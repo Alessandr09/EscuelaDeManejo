@@ -1,0 +1,27 @@
+<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+<div class="scrim" id="scrim"></div>
+
+<header class="admin-topbar">
+  <div class="btn-toggle-side" id="toggleSide" title="Mostrar / ocultar menu">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <div class="topbar-date">
+    <i class="fas fa-calendar-day"></i>
+    <span id="fechaActual">Cargando fecha...</span>
+  </div>
+
+  <div class="topbar-right">
+    <div class="topbar-icon" title="Notificaciones">
+      <i class="fas fa-bell"></i><span class="dot"></span>
+    </div>
+    <div class="topbar-user">
+      <div class="topbar-avatar">AD</div>
+      <div class="tu-meta">
+        <div class="tu-name">Admin</div>
+        <div class="tu-role">Administrador</div>
+      </div>
+      <a href="<?= BASE_URL ?>/admin.php?v=logout" class="btn-act del" title="Cerrar sesion"><i class="fas fa-right-from-bracket"></i></a>
+    </div>
+  </div>
+</header>
