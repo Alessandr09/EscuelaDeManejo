@@ -26,9 +26,9 @@
         </div>
         <i class="fas fa-car-side car"></i>
         <div class="hero-card-row">
-          <div class="pill"><b>Clase A</b>Motocicleta</div>
-          <div class="pill"><b>Clase B</b>Particular</div>
-          <div class="pill"><b>Clase C</b>Carga</div>
+          <div class="pill"><b>MOTOCICLETA</b>Consigue tu licencia para manejar motocicleta.</div>
+          <div class="pill"><b>PARTICULAR</b>Maneja vehiculos sedanes, pickups y camionetas.</div>
+          <div class="pill"><b>LIVIANA</b>Maneja vehiculos de hasta 2.5 toneladas y 15 pasajeros</div>
         </div>
       </div>
     </div>
@@ -47,27 +47,34 @@
     <div class="row g-4">
       <?php
       $cursos = [
-        ['fa-motorcycle','Clase A','Motocicleta','$120','2 semanas',['Incluye casco y guantes','Practica en circuito cerrado','Teoria + examen practico','Certificado inmediato']],
-        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
-        ['fa-truck','Clase C','Vehiculo de carga','$260','6 semanas',['Manejo de camiones y trailers','Certificacion oficial','Horarios nocturnos disponibles','Acompañamiento post-certificacion']],
+        ['fa-motorcycle','Clase A','Motocicleta','$120','2 semanas','motocicleta.jpg',['Incluye casco y guantes','Practica en circuito cerrado','Teoria + examen practico','Certificado inmediato']],
+        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas','sedan.jpg',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
+        ['fa-truck','Clase C','Vehiculo de carga','$260','6 semanas','microbus.jpg',['Manejo de camiones y trailers','Certificacion oficial','Horarios nocturnos disponibles','Acompañamiento post-certificacion']],
       ];
       foreach ($cursos as $c):
-        [$icon,$titulo,$sub,$precio,$dura,$feats] = $c;
+        [$icon,$titulo,$sub,$precio,$dura,$img,$feats] = $c;
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass course-card reveal">
-          <div class="course-icon"><i class="fas <?= $icon ?>"></i></div>
-          <h4><?= $titulo ?></h4>
-          <p class="mb-3"><?= $sub ?></p>
-          <div class="course-price"><?= $precio ?> <small>/ total</small></div>
-          <ul class="course-feats">
-            <?php foreach ($feats as $f): ?>
-            <li><i class="fas fa-check-circle"></i><?= $f ?></li>
-            <?php endforeach; ?>
-          </ul>
-          <div class="d-flex align-items-center justify-content-between">
-            <span class="badge b-info"><?= $dura ?></span>
-            <a href="#contacto" class="btn btn-gold btn-sm">Inscribirme</a>
+        <div class="course-card reveal">
+          <div class="course-media">
+            <img src="<?= BASE_URL ?>/assets/img/<?= $img ?>" alt="<?= $titulo ?> - <?= $sub ?>" loading="lazy">
+            <span class="course-tag"><i class="fas fa-clock"></i><?= $dura ?></span>
+          </div>
+          <div class="course-body">
+            <div class="course-head">
+              <div class="course-icon"><i class="fas <?= $icon ?>"></i></div>
+              <div>
+                <h4><?= $titulo ?></h4>
+                <p><?= $sub ?></p>
+              </div>
+            </div>
+            <div class="course-price"><?= $precio ?> <small>/ total</small></div>
+            <ul class="course-feats">
+              <?php foreach ($feats as $f): ?>
+              <li><i class="fas fa-check-circle"></i><?= $f ?></li>
+              <?php endforeach; ?>
+            </ul>
+            <a href="#contacto" class="btn btn-gold w-100">Inscribirme</a>
           </div>
         </div>
       </div>

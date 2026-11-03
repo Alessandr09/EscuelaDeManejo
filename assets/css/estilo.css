@@ -191,6 +191,16 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
     border-radius: var(--radius);
 }
 
+/* Header sobre la imagen: letras blancas hasta hacer scroll */
+.nav-esdrive:not(.nav-scrolled) .nav-brand-name,
+.nav-esdrive:not(.nav-scrolled) .nav-link,
+.nav-esdrive:not(.nav-scrolled) .navbar-toggler { color: #fff; }
+.nav-esdrive:not(.nav-scrolled) .nav-brand-sub { color: rgba(255,255,255,.75); }
+.nav-esdrive:not(.nav-scrolled) .navbar-toggler { border-color: rgba(255,255,255,.45); }
+.nav-esdrive:not(.nav-scrolled) .nav-link:hover,
+.nav-esdrive:not(.nav-scrolled) .nav-link.active { color: var(--gold-soft); }
+.nav-esdrive:not(.nav-scrolled) #btnToggleTheme { color: #fff !important; }
+
 /* ============ SECCIONES ============ */
 .section { padding: 90px 0; }
 .section-title {
@@ -230,90 +240,185 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
 }
 .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--gold);
-    padding: 7px 16px; border-radius: var(--radius);
-    font-size: .82rem; font-weight: 600;
-    margin-bottom: 22px;
+    background: var(--gold);
+    color: #241a05;
+    border: 1px solid var(--gold);
+    padding: 8px 18px;
+    font-size: .84rem; font-weight: 700;
+    margin-bottom: 24px;
+    transition: transform .25s ease, filter .25s ease;
 }
+.hero-badge:hover { transform: translateY(-2px); filter: brightness(1.06); }
 .hero-title {
     font-size: clamp(2.4rem, 5vw, 3.6rem);
     font-weight: 800;
     line-height: 1.12;
     margin-bottom: 18px;
+    color: #fff;
+    text-shadow: 0 2px 24px rgba(0,0,0,.5);
 }
-.hero-title em { font-style: normal; color: var(--gold); }
-.hero-lead { color: var(--text-mut); font-size: 1.1rem; margin-bottom: 30px; }
+.hero-title em { font-style: normal; color: var(--gold); text-shadow: 0 2px 24px rgba(0,0,0,.4); }
+.hero-lead {
+    color: rgba(255,255,255,.92);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+    max-width: 34rem;
+    text-shadow: 0 1px 14px rgba(0,0,0,.45);
+}
 .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
-.hero-stats { display: flex; gap: 34px; margin-top: 42px; flex-wrap: wrap; }
+.hero-cta .btn-glass {
+    background: rgba(15,23,41,.4);
+    color: #fff;
+    border-color: rgba(255,255,255,.65);
+}
+.hero-cta .btn-glass:hover, .hero-cta .btn-glass:focus {
+    background: #fff;
+    color: #0f1729;
+    border-color: #fff;
+}
+.hero-stats { display: flex; gap: 30px; margin-top: 44px; flex-wrap: wrap; }
+.hero-stat {
+    padding-left: 16px;
+    border-left: 3px solid var(--gold);
+}
 .hero-stat b {
     display: block;
     font-family: 'Poppins', sans-serif;
     font-size: 1.9rem; font-weight: 800; color: var(--gold);
+    text-shadow: 0 2px 16px rgba(0,0,0,.4);
 }
-.hero-stat small { color: var(--text-mut); font-size: .85rem; }
+.hero-stat small { color: rgba(255,255,255,.85); font-size: .85rem; text-shadow: 0 1px 12px rgba(0,0,0,.45); }
 
 .hero-card {
-    padding: 26px;
+    padding: 30px;
     background: var(--surface);
     border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
     border-radius: var(--radius);
     position: relative;
     overflow: hidden;
+    transition: transform .3s ease, border-color .3s ease;
+}
+.hero-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold);
 }
 .hero-card .car {
-    font-size: 6rem;
+    display: block;
+    font-size: 5.5rem;
     color: var(--gold);
     text-align: center;
-    filter: drop-shadow(0 12px 24px rgba(0,0,0,.3));
+    margin: 4px 0 16px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,.25));
     animation: carFloat 4s ease-in-out infinite;
 }
 @keyframes carFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-.hero-card-row { display: flex; justify-content: space-between; margin-top: 20px; }
+.hero-card-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+}
 .hero-card-row .pill {
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 10px 14px;
-    font-size: .8rem; color: var(--text-mut); text-align: center; flex: 1;
+    padding: 12px 10px;
+    font-size: .78rem; color: var(--text-mut); text-align: center;
+    transition: border-color .2s ease, transform .2s ease, background .2s ease;
 }
-.hero-card-row .pill b { display:block; color: var(--text); font-size: 1rem; }
+.hero-card-row .pill:hover {
+    border-color: var(--gold);
+    background: rgba(233,165,55,.08);
+    transform: translateY(-2px);
+}
+.hero-card-row .pill b {
+    display: block; color: var(--text); font-size: 1.02rem;
+    font-family: 'Poppins', sans-serif; margin-bottom: 2px;
+}
 
 /* ============ TARJETAS DE CURSOS ============ */
 .course-card {
-    padding: 30px 26px;
     height: 100%;
-    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    transition: transform .3s ease, border-color .3s ease;
 }
 .course-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     border-color: var(--gold);
-    box-shadow: 0 12px 30px rgba(0,0,0,.3);
+}
+
+/* Media: imagen del curso */
+.course-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+}
+.course-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .45s ease;
+}
+.course-card:hover .course-media img { transform: scale(1.06); }
+.course-tag {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: #241a05;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+}
+
+/* Cuerpo de la card */
+.course-body {
+    padding: 24px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.course-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
 }
 .course-icon {
-    width: 66px; height: 66px;
+    width: 48px; height: 48px; flex: 0 0 48px;
     display: grid; place-items: center;
-    border-radius: var(--radius);
     background: rgba(233,165,55,.1);
     border: 1px solid var(--gold);
     color: var(--gold);
-    font-size: 1.7rem;
-    margin-bottom: 20px;
+    font-size: 1.3rem;
 }
-.course-card h4 { font-weight: 700; margin-bottom: 8px; color: var(--text); }
-.course-card p { color: var(--text-mut); font-size: .95rem; }
+.course-head h4 { font-weight: 700; margin-bottom: 2px; color: var(--text); font-size: 1.2rem; }
+.course-head p { color: var(--text-mut); font-size: .9rem; margin: 0; }
 .course-price {
     font-family: 'Poppins', sans-serif;
     font-size: 1.7rem; font-weight: 800; color: var(--gold);
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
 }
 .course-price small { font-size: .8rem; color: var(--text-mut); font-weight: 500; }
-.course-feats { list-style: none; padding: 0; margin: 18px 0 22px; }
+.course-feats { list-style: none; padding: 10px 0 0; margin: 0 0 20px; flex: 1; }
 .course-feats li {
     color: var(--text-mut); font-size: .92rem;
     padding: 7px 0; display: flex; gap: 10px; align-items: center;
@@ -407,6 +512,9 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
         padding-top: calc(40px + var(--nav-h));
         padding-bottom: 30px;
     }
+    .hero-card { padding: 24px 20px; }
+    .hero-card .car { font-size: 4.5rem; }
     .hero-stats { gap: 22px; }
+    .hero-stat { padding-left: 12px; }
     .nav-brand-sub { display: none; }
 }
