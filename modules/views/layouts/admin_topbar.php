@@ -12,6 +12,9 @@
   </div>
 
   <div class="topbar-right">
+    <button id="btnToggleTheme" style="background:none;border:none;color:var(--text-mut);cursor:pointer;font-size:1.15rem;padding:4px 8px;margin-right:6px;" title="Cambiar tema" aria-label="Cambiar tema">
+      <i id="iconTheme" class="fas fa-sun"></i>
+    </button>
     <div class="topbar-icon" title="Notificaciones">
       <i class="fas fa-bell"></i><span class="dot"></span>
     </div>

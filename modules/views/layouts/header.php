@@ -37,5 +37,22 @@
         </li>
       </ul>
     </div>
+
+    <button id="btnToggleTheme" style="background:none;border:none;color:var(--text-mut);cursor:pointer;font-size:1.15rem;padding:6px 10px;margin-left:10px;" title="Cambiar tema" aria-label="Cambiar tema">
+      <i id="iconTheme" class="fas fa-sun"></i>
+    </button>
   </div>
 </nav>
+
+<script>
+/* Navbar: transparente sobre el hero, solido al hacer scroll */
+(function () {
+  var nav = document.querySelector('.nav-esdrive');
+  if (!nav) return;
+  function onScroll() {
+    nav.classList.toggle('nav-scrolled', window.scrollY > 30);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
