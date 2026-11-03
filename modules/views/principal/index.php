@@ -33,6 +33,7 @@
       </div>
     </div>
   </div>
+  <a class="hero-scroll" href="#cursos" aria-label="Ver cursos"><i class="fas fa-chevron-down"></i></a>
 </section>
 
 <!-- ============ CURSOS ============ -->
@@ -84,14 +85,15 @@
 </section>
 
 <!-- ============ PORQUE NOSOTROS ============ -->
-<section class="section" id="porque">
+<section class="section section-band" id="porque">
   <div class="container">
     <div class="title-center mb-5">
       <h2 class="section-title reveal">¿Por que <span>ESDRIVE</span>?</h2>
       <p class="section-sub reveal">Razones por las que somos la mejor opcion</p>
       <div class="title-line reveal"></div>
     </div>
-    <div class="row g-4">
+    <div class="feature-grid reveal">
+      <div class="row g-0">
       <?php
       $feats = [
         ['fa-chalkboard-teacher','Teoria moderna','Clases con material multimedia y simuladores interactivos.'],
@@ -101,17 +103,19 @@
         ['fa-shield-halved','Totalmente asegurado','Cada alumno practica cubierto por seguro.'],
         ['fa-graduation-cap','Certificacion oficial','Te preparamos para aprobar a la primera.'],
       ];
-      foreach ($feats as $f):
+      foreach ($feats as $i => $f):
         [$icon,$t,$d] = $f;
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass-soft feature-item reveal">
+        <div class="feature-item">
+          <span class="fi-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
           <div class="fi-icon"><i class="fas <?= $icon ?>"></i></div>
           <h5><?= $t ?></h5>
           <p><?= $d ?></p>
         </div>
       </div>
       <?php endforeach; ?>
+      </div>
     </div>
   </div>
 </section>
@@ -136,16 +140,17 @@
         $ini = strtoupper(substr($nom,0,1));
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass testi-card reveal">
+        <div class="testi-card reveal">
+          <i class="fas fa-quote-right testi-quote"></i>
           <div class="testi-stars">
             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
           </div>
-          <p>"<?= $txt ?>"</p>
+          <p><?= $txt ?></p>
           <div class="testi-user">
             <div class="testi-avatar"><?= $ini ?></div>
             <div>
-              <div style="font-weight:600"><?= $nom ?></div>
-              <small style="color:var(--text-mut)"><?= $rol ?></small>
+              <div class="testi-name"><?= $nom ?></div>
+              <div class="testi-role"><?= $rol ?></div>
             </div>
           </div>
         </div>
@@ -155,42 +160,23 @@
   </div>
 </section>
 
-<!-- ============ CTA CONTACTO ============ -->
-<section class="section" id="contacto">
+<!-- ============ CTA CONTACTO (parallax) ============ -->
+<section class="section cta-parallax" id="contacto">
+  <div class="cta-parallax-bg" aria-hidden="true"></div>
   <div class="container">
-    <div class="glass p-5 text-center reveal">
+    <div class="cta-inner reveal">
+      <span class="cta-kicker"><i class="fas fa-route"></i> Tu camino a la licencia empieza aqui</span>
       <h2 class="section-title">¿Listo para <span>conducir</span>?</h2>
-      <p class="section-sub mb-4">Agenda tu primera clase hoy y comienza el camino hacia tu licencia.</p>
-      <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <p class="cta-lead">Agenda tu primera clase hoy y comienza el camino hacia tu licencia.</p>
+      <div class="cta-btns">
         <a href="https://wa.me/50370000000" target="_blank" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>WhatsApp</a>
-        <a href="mailto:contacto@esdrive.com" class="btn btn-glass"><i class="fas fa-envelope me-2"></i>Correo</a>
+        <a href="mailto:contacto@esdrive.com" class="btn btn-white"><i class="fas fa-envelope me-2"></i>Correo</a>
       </div>
+      <ul class="cta-info">
+        <li><i class="fas fa-phone"></i>+503 2222-3333</li>
+        <li><i class="fas fa-clock"></i>Lun a Sab: 7:00 - 18:00</li>
+        <li><i class="fas fa-location-dot"></i>Av. Principal #123, San Salvador</li>
+      </ul>
     </div>
   </div>
 </section>
-
-<script>
-(function () {
-  function animacionPara(el) {
-    if (el.classList.contains('feature-item')) return 'animate__fadeInUp';
-    if (el.classList.contains('course-card')) return 'animate__fadeInUp';
-    if (el.classList.contains('testi-card')) return 'animate__fadeInUp';
-    return 'animate__fadeInUp';
-  }
-  var revelar = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    revelar.forEach(function (el) { el.classList.add('animate__animated'); });
-    return;
-  }
-  var observer = new IntersectionObserver(function (entradas) {
-    entradas.forEach(function (entrada) {
-      if (entrada.isIntersecting) {
-        var el = entrada.target;
-        el.classList.add('animate__animated', animacionPara(el));
-        observer.unobserve(el);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  revelar.forEach(function (el) { observer.observe(el); });
-})();
-</script>

@@ -18,10 +18,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <!-- Estilos propios (diseno glassmorphism) -->
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=5">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=6">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
 <!-- Tema claro/oscuro -->
 <script src="<?= BASE_URL ?>/assets/js/theme.js" defer></script>
+
+<!-- Efectos del sitio: reveal + parallax -->
+<script src="<?= BASE_URL ?>/assets/js/site.js" defer></script>

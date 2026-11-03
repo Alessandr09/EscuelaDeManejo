@@ -220,18 +220,46 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
 }
 
 /* ============ HERO ============ */
-/* La imagen cubre desde detras del header hasta el final del viewport (sin velo) */
+/* Imagen desde detras del header hasta abajo, con parallax (JS: --hero-py) */
 .hero-wrap {
     min-height: 100vh;
     min-height: 100svh;
     margin-top: calc(-1 * var(--nav-h));
     padding-top: calc(70px + var(--nav-h));
-    padding-bottom: 40px;
+    padding-bottom: 56px;
     position: relative;
-    background:
-        url('../img/pexels-gustavo-fring-4895404.jpg') center center / cover no-repeat;
+    overflow: hidden;
+    background: var(--bg);
+}
+.hero-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -30% 0;
+    background: url('../img/pexels-gustavo-fring-4895404.jpg') center center / cover no-repeat;
+    transform: translate3d(0, var(--hero-py, 0px), 0);
+    will-change: transform;
+    z-index: 0;
 }
 .hero-wrap > .container { position: relative; z-index: 1; }
+
+/* Indicador de scroll */
+.hero-scroll {
+    position: absolute;
+    left: 50%; bottom: 16px;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    color: rgba(255,255,255,.9);
+    border: 1px solid rgba(255,255,255,.5);
+    font-size: .95rem;
+    animation: scrollHint 1.9s ease-in-out infinite;
+}
+.hero-scroll:hover { background: var(--gold); border-color: var(--gold); color: #241a05; }
+@keyframes scrollHint {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 8px); }
+}
 .hero-grid {
     display: grid;
     grid-template-columns: 1.05fr .95fr;
@@ -425,35 +453,142 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
 }
 .course-feats li i { color: var(--gold); }
 
-/* ============ FEATURES / WHY US ============ */
-.feature-item { text-align: center; padding: 26px 18px; height: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+/* ============ FEATURES / WHY US (grid plano con divisores) ============ */
+.section-band {
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+.feature-grid {
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+}
+.feature-grid .row { margin: 0; }
+.feature-grid .col-lg-4,
+.feature-grid .col-md-6 {
+    padding: 0;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+.feature-item {
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    padding: 34px 28px;
+    height: 100%;
+    background: var(--surface);
+    transition: background .25s ease;
+}
+.feature-item:hover { background: rgba(233,165,55,.06); }
+.fi-num {
+    position: absolute;
+    top: 12px; right: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.4rem; font-weight: 800;
+    line-height: 1;
+    color: rgba(233,165,55,.18);
+    pointer-events: none;
+}
 .feature-item .fi-icon {
-    width: 60px; height: 60px; margin: 0 auto 16px;
+    width: 54px; height: 54px;
     display: grid; place-items: center;
-    border-radius: var(--radius);
     background: rgba(233,165,55,.1);
     border: 1px solid var(--gold);
     color: var(--gold); font-size: 1.4rem;
+    margin-bottom: 18px;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
 }
-.feature-item h5 { font-weight: 600; font-size: 1.05rem; color: var(--text); }
-.feature-item p { color: var(--text-mut); font-size: .9rem; margin-top: 6px; }
+.feature-item:hover .fi-icon {
+    background: var(--gold);
+    color: #241a05;
+    transform: translateY(-3px);
+}
+.feature-item h5 { font-weight: 600; font-size: 1.08rem; color: var(--text); margin-bottom: 6px; }
+.feature-item p { color: var(--text-mut); font-size: .9rem; margin: 0; }
 
 /* ============ TESTIMONIOS ============ */
-.testi-card { padding: 28px; height: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
-.testi-stars { color: var(--gold); margin-bottom: 14px; }
-.testi-card p { color: var(--text-mut); font-style: italic; }
-.testi-user { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.testi-card {
+    position: relative;
+    padding: 30px 28px 26px;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color .3s ease, transform .3s ease;
+}
+.testi-card:hover { border-top-color: var(--gold); transform: translateY(-5px); }
+.testi-quote {
+    display: block;
+    height: 24px;
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+    color: rgba(233,165,55,.45);
+}
+.testi-stars { color: var(--gold); margin-bottom: 14px; font-size: .9rem; }
+.testi-card p { color: var(--text-mut); font-style: italic; margin-bottom: 0; }
+.testi-user {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 20px; padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
 .testi-avatar {
     width: 46px; height: 46px; border-radius: var(--radius);
     display: grid; place-items: center;
     background: var(--gold);
     color: #241a05; font-weight: 700; font-family: 'Poppins',sans-serif;
 }
+.testi-name { font-weight: 600; color: var(--text); }
+.testi-role { color: var(--text-mut); font-size: .85rem; }
+
+/* ============ CTA CONTACTO (fondo parallax) ============ */
+.cta-parallax {
+    position: relative;
+    overflow: hidden;
+    background: #0f1729;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 0;
+}
+.cta-parallax-bg {
+    position: absolute;
+    inset: -30% 0;
+    background: url('../img/pexels-gustavo-fring-4895404.jpg') center center / cover no-repeat;
+    will-change: transform;
+}
+.cta-parallax::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(15,23,41,.92), rgba(36,48,77,.84));
+}
+.cta-parallax .container { position: relative; z-index: 1; }
+.cta-inner { text-align: center; }
+.cta-kicker {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--gold); font-size: .8rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.cta-parallax .section-title { color: #fff; }
+.cta-lead { color: rgba(255,255,255,.85); font-size: 1.08rem; max-width: 34rem; margin: 0 auto 30px; }
+.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 44px; }
+.btn-white {
+    background: #fff; color: #0f1729; border: 1px solid #fff;
+    padding: 12px 26px; font-weight: 600;
+}
+.btn-white:hover { background: transparent; color: #fff; transform: translateY(-2px); }
+.cta-info {
+    list-style: none; padding: 26px 0 0; margin: 0;
+    border-top: 1px solid rgba(255,255,255,.18);
+    display: flex; justify-content: center; gap: 36px; flex-wrap: wrap;
+    color: rgba(255,255,255,.85); font-size: .92rem;
+}
+.cta-info i { color: var(--gold); margin-right: 8px; }
 
 /* ============ FOOTER ============ */
 .footer-glass {
     background: var(--surface);
-    border-top: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
     padding: 60px 0 0;
     margin-top: 40px;
 }
@@ -510,11 +645,22 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
 @media (max-width: 576px) {
     .hero-wrap {
         padding-top: calc(40px + var(--nav-h));
-        padding-bottom: 30px;
+        padding-bottom: 66px;
     }
     .hero-card { padding: 24px 20px; }
     .hero-card .car { font-size: 4.5rem; }
     .hero-stats { gap: 22px; }
     .hero-stat { padding-left: 12px; }
     .nav-brand-sub { display: none; }
+    .feature-item { padding: 28px 22px; }
+    .cta-parallax { padding: 72px 0; }
+    .cta-info { gap: 18px; }
+}
+
+/* ============ ACCESIBILIDAD: MOVIMIENTO REDUCIDO ============ */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .hero-card .car, .hero-scroll, .course-media img { animation: none; transition: none; }
+    .hero-wrap::before, .cta-parallax-bg { transform: none !important; }
 }
