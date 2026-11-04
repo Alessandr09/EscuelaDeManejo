@@ -1,6 +1,6 @@
 /* ============================================================
    ESDRIVE - site.js (sitio publico)
-   Reveal en scroll + efectos parallax
+   Efectos parallax + formulario de contacto (WhatsApp)
    ============================================================ */
 (function () {
   'use strict';
@@ -8,20 +8,22 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- REVEAL (IntersectionObserver) ---------- */
-  var revelar = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entradas) {
-      entradas.forEach(function (entrada) {
-        if (entrada.isIntersecting) {
-          entrada.target.classList.add('animate__animated', 'animate__fadeInUp');
-          observer.unobserve(entrada.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    revelar.forEach(function (el) { observer.observe(el); });
-  } else {
-    revelar.forEach(function (el) { el.classList.add('animate__animated'); });
+  /* ---------- FORMULARIO DE CONTACTO -> WhatsApp ---------- */
+  var formContacto = document.getElementById('formContacto');
+  if (formContacto) {
+    formContacto.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var nombre = formContacto.elements['nombre'].value.trim();
+      var telefono = formContacto.elements['telefono'].value.trim();
+      var curso = formContacto.elements['curso'].value;
+      if (!nombre || !telefono) {
+        formContacto.classList.add('was-validated');
+        return;
+      }
+      var mensaje = 'Hola ESDRIVE, soy ' + nombre +
+        ' (tel: ' + telefono + '). Quiero agendar una clase muestra gratis para: ' + curso + '.';
+      window.open('https://wa.me/50370000000?text=' + encodeURIComponent(mensaje), '_blank', 'noopener');
+    });
   }
 
   if (reduceMotion) return;

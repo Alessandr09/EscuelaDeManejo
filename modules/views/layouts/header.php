@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/../../../php/base.php'; ?>
 <div class="app-bg"></div>
 
-<nav class="navbar navbar-expand-lg navbar-dark nav-esdrive">
+<nav class="navbar navbar-expand-lg nav-esdrive">
   <div class="container">
     <a class="navbar-brand" href="<?= BASE_URL ?>/index.php">
       <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo <?= APP_NOMBRE ?>">
@@ -22,30 +22,22 @@
         <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
         <li class="nav-item"><a class="nav-link" href="#porque">Nosotros</a></li>
         <li class="nav-item"><a class="nav-link" href="#testimonios">Testimonios</a></li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Servicios
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#cursos"><i class="fas fa-car-side me-2"></i>Clase B (Particular)</a></li>
-            <li><a class="dropdown-item" href="#cursos"><i class="fas fa-motorcycle me-2"></i>Clase A (Motocicleta)</a></li>
-            <li><a class="dropdown-item" href="#cursos"><i class="fas fa-truck me-2"></i>Clase C (Carga)</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#cursos"><i class="fas fa-id-card me-2"></i>Renovacion de licencia</a></li>
-          </ul>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="#preguntas">Preguntas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
       </ul>
-    </div>
 
-    <button id="btnToggleTheme" style="background:none;border:none;color:var(--text-mut);cursor:pointer;font-size:1.15rem;padding:6px 10px;margin-left:10px;" title="Cambiar tema" aria-label="Cambiar tema">
-      <i id="iconTheme" class="fas fa-sun"></i>
-    </button>
+      <div class="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
+        <button id="btnToggleTheme" title="Cambiar tema" aria-label="Cambiar tema">
+          <i id="iconTheme" class="fas fa-moon"></i>
+        </button>
+        <a href="#contacto" class="btn btn-gold nav-cta"><i class="fas fa-calendar-check me-2"></i>Agenda tu clase</a>
+      </div>
+    </div>
   </div>
 </nav>
 
 <script>
-/* Navbar: transparente sobre el hero, solido al hacer scroll */
+/* Navbar: agrega sombra al hacer scroll */
 (function () {
   var nav = document.querySelector('.nav-esdrive');
   if (!nav) return;
