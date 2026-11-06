@@ -99,6 +99,78 @@
   </div>
 </section>
 
+<!-- ============ EQUIPO (carrusel 3D) ============ -->
+<section class="section team-section" id="equipo">
+  <div class="container">
+    <div class="title-center mb-5">
+      <h2 class="section-title reveal">Nuestro <span>Equipo</span></h2>
+      <p class="section-sub reveal">Instructores y asesores que te acompañan en cada etapa</p>
+      <div class="title-line reveal"></div>
+    </div>
+
+    <div class="team-stage reveal">
+      <span class="team-ghost-title" aria-hidden="true">OUR TEAM</span>
+
+      <div class="team-carousel">
+        <button class="team-arrow left" type="button" aria-label="Miembro anterior">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <div class="team-track">
+          <?php
+          $equipo = [
+            ['miembro-1.jpg', 'Emily Kim', 'Founder'],
+            ['miembro-2.jpg', 'Michael Steward', 'Creative Director'],
+            ['miembro-3.jpg', 'Emma Rodriguez', 'Lead Developer'],
+            ['miembro-4.jpg', 'Julia Gimmel', 'UX Designer'],
+            ['miembro-5.jpg', 'Lisa Anderson', 'Marketing Manager'],
+            ['miembro-6.jpg', 'James Wilson', 'Product Manager'],
+          ];
+          $totalEquipo = count($equipo);
+
+          foreach ($equipo as $i => $miembro):
+            [$foto, $nombre, $rol] = $miembro;
+            $offset = $i; // El primer miembro (indice 0) es el centro
+            if ($offset === 0) {
+              $clase = 'center';
+            } elseif ($offset === 1) {
+              $clase = 'right-1';
+            } elseif ($offset === 2) {
+              $clase = 'right-2';
+            } elseif ($offset === $totalEquipo - 1) {
+              $clase = 'left-1';
+            } elseif ($offset === $totalEquipo - 2) {
+              $clase = 'left-2';
+            } else {
+              $clase = 'hidden';
+            }
+          ?>
+          <div class="team-card <?= $clase ?>" data-index="<?= $i ?>" data-name="<?= htmlspecialchars($nombre) ?>" data-role="<?= htmlspecialchars($rol) ?>">
+            <img src="<?= BASE_URL ?>/assets/img/equipo/<?= $foto ?>" alt="<?= htmlspecialchars($nombre . ' - ' . $rol) ?>" loading="lazy">
+          </div>
+          <?php endforeach; ?>
+        </div>
+
+        <button class="team-arrow right" type="button" aria-label="Siguiente miembro">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="team-member-info" aria-live="polite">
+        <h3 class="team-member-name"><?= htmlspecialchars($equipo[0][1]) ?></h3>
+        <p class="team-member-role"><?= htmlspecialchars($equipo[0][2]) ?></p>
+      </div>
+
+      <div class="team-dots" aria-label="Seleccionar miembro del equipo">
+        <?php for ($i = 0; $i < $totalEquipo; $i++): ?>
+        <button class="team-dot<?= $i === 0 ? ' active' : '' ?>" type="button" data-index="<?= $i ?>"
+                aria-label="Ver miembro <?= $i + 1 ?>" aria-pressed="<?= $i === 0 ? 'true' : 'false' ?>"></button>
+        <?php endfor; ?>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ TESTIMONIOS ============ -->
 <section class="section" id="testimonios">
   <div class="container">
@@ -211,6 +283,8 @@
             <option value="Clase B - Vehiculo particular ($180)" selected>Clase B - Vehiculo particular ($180)</option>
             <option value="Clase C - Vehiculo de carga ($260)">Clase C - Vehiculo de carga ($260)</option>
           </select>
+          <label for="f-mensaje">Mensaje <span class="fw-normal text-secondary">(opcional)</span></label>
+          <textarea class="form-control" id="f-mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aqui..."></textarea>
           <button type="submit" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp</button>
           <p class="form-note"><i class="fab fa-whatsapp"></i> Tu mensaje se abrira en WhatsApp con tus datos. Sin spam.</p>
         </form>
