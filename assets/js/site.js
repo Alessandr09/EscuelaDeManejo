@@ -8,35 +8,8 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- CKEditor en el campo mensaje ---------- */
-  var editorMensaje = null;
-  var textareaMensaje = document.getElementById('f-mensaje');
-  if (textareaMensaje && window.ClassicEditor) {
-    window.ClassicEditor
-      .create(textareaMensaje, {
-        toolbar: ['bold', 'italic', 'underline', 'link', 'bulletedList', 'numberedList']
-      })
-      .then(function (editor) { editorMensaje = editor; })
-      .catch(function () { /* sin CKEditor: queda el textarea normal */ });
-  }
-
-  function htmlATexto(html) {
-    return String(html)
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<\/(p|li|h[1-6]|div|blockquote)>/gi, '\n')
-      .replace(/<li[^>]*>/gi, '- ')
-      .replace(/<[^>]*>/g, '')
-      .replace(/&nbsp;/gi, ' ')
-      .replace(/&amp;/gi, '&')
-      .replace(/&lt;/gi, '<')
-      .replace(/&gt;/gi, '>')
-      .replace(/&quot;/gi, '"')
-      .replace(/&#39;/gi, "'")
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-  }
-
   /* ---------- FORMULARIO DE CONTACTO -> WhatsApp ---------- */
+  var textareaMensaje = document.getElementById('f-mensaje');
   var formContacto = document.getElementById('formContacto');
   if (formContacto) {
     formContacto.addEventListener('submit', function (ev) {
@@ -48,9 +21,7 @@
         formContacto.classList.add('was-validated');
         return;
       }
-      var mensajeTexto = editorMensaje
-        ? htmlATexto(editorMensaje.getData())
-        : (textareaMensaje ? textareaMensaje.value.trim() : '');
+      var mensajeTexto = textareaMensaje ? textareaMensaje.value.trim() : '';
       var mensaje = 'Hola ESDRIVE, soy ' + nombre +
         ' (tel: ' + telefono + '). Quiero agendar una clase muestra gratis para: ' + curso + '.';
       if (mensajeTexto) {
@@ -184,6 +155,28 @@
     }, { passive: true });
 
     updateCarousel(0, true);
+  })();
+
+  /* ---------- SLIDER DE RAZONES (SWIPER) ---------- */
+  (function initWhySlider() {
+    var slider = document.querySelector('.blog-slider');
+    if (!slider || !window.Swiper) return;
+
+    new window.Swiper(slider, {
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      loop: true,
+      speed: reduceMotion ? 0 : 600,
+      grabCursor: true,
+      pagination: {
+        el: slider.querySelector('.blog-slider__pagination'),
+        clickable: true
+      },
+      a11y: {
+        enabled: true,
+        paginationBulletMessage: 'Ir a la diapositiva {{index}}'
+      }
+    });
   })();
 
   if (reduceMotion) return;

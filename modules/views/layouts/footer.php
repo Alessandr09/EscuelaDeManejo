@@ -9,10 +9,10 @@
         </div>
         <p>Formamos conductores responsables y seguros. Licencias de las clases A, B y C con instructores certificados y vehiculos modernos.</p>
         <div class="footer-social mt-3">
-          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#siguenos" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#siguenos" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#siguenos" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="https://wa.me/50370000000" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
 
@@ -24,6 +24,7 @@
           <li><a href="#porque">Nosotros</a></li>
           <li><a href="#equipo">Equipo</a></li>
           <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#siguenos">Síguenos</a></li>
         </ul>
       </div>
 

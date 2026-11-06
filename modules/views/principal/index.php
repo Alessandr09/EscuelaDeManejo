@@ -63,37 +63,47 @@
   </div>
 </section>
 
-<!-- ============ PORQUE NOSOTROS ============ -->
-<section class="section section-band" id="porque">
+<!-- ============ PORQUE NOSOTROS (slider tipo blog) ============ -->
+<section class="section section-band why-slider-section" id="porque">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">¿Por que <span>ESDRIVE</span>?</h2>
-      <p class="section-sub reveal">Razones por las que somos la mejor opcion</p>
+      <h2 class="section-title reveal">¿Por qué <span>ESDRIVE</span>?</h2>
+      <p class="section-sub reveal">Razones por las que somos tu mejor opción</p>
       <div class="title-line reveal"></div>
     </div>
-    <div class="feature-grid reveal">
-      <div class="row g-0">
-      <?php
-      $feats = [
-        ['fa-chalkboard-teacher','Teoria moderna','Clases con material multimedia y simuladores interactivos.'],
-        ['fa-car','Vehiculos nuevos','Flota reciente y mantenida para tu practica.'],
-        ['fa-user-tie','Instructores certificados','Profesionales con licencia y anos de experiencia.'],
-        ['fa-clock','Horarios flexibles','Clases de manana, tarde y fin de semana.'],
-        ['fa-shield-halved','Totalmente asegurado','Cada alumno practica cubierto por seguro.'],
-        ['fa-graduation-cap','Certificacion oficial','Te preparamos para aprobar a la primera.'],
-      ];
-      foreach ($feats as $i => $f):
-        [$icon,$t,$d] = $f;
-      ?>
-      <div class="col-lg-4 col-md-6">
-        <div class="feature-item">
-          <span class="fi-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
-          <div class="fi-icon"><i class="fas <?= $icon ?>"></i></div>
-          <h5><?= $t ?></h5>
-          <p><?= $d ?></p>
+
+    <div class="why-slider-wrap reveal">
+      <div class="blog-slider swiper" aria-label="Razones para elegir ESDRIVE">
+        <div class="swiper-wrapper">
+          <?php
+          $razones = [
+            ['teoria-moderna.jpg', 'Aprendizaje', 'Teoría moderna', 'Clases con material multimedia y simuladores interactivos.', 'Aula moderna con proyección y estudiantes'],
+            ['vehiculos.jpg', 'Flota', 'Vehículos nuevos', 'Flota reciente y mantenida para tu práctica.', 'Vehículo reciente para prácticas de manejo'],
+            ['instructores.jpg', 'Equipo', 'Instructores certificados', 'Profesionales con licencia y años de experiencia.', 'Instructora certificada de ESDRIVE'],
+            ['horarios.jpg', 'Flexibilidad', 'Horarios flexibles', 'Clases de mañana, tarde y fin de semana.', 'Calendario de clases'],
+            ['seguro.jpg', 'Seguridad', 'Totalmente asegurado', 'Cada alumno practica cubierto por seguro.', 'Firma de contrato de seguro'],
+            ['certificacion.jpg', 'Certificación', 'Certificación oficial', 'Te preparamos para aprobar a la primera.', 'Examen de certificación'],
+          ];
+
+          foreach ($razones as $i => $razon):
+            [$imagen, $categoria, $titulo, $texto, $alt] = $razon;
+          ?>
+          <article class="swiper-slide blog-slider__item">
+            <div class="blog-slider__img">
+              <img src="<?= BASE_URL ?>/assets/img/porque/<?= $imagen ?>" alt="<?= htmlspecialchars($alt) ?>" loading="lazy">
+            </div>
+            <div class="blog-slider__content">
+              <span class="blog-slider__code"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?> · <?= $categoria ?></span>
+              <h3 class="blog-slider__title"><?= $titulo ?></h3>
+              <p class="blog-slider__text"><?= $texto ?></p>
+              <a href="#contacto" class="blog-slider__button">
+                <i class="fas fa-calendar-check me-2"></i>Agenda tu clase
+              </a>
+            </div>
+          </article>
+          <?php endforeach; ?>
         </div>
-      </div>
-      <?php endforeach; ?>
+        <div class="blog-slider__pagination"></div>
       </div>
     </div>
   </div>
@@ -272,22 +282,106 @@
 
         <form class="contact-form-card" id="formContacto" novalidate>
           <h3>Agenda tu clase gratis</h3>
-          <p>Completa el formulario y te confirmamos por WhatsApp.</p>
-          <label for="f-nombre">Nombre completo</label>
-          <input type="text" class="form-control" id="f-nombre" name="nombre" placeholder="Ej. Maria Lopez" required>
-          <label for="f-telefono">Telefono / WhatsApp</label>
-          <input type="tel" class="form-control" id="f-telefono" name="telefono" placeholder="Ej. 7000-0000" required>
-          <label for="f-curso">Curso de interes</label>
-          <select class="form-select" id="f-curso" name="curso" required>
-            <option value="Clase A - Motocicleta ($120)">Clase A - Motocicleta ($120)</option>
-            <option value="Clase B - Vehiculo particular ($180)" selected>Clase B - Vehiculo particular ($180)</option>
-            <option value="Clase C - Vehiculo de carga ($260)">Clase C - Vehiculo de carga ($260)</option>
-          </select>
-          <label for="f-mensaje">Mensaje <span class="fw-normal text-secondary">(opcional)</span></label>
-          <textarea class="form-control" id="f-mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aqui..."></textarea>
-          <button type="submit" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp</button>
-          <p class="form-note"><i class="fab fa-whatsapp"></i> Tu mensaje se abrira en WhatsApp con tus datos. Sin spam.</p>
+          <p class="contact-form-intro">Completa tus datos y te confirmamos por WhatsApp.</p>
+
+          <div class="contact-form-grid">
+            <div class="form-field">
+              <label for="f-nombre">Nombre completo</label>
+              <input type="text" class="form-control" id="f-nombre" name="nombre"
+                     placeholder="Ej. María López" autocomplete="name" required>
+            </div>
+
+            <div class="form-field">
+              <label for="f-telefono">Teléfono / WhatsApp</label>
+              <input type="tel" class="form-control" id="f-telefono" name="telefono"
+                     placeholder="Ej. 7000-0000" autocomplete="tel" inputmode="tel" required>
+            </div>
+
+            <div class="form-field form-field-full">
+              <label for="f-curso">Curso de interés</label>
+              <select class="form-select" id="f-curso" name="curso" required>
+                <option value="Clase A - Motocicleta ($120)">Clase A - Motocicleta ($120)</option>
+                <option value="Clase B - Vehiculo particular ($180)" selected>Clase B - Vehiculo particular ($180)</option>
+                <option value="Clase C - Vehiculo de carga ($260)">Clase C - Vehiculo de carga ($260)</option>
+              </select>
+            </div>
+
+            <div class="form-field form-field-full">
+              <label for="f-mensaje">Mensaje <span class="fw-normal text-secondary">(opcional)</span></label>
+              <textarea class="form-control" id="f-mensaje" name="mensaje" rows="2"
+                        placeholder="Escribe tu mensaje aquí..."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-gold">
+            <i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp
+          </button>
+          <p class="form-note"><i class="fab fa-whatsapp"></i> Se abrirá WhatsApp con tus datos. Sin spam.</p>
         </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REDES SOCIALES Y UBICACION ============ -->
+<section class="section social-section" id="siguenos">
+  <div class="container">
+    <div class="title-center mb-5">
+      <h2 class="section-title reveal">Síguenos y <span>visítanos</span></h2>
+      <p class="section-sub reveal">Conecta con nosotros en redes o llega a nuestra escuela</p>
+      <div class="title-line reveal"></div>
+    </div>
+
+    <?php
+    // TODO: reemplazar los enlaces "#siguenos" por los perfiles oficiales cuando esten disponibles.
+    $redesSociales = [
+      ['fab fa-tiktok', 'TikTok', '@esdrive', '#siguenos', false],
+      ['fab fa-instagram', 'Instagram', '@esdrive', '#siguenos', false],
+      ['fab fa-facebook-f', 'Facebook', 'ESDRIVE Escuela de Manejo', '#siguenos', false],
+      ['fas fa-envelope', 'Correo electrónico', 'contacto@esdrive.com', 'mailto:contacto@esdrive.com', false],
+      ['fab fa-whatsapp', 'WhatsApp', '+503 7000-0000', 'https://wa.me/50370000000', true],
+    ];
+
+    // TODO: reemplazar por la direccion exacta de la escuela.
+    $direccionCorta = 'Av. Principal #123, San Salvador';
+    $direccionMapa = $direccionCorta . ', El Salvador';
+    $mapaEmbed = 'https://www.google.com/maps?q=' . rawurlencode($direccionMapa) . '&output=embed';
+    $mapaRuta = 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($direccionMapa);
+    ?>
+
+    <div class="social-layout">
+      <div class="social-channels reveal">
+        <?php foreach ($redesSociales as [$icono, $nombre, $detalle, $url, $externo]): ?>
+        <a class="social-channel" href="<?= htmlspecialchars($url) ?>"<?= $externo ? ' target="_blank" rel="noopener"' : '' ?>>
+          <span class="social-icon"><i class="<?= $icono ?>"></i></span>
+          <span class="social-copy">
+            <span class="social-name"><?= $nombre ?></span>
+            <span class="social-detail"><?= $detalle ?></span>
+          </span>
+          <i class="fas fa-arrow-right social-arrow" aria-hidden="true"></i>
+        </a>
+        <?php endforeach; ?>
+      </div>
+
+      <div class="map-card reveal">
+        <div class="map-frame">
+          <iframe
+            src="<?= $mapaEmbed ?>"
+            title="Ubicación de ESDRIVE Escuela de Manejo"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+        <div class="map-info">
+          <div>
+            <span class="map-kicker"><i class="fas fa-location-dot"></i> Nuestra ubicación</span>
+            <h3><?= $direccionCorta ?></h3>
+            <p><i class="fas fa-clock me-2"></i>Lun a Sab: 7:00 - 18:00</p>
+          </div>
+          <a class="btn btn-gold" href="<?= $mapaRuta ?>" target="_blank" rel="noopener">
+            <i class="fas fa-diamond-turn-right me-2"></i>Cómo llegar
+          </a>
+        </div>
       </div>
     </div>
   </div>

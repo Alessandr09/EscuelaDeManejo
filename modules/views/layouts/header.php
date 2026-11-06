@@ -23,7 +23,7 @@
         <li class="nav-item"><a class="nav-link" href="#porque">Nosotros</a></li>
         <li class="nav-item"><a class="nav-link" href="#testimonios">Testimonios</a></li>
         <li class="nav-item"><a class="nav-link" href="#preguntas">Preguntas</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="#siguenos">Contacto</a></li>
       </ul>
 
       <div class="d-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0">
