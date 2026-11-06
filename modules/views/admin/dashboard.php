@@ -2,7 +2,7 @@
 <div class="page-head d-flex flex-wrap justify-content-between align-items-center gap-3">
   <div>
     <h3>Hola, <span>Admin</span> 👋</h3>
-    <p>Aqui tienes el resumen de ESDRIVE de hoy.</p>
+    <p>Aqui tienes el resumen de ECOSAN de hoy.</p>
   </div>
   <div class="d-flex align-items-center gap-2 flex-wrap">
     <button class="btn btn-glass btn-sm"><i class="fas fa-download me-2"></i>Exportar</button>

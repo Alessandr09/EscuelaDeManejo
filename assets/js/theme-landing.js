@@ -1,5 +1,5 @@
 /* ============================================================
-   ESDRIVE - Toggle de tema claro / oscuro
+   ECOSAN - Toggle de tema claro / oscuro
    Oscuro via clase html.dark-mode (el tema claro es el default,
    adaptado al diseno Canva "Ruta Segura").
    Guarda la preferencia en localStorage
@@ -14,11 +14,11 @@
     if (isDark) {
       html.classList.add('dark-mode');
       if (icon) icon.className = 'fas fa-sun';  // icono para pasar a claro
-      localStorage.setItem('esdrive-theme', 'dark');
+      localStorage.setItem('ecosan-theme', 'dark');
     } else {
       html.classList.remove('dark-mode');
       if (icon) icon.className = 'fas fa-moon'; // icono para pasar a oscuro
-      localStorage.setItem('esdrive-theme', 'light');
+      localStorage.setItem('ecosan-theme', 'light');
     }
     // Recalcular graficas si existen (ApexCharts)
     if (window.chartAlumnos) window.chartAlumnos.resize();
@@ -26,7 +26,7 @@
   }
 
   // Inicializar tema: claro por defecto (diseno Canva), oscuro si se guardo o el SO lo prefiere
-  var saved = localStorage.getItem('esdrive-theme');
+  var saved = localStorage.getItem('ecosan-theme');
   var prefersDark = window.matchMedia &&
     window.matchMedia('(prefers-color-scheme: dark)').matches;
   var initialDark = saved ? saved === 'dark' : prefersDark;

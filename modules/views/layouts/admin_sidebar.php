@@ -7,7 +7,7 @@ $activo = function($v) use ($vista){ return $vista === $v ? 'active' : ''; };
   <div class="sidebar-brand">
     <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo">
     <div class="sb-text">
-      <div class="sb-name">ES<span>DRIVE</span></div>
+      <div class="sb-name">ECO<span>SAN</span></div>
       <div class="sb-sub">Panel admin</div>
     </div>
   </div>
@@ -35,6 +35,6 @@ $activo = function($v) use ($vista){ return $vista === $v ? 'active' : ''; };
   </nav>
 
   <div class="sidebar-foot">
-    <small><i class="fas fa-circle" style="color:#46c26e;font-size:.6rem"></i> Servidor en linea<br>ESDRIVE v1.0</small>
+    <small><i class="fas fa-circle" style="color:#46c26e;font-size:.6rem"></i> Servidor en linea<br>ECOSAN v1.0</small>
   </div>
 </aside>

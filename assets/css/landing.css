@@ -1,6 +1,6 @@
 /* ============================================================
-   ESDRIVE - Sistema de diseno adaptado al diseno Canva "Ruta Segura"
-   Paleta: blanco/azul marino + acento dorado (claro por defecto)
+   ECOSAN (demo) - Sistema de diseno adaptado al diseno Canva "Ruta Segura"
+   Paleta: navy + acento dorado (claro por defecto)
    Soporta modo oscuro via html.dark-mode
    ============================================================ */
 
@@ -287,7 +287,7 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
     content: '';
     position: absolute;
     inset: -30% 0;
-    background: url('../img/pexels-gustavo-fring-4895404.jpg') 72% center / cover no-repeat;
+    background: url('../img/pexels-gustavo-fring-4895404.webp') 72% center / cover no-repeat;
     transform: translate3d(0, var(--hero-py, 0px), 0);
     will-change: transform;
     z-index: 0;
@@ -296,7 +296,7 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(13, 26, 43, .88) 0%, rgba(13, 26, 43, .62) 40%, rgba(13, 26, 43, .08) 78%);
+    background: linear-gradient(90deg, var(--hero-ov-1) 0%, var(--hero-ov-2) 45%, transparent 82%);
     z-index: 0;
 }
 .hero-wrap > .container { position: relative; z-index: 1; }
@@ -451,7 +451,67 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
 }
 .course-feats li i { color: var(--gold); }
 
-/* ============ POR QUE ESDRIVE (slider tipo blog) ============ */
+/* Tabla de precios en tarjetas */
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 2px;
+    font-size: .88rem;
+}
+.price-table thead th {
+    font-size: .66rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-mut);
+    text-align: left;
+    padding: 4px 8px;
+    border-bottom: 2px solid var(--border);
+}
+.price-table tbody td {
+    padding: 7px 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 500;
+}
+.price-table tbody td:first-child { color: var(--text-mut); font-weight: 600; }
+.price-table th:not(:first-child), .price-table td:not(:first-child) { text-align: center; }
+.price-table tbody tr:last-child td { border-bottom: 0; }
+
+/* Card de asesoría (sin precio) */
+.course-card--accent { background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+.advisory-icon {
+    width: 54px; height: 54px;
+    display: grid; place-items: center;
+    font-size: 1.5rem; color: var(--gold);
+    border: 1px solid var(--gold);
+    background: rgba(233,165,55,.12);
+    border-radius: var(--radius);
+    margin: 8px 0 16px;
+}
+.advisory-title { font-weight: 700; color: var(--text); font-size: 1.3rem; margin-bottom: 10px; }
+.advisory-text { color: var(--text-mut); font-size: .94rem; line-height: 1.55; }
+
+/* Stats del hero */
+.hero-stats { display: flex; gap: 26px; margin-top: 30px; flex-wrap: wrap; }
+.hero-stat {
+    display: flex; flex-direction: column;
+    border-left: 2px solid rgba(255,255,255,.25);
+    padding-left: 14px;
+}
+.hero-stat b {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    text-shadow: 0 1px 12px rgba(0,0,0,.45);
+}
+.hero-stat small {
+    color: rgba(255,255,255,.85);
+    font-size: .8rem;
+    text-shadow: 0 1px 12px rgba(0,0,0,.45);
+}
+
+/* ============ POR QUE ECOSAN (slider tipo blog) ============ */
 .section-band {
     background: var(--surface-2);
     border-top: 1px solid var(--border);
@@ -884,7 +944,7 @@ html.dark-mode .team-ghost-title {
 .cta-parallax-bg {
     position: absolute;
     inset: -35% 0;
-    background: url('../img/pexels-gustavo-fring-4895404.jpg') center 30% / cover no-repeat;
+    background: url('../img/pexels-gustavo-fring-4895404.webp') center 30% / cover no-repeat;
     will-change: transform;
 }
 .cta-parallax::after {
@@ -1234,6 +1294,161 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
 .form-note { font-size: .72rem; color: #64748b; margin: 8px 0 0; text-align: center; }
 .form-note i { color: #25D366; }
 
+/* Estimación de precio del formulario */
+.price-estimate {
+    color: #334155;
+    font-size: .84rem;
+    margin: 10px 2px 2px;
+}
+.price-estimate strong { color: #b45309; font-size: .95rem; }
+
+/* ============ PROCESO: 4 PASOS ============ */
+.steps-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    padding: 0;
+    margin: 0 0 30px;
+}
+.step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 20px 22px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+}
+.step-num {
+    display: grid;
+    place-items: center;
+    width: 52px; height: 52px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #241a05;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+.step-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.step-card p { color: var(--text-mut); font-size: .88rem; margin: 0; line-height: 1.5; }
+.trust-strip {
+    list-style: none;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+.trust-strip li {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-mut);
+    font-size: .88rem;
+    font-weight: 600;
+}
+.trust-strip i { color: var(--gold); }
+
+/* ============ GALERÍA ============ */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+.gallery-item {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    aspect-ratio: 4 / 3;
+    background: var(--surface-2);
+}
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .45s ease;
+}
+.gallery-item:hover img { transform: scale(1.05); }
+.gallery-item figcaption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    background: rgba(13,26,43,.72);
+    color: #ffffff;
+    font-size: .8rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    backdrop-filter: blur(4px);
+}
+.gallery-note {
+    text-align: center;
+    color: var(--text-mut);
+    font-size: .82rem;
+    font-style: italic;
+    margin: 18px 0 0;
+}
+
+/* ============ RECURSOS ============ */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+.resource-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-decoration: none;
+    transition: transform .3s ease, border-color .3s ease;
+}
+.resource-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+.resource-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+}
+.resource-card h3 {
+    font-size: .97rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.35;
+}
+.resource-card p {
+    color: var(--text-mut);
+    font-size: .84rem;
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+}
+.resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-soft);
+    font-weight: 600;
+    font-size: .84rem;
+    margin-top: 4px;
+}
+.resource-link i { transition: transform .2s ease; }
+.resource-card:hover .resource-link i { transform: translateX(4px); }
+
 /* ============ REVEAL (scroll) ============ */
 /* El contenido nunca depende de JS para ser visible */
 .reveal { opacity: 1; transition: opacity .3s ease; }
@@ -1276,6 +1491,11 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
     .team-card.right-1 { transform: translateX(175px) scale(.9) translateZ(-100px); }
     .team-card.left-2 { transform: translateX(-350px) scale(.8) translateZ(-300px); }
     .team-card.right-2 { transform: translateX(350px) scale(.8) translateZ(-300px); }
+    /* Pasos, recursos, galeria y stats */
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .resource-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-stats { gap: 18px; }
     /* Redes sociales y ubicacion */
     .social-layout { gap: 26px; }
     .social-channel { padding: 14px 15px; }
@@ -1369,6 +1589,13 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
     .map-frame { min-height: 260px; }
     .map-info { flex-direction: column; align-items: flex-start; padding: 18px; }
     .map-info .btn { width: 100%; justify-content: center; }
+    /* Pasos, recursos, galeria y stats */
+    .steps-grid { grid-template-columns: 1fr; }
+    .resource-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 14px; }
+    .hero-stat b { font-size: 1.25rem; }
+    .price-table { font-size: .8rem; }
 }
 
 /* ============ ACCESIBILIDAD: MOVIMIENTO REDUCIDO ============ */

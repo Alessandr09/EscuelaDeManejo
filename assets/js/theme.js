@@ -1,5 +1,5 @@
 /* ============================================================
-   ESDRIVE - Toggle de tema claro / oscuro
+   ECOSAN - Toggle de tema claro / oscuro
    Guarda la preferencia en localStorage
    ============================================================ */
 
@@ -12,11 +12,11 @@
     if (isLight) {
       html.classList.add('light-mode');
       if (icon) icon.className = 'fas fa-moon'; // icono para pasar a oscuro
-      localStorage.setItem('esdrive-theme', 'light');
+      localStorage.setItem('ecosan-theme', 'light');
     } else {
       html.classList.remove('light-mode');
       if (icon) icon.className = 'fas fa-sun';  // icono para pasar a claro
-      localStorage.setItem('esdrive-theme', 'dark');
+      localStorage.setItem('ecosan-theme', 'dark');
     }
     // Recalcular graficas si existen (ApexCharts)
     if (window.chartAlumnos) window.chartAlumnos.resize();
@@ -24,7 +24,7 @@
   }
 
   // Inicializar tema
-  var saved = localStorage.getItem('esdrive-theme');
+  var saved = localStorage.getItem('ecosan-theme');
   var prefersDark = window.matchMedia &&
     window.matchMedia('(prefers-color-scheme: dark)').matches;
   var initialLight = saved ? saved === 'light' : !prefersDark;

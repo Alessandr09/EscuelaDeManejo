@@ -1,6 +1,6 @@
 /* ============================================================
-   ESDRIVE - site.js (sitio publico)
-   Efectos parallax + formulario de contacto (WhatsApp)
+   ECOSAN - site.js (sitio publico)
+   Efectos parallax + formulario de inscripción (WhatsApp)
    ============================================================ */
 (function () {
   'use strict';
@@ -9,27 +9,77 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- FORMULARIO DE CONTACTO -> WhatsApp ---------- */
+  var WHATSAPP_NUMERO = '50375288584';
   var textareaMensaje = document.getElementById('f-mensaje');
   var formContacto = document.getElementById('formContacto');
+  var cursoSel = document.getElementById('f-curso');
+  var nivelSel = document.getElementById('f-nivel');
+  var precioOut = document.getElementById('precioEstimado');
+
+  /* ---------- ESTIMACION DE PRECIO (catalogo ECOSAN) ---------- */
+  var COTIZADOR = {
+    'particular-estandar': { principiante: 180, intermedio: 160, avanzado: 140 },
+    'particular-automatico': { principiante: 200, intermedio: 170, avanzado: 140 },
+    'liviano': { principiante: 250, avanzado: 175 },
+    'moto-estandar': { principiante: 160, intermedio: 140, avanzado: 120 },
+    'moto-automatico': { principiante: 160, intermedio: 140, avanzado: 120 },
+    'refuerzo-particular': { clase: '$15 – $20 por clase' },
+    'refuerzo-liviana': { clase: '$30 por clase' },
+    'empresas': { clase: 'Cotización personalizada' }
+  };
+
+  function actualizarPrecio() {
+    if (!cursoSel || !precioOut) return;
+    var tabla = COTIZADOR[cursoSel.value];
+    if (!tabla) { precioOut.textContent = '—'; return; }
+    if (tabla.clase) { precioOut.textContent = tabla.clase; return; }
+    var nivel = nivelSel ? nivelSel.value.toLowerCase() : '';
+    var precio = tabla[nivel];
+    precioOut.textContent = (precio == null) ? 'A consultar con un asesor' : '$' + precio;
+  }
+
+  if (cursoSel) {
+    cursoSel.addEventListener('change', actualizarPrecio);
+    if (nivelSel) nivelSel.addEventListener('change', actualizarPrecio);
+    actualizarPrecio();
+  }
+
+  /* Botones "Inscribirme" de las tarjetas: preseleccionan el curso en el formulario */
+  var botonesCurso = document.querySelectorAll('[data-curso]');
+  Array.prototype.forEach.call(botonesCurso, function (btn) {
+    btn.addEventListener('click', function () {
+      if (cursoSel && btn.getAttribute('data-curso')) {
+        cursoSel.value = btn.getAttribute('data-curso');
+        actualizarPrecio();
+      }
+    });
+  });
+
+  /* ---------- FORMULARIO DE INSCRIPCION -> WhatsApp ---------- */
   if (formContacto) {
     formContacto.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var nombre = formContacto.elements['nombre'].value.trim();
       var telefono = formContacto.elements['telefono'].value.trim();
-      var curso = formContacto.elements['curso'].value;
+      var cursoTexto = cursoSel ? cursoSel.options[cursoSel.selectedIndex].text : '';
       if (!nombre || !telefono) {
         formContacto.classList.add('was-validated');
         return;
       }
+      var nivel = nivelSel ? nivelSel.value : '';
+      var horarioSel = formContacto.elements['horario'];
+      var horario = horarioSel ? horarioSel.value : '';
       var mensajeTexto = textareaMensaje ? textareaMensaje.value.trim() : '';
-      var mensaje = 'Hola ESDRIVE, soy ' + nombre +
-        ' (tel: ' + telefono + '). Quiero agendar una clase muestra gratis para: ' + curso + '.';
+      var mensaje = 'Hola ECOSAN, soy ' + nombre +
+        ' (tel: ' + telefono + '). Quiero inscribirme en: ' + cursoTexto +
+        (nivel ? ' — Nivel ' + nivel : '') +
+        (horario ? '. Horario deseado: ' + horario + '.' : '');
       if (mensajeTexto) {
         // WhatsApp no soporta HTML: se envia el texto plano (max. 500 caracteres)
         var extra = mensajeTexto.length > 500 ? mensajeTexto.substring(0, 500) + '…' : mensajeTexto;
         mensaje += '\n\nMensaje:\n' + extra;
       }
-      window.open('https://wa.me/50370000000?text=' + encodeURIComponent(mensaje), '_blank', 'noopener');
+      window.open('https://wa.me/' + WHATSAPP_NUMERO + '?text=' + encodeURIComponent(mensaje), '_blank', 'noopener');
     });
   }
 
@@ -183,7 +233,6 @@
 
   /* ---------- PARALLAX ---------- */
   var hero = document.querySelector('.hero-wrap');
-  var heroGrid = hero ? hero.querySelector('.hero-grid') : null;
   var cta = document.querySelector('.cta-parallax');
   var ctaBg = cta ? cta.querySelector('.cta-parallax-bg') : null;
   var ticking = false;
@@ -196,11 +245,6 @@
     // Hero: la imagen avanza mas lento que el contenido
     if (hero && y < vh * 1.5) {
       hero.style.setProperty('--hero-py', (y * 0.25) + 'px');
-      if (heroGrid) {
-        var f = Math.min(1, y / (vh * 0.75));
-        heroGrid.style.transform = 'translate3d(0,' + (-y * 0.12) + 'px,0)';
-        heroGrid.style.opacity = String(Math.max(0, 1 - f));
-      }
     }
 
     // CTA: la capa de imagen se desplaza dentro de su seccion
