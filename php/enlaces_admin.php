@@ -21,7 +21,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Estilos propios -->
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=3">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=6">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=4">
 
 <!-- Bootstrap JS -->

@@ -1,35 +1,15 @@
 <?php require_once __DIR__ . '/../../../php/base.php'; ?>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HERO (adaptado al diseno Canva: ancho completo, imagen de fondo) ============ -->
 <section class="hero-wrap">
   <div class="container">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <span class="hero-badge animate__animated animate__fadeInDown"><i class="fas fa-star"></i> +2,500 conductores formados</span>
-        <h1 class="hero-title animate__animated animate__fadeInUp">Aprende a conducir con <em>confianza y seguridad</em></h1>
-        <p class="hero-lead animate__animated animate__fadeInUp">Obten tu licencia de las clases A, B y C con instructores certificados, vehiculos modernos y un enfoque practico que si funciona.</p>
-        <div class="hero-cta animate__animated animate__fadeInUp" style="animation-delay:.15s">
-          <a href="#cursos" class="btn btn-gold"><i class="fas fa-steering-wheel me-2"></i>Ver cursos</a>
-          <a href="#contacto" class="btn btn-glass"><i class="fas fa-paper-plane me-2"></i>Agenda tu clase</a>
-        </div>
-        <div class="hero-stats animate__animated animate__fadeInUp" style="animation-delay:.3s">
-          <div class="hero-stat"><b>2,500+</b><small>Alumnos formados</small></div>
-          <div class="hero-stat"><b>98%</b><small>Tasa de aprobacion</small></div>
-          <div class="hero-stat"><b>12</b><small>Instructores</small></div>
-        </div>
-      </div>
-
-      <div class="glass hero-card animate__animated animate__zoomIn">
-        <div class="hero-card-row" style="margin-top:0;margin-bottom:18px">
-          <div class="pill"><i class="fas fa-shield-halved" style="color:var(--gold)"></i><b>100%</b>Seguro</div>
-          <div class="pill"><i class="fas fa-clock" style="color:var(--gold)"></i><b>Flexible</b>Horarios</div>
-        </div>
-        <i class="fas fa-car-side car"></i>
-        <div class="hero-card-row">
-          <div class="pill"><b>Clase A</b>Motocicleta</div>
-          <div class="pill"><b>Clase B</b>Particular</div>
-          <div class="pill"><b>Clase C</b>Carga</div>
-        </div>
+    <div class="hero-copy">
+      <span class="hero-kicker">Seguridad, experiencia y confianza al volante</span>
+      <h1 class="hero-title">Aprende a manejar con confianza</h1>
+      <p class="hero-lead">Instructores certificados, autos doble comando y cursos para todas las edades</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn btn-gold">Agenda tu clase muestra gratis</a>
+        <a href="tel:+50322223333" class="btn btn-hero-outline"><i class="fas fa-phone me-2"></i>+503 2222-3333</a>
       </div>
     </div>
   </div>
@@ -47,27 +27,34 @@
     <div class="row g-4">
       <?php
       $cursos = [
-        ['fa-motorcycle','Clase A','Motocicleta','$120','2 semanas',['Incluye casco y guantes','Practica en circuito cerrado','Teoria + examen practico','Certificado inmediato']],
-        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
-        ['fa-truck','Clase C','Vehiculo de carga','$260','6 semanas',['Manejo de camiones y trailers','Certificacion oficial','Horarios nocturnos disponibles','Acompañamiento post-certificacion']],
+        ['fa-motorcycle','Clase A','Motocicleta','$120','2 semanas','motocicleta.jpg',['Incluye casco y guantes','Practica en circuito cerrado','Teoria + examen practico','Certificado inmediato']],
+        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas','sedan.jpg',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
+        ['fa-truck','Clase C','Vehiculo de carga','$260','6 semanas','microbus.jpg',['Manejo de camiones y trailers','Certificacion oficial','Horarios nocturnos disponibles','Acompañamiento post-certificacion']],
       ];
       foreach ($cursos as $c):
-        [$icon,$titulo,$sub,$precio,$dura,$feats] = $c;
+        [$icon,$titulo,$sub,$precio,$dura,$img,$feats] = $c;
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass course-card reveal">
-          <div class="course-icon"><i class="fas <?= $icon ?>"></i></div>
-          <h4><?= $titulo ?></h4>
-          <p class="mb-3"><?= $sub ?></p>
-          <div class="course-price"><?= $precio ?> <small>/ total</small></div>
-          <ul class="course-feats">
-            <?php foreach ($feats as $f): ?>
-            <li><i class="fas fa-check-circle"></i><?= $f ?></li>
-            <?php endforeach; ?>
-          </ul>
-          <div class="d-flex align-items-center justify-content-between">
-            <span class="badge b-info"><?= $dura ?></span>
-            <a href="#contacto" class="btn btn-gold btn-sm">Inscribirme</a>
+        <div class="course-card reveal">
+          <div class="course-media">
+            <img src="<?= BASE_URL ?>/assets/img/<?= $img ?>" alt="<?= $titulo ?> - <?= $sub ?>" loading="lazy">
+            <span class="course-tag"><i class="fas fa-clock"></i><?= $dura ?></span>
+          </div>
+          <div class="course-body">
+            <div class="course-head">
+              <div class="course-icon"><i class="fas <?= $icon ?>"></i></div>
+              <div>
+                <h4><?= $titulo ?></h4>
+                <p><?= $sub ?></p>
+              </div>
+            </div>
+            <div class="course-price"><?= $precio ?> <small>/ total</small></div>
+            <ul class="course-feats">
+              <?php foreach ($feats as $f): ?>
+              <li><i class="fas fa-check-circle"></i><?= $f ?></li>
+              <?php endforeach; ?>
+            </ul>
+            <a href="#contacto" class="btn btn-gold w-100">Inscribirme</a>
           </div>
         </div>
       </div>
@@ -77,14 +64,15 @@
 </section>
 
 <!-- ============ PORQUE NOSOTROS ============ -->
-<section class="section" id="porque">
+<section class="section section-band" id="porque">
   <div class="container">
     <div class="title-center mb-5">
       <h2 class="section-title reveal">¿Por que <span>ESDRIVE</span>?</h2>
       <p class="section-sub reveal">Razones por las que somos la mejor opcion</p>
       <div class="title-line reveal"></div>
     </div>
-    <div class="row g-4">
+    <div class="feature-grid reveal">
+      <div class="row g-0">
       <?php
       $feats = [
         ['fa-chalkboard-teacher','Teoria moderna','Clases con material multimedia y simuladores interactivos.'],
@@ -94,17 +82,19 @@
         ['fa-shield-halved','Totalmente asegurado','Cada alumno practica cubierto por seguro.'],
         ['fa-graduation-cap','Certificacion oficial','Te preparamos para aprobar a la primera.'],
       ];
-      foreach ($feats as $f):
+      foreach ($feats as $i => $f):
         [$icon,$t,$d] = $f;
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass-soft feature-item reveal">
+        <div class="feature-item">
+          <span class="fi-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
           <div class="fi-icon"><i class="fas <?= $icon ?>"></i></div>
           <h5><?= $t ?></h5>
           <p><?= $d ?></p>
         </div>
       </div>
       <?php endforeach; ?>
+      </div>
     </div>
   </div>
 </section>
@@ -129,16 +119,17 @@
         $ini = strtoupper(substr($nom,0,1));
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="glass testi-card reveal">
+        <div class="testi-card reveal">
+          <i class="fas fa-quote-right testi-quote"></i>
           <div class="testi-stars">
             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
           </div>
-          <p>"<?= $txt ?>"</p>
+          <p><?= $txt ?></p>
           <div class="testi-user">
             <div class="testi-avatar"><?= $ini ?></div>
             <div>
-              <div style="font-weight:600"><?= $nom ?></div>
-              <small style="color:var(--text-mut)"><?= $rol ?></small>
+              <div class="testi-name"><?= $nom ?></div>
+              <div class="testi-role"><?= $rol ?></div>
             </div>
           </div>
         </div>
@@ -148,42 +139,82 @@
   </div>
 </section>
 
-<!-- ============ CTA CONTACTO ============ -->
-<section class="section" id="contacto">
+<!-- ============ PREGUNTAS FRECUENTES ============ -->
+<section class="section section-band" id="preguntas">
   <div class="container">
-    <div class="glass p-5 text-center reveal">
-      <h2 class="section-title">¿Listo para <span>conducir</span>?</h2>
-      <p class="section-sub mb-4">Agenda tu primera clase hoy y comienza el camino hacia tu licencia.</p>
-      <div class="d-flex gap-3 justify-content-center flex-wrap">
-        <a href="https://wa.me/50370000000" target="_blank" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>WhatsApp</a>
-        <a href="mailto:contacto@esdrive.com" class="btn btn-glass"><i class="fas fa-envelope me-2"></i>Correo</a>
+    <div class="title-center mb-5">
+      <h2 class="section-title reveal">Preguntas <span>frecuentes</span></h2>
+      <p class="section-sub reveal">Todo lo que necesitas saber antes de inscribirte</p>
+      <div class="title-line reveal"></div>
+    </div>
+
+    <div class="faq-wrap reveal">
+      <div class="accordion" id="faqAccordion">
+        <?php
+        $faqs = [
+          ['faq1', true,  '¿Cuánto tiempo toma obtener mi licencia?', 'Depende de la clase que elijas: la Clase A (motocicleta) toma 2 semanas, la Clase B (particular) 4 semanas y la Clase C (carga) 6 semanas. Tenemos horarios de mañana, tarde y fines de semana para que avances a tu ritmo.'],
+          ['faq2', false, '¿El curso incluye vehículo y seguro?', 'Sí. Practicas con vehículos doble comando, de flotilla reciente y totalmente asegurados. En la Clase B puedes elegir entre vehículo automático o manual, y en la Clase A incluimos casco y guantes.'],
+          ['faq3', false, '¿Qué edad mínima se necesita para inscribirse?', 'Puedes inscribirte desde los 16 años con permiso provisional firmado por tu padre, madre o tutor legal. Los menores reciben formación en circuito cerrado antes de salir a la vía pública.'],
+          ['faq4', false, '¿Qué métodos de pago aceptan?', 'Aceptamos efectivo, tarjetas de débito/crédito y transferencias bancarias. Puedes apartar tu lugar con el 50% de anticipo y pagar el resto antes de tu primera práctica.'],
+          ['faq5', false, '¿Qué pasa si no apruebo el examen a la primera?', 'Sin problema: tu paquete incluye clases de refuerzo sin costo hasta que apruebes. Nuestro 98% de aprobados en el primer intento sale de prepararte con simulacros y práctica constante.'],
+        ];
+        foreach ($faqs as [$id, $open, $pregunta, $respuesta]):
+        ?>
+        <div class="accordion-item">
+          <h3 class="accordion-header" id="heading-<?= $id ?>">
+            <button class="accordion-button<?= $open ? '' : ' collapsed' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $id ?>" aria-expanded="<?= $open ? 'true' : 'false' ?>" aria-controls="<?= $id ?>">
+              <?= $pregunta ?>
+            </button>
+          </h3>
+          <div id="<?= $id ?>" class="accordion-collapse collapse<?= $open ? ' show' : '' ?>" aria-labelledby="heading-<?= $id ?>" data-bs-parent="#faqAccordion">
+            <div class="accordion-body"><?= $respuesta ?></div>
+          </div>
+        </div>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
 </section>
 
-<script>
-(function () {
-  function animacionPara(el) {
-    if (el.classList.contains('feature-item')) return 'animate__fadeInUp';
-    if (el.classList.contains('course-card')) return 'animate__fadeInUp';
-    if (el.classList.contains('testi-card')) return 'animate__fadeInUp';
-    return 'animate__fadeInUp';
-  }
-  var revelar = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    revelar.forEach(function (el) { el.classList.add('animate__animated'); });
-    return;
-  }
-  var observer = new IntersectionObserver(function (entradas) {
-    entradas.forEach(function (entrada) {
-      if (entrada.isIntersecting) {
-        var el = entrada.target;
-        el.classList.add('animate__animated', animacionPara(el));
-        observer.unobserve(el);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  revelar.forEach(function (el) { observer.observe(el); });
-})();
-</script>
+<!-- ============ CTA CONTACTO (parallax) ============ -->
+<section class="section cta-parallax" id="contacto">
+  <div class="cta-parallax-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="cta-grid">
+        <div>
+          <span class="cta-kicker"><i class="fas fa-route"></i> Tu camino a la licencia empieza aqui</span>
+          <h2 class="section-title">¿Listo para <span>conducir</span>?</h2>
+          <p class="cta-lead">Agenda tu clase muestra gratis hoy y comienza el camino hacia tu licencia. Un asesor te contacta en minutos.</p>
+          <ul class="cta-info">
+            <li><i class="fas fa-phone"></i>+503 2222-3333</li>
+            <li><i class="fas fa-clock"></i>Lun a Sab: 7:00 - 18:00</li>
+            <li><i class="fas fa-location-dot"></i>Av. Principal #123, San Salvador</li>
+            <li><i class="fas fa-envelope"></i>contacto@esdrive.com</li>
+          </ul>
+          <div class="cta-btns cta-btns-left">
+            <a href="https://wa.me/50370000000" target="_blank" rel="noopener" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>WhatsApp</a>
+            <a href="mailto:contacto@esdrive.com" class="btn btn-white"><i class="fas fa-envelope me-2"></i>Correo</a>
+          </div>
+        </div>
+
+        <form class="contact-form-card" id="formContacto" novalidate>
+          <h3>Agenda tu clase gratis</h3>
+          <p>Completa el formulario y te confirmamos por WhatsApp.</p>
+          <label for="f-nombre">Nombre completo</label>
+          <input type="text" class="form-control" id="f-nombre" name="nombre" placeholder="Ej. Maria Lopez" required>
+          <label for="f-telefono">Telefono / WhatsApp</label>
+          <input type="tel" class="form-control" id="f-telefono" name="telefono" placeholder="Ej. 7000-0000" required>
+          <label for="f-curso">Curso de interes</label>
+          <select class="form-select" id="f-curso" name="curso" required>
+            <option value="Clase A - Motocicleta ($120)">Clase A - Motocicleta ($120)</option>
+            <option value="Clase B - Vehiculo particular ($180)" selected>Clase B - Vehiculo particular ($180)</option>
+            <option value="Clase C - Vehiculo de carga ($260)">Clase C - Vehiculo de carga ($260)</option>
+          </select>
+          <button type="submit" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp</button>
+          <p class="form-note"><i class="fab fa-whatsapp"></i> Tu mensaje se abrira en WhatsApp con tus datos. Sin spam.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
