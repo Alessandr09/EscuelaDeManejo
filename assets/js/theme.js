@@ -18,9 +18,10 @@
       if (icon) icon.className = 'fas fa-sun';  // icono para pasar a claro
       localStorage.setItem('esdrive-theme', 'dark');
     }
-    // Recalcular graficas si existen (ApexCharts)
-    if (window.chartAlumnos) window.chartAlumnos.resize();
-    if (window.chartLicencias) window.chartLicencias.resize();
+    // Recalcular graficas si existen (Chart.js o ApexCharts)
+    if (typeof window.esdriveResizeCharts === 'function') {
+      window.esdriveResizeCharts();
+    }
   }
 
   // Inicializar tema

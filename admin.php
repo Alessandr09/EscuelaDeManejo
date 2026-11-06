@@ -52,7 +52,7 @@ if (!$auth) {
           </div>
         </main>
       </div>
-      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=2"></script>
+      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=3"></script>
     <?php endif; ?>
   </body>
 </html>

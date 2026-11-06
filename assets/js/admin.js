@@ -3,6 +3,17 @@
    Sidebar colapsable + fechas con Tempo + Chart.js + CKEditor
    ============================================================ */
 
+/* Redimensiona las graficas del dashboard sin importar la libreria:
+   Chart.js tiene .resize(); ApexCharts se redimensiona al disparar
+   el evento resize de la ventana. */
+window.esdriveResizeCharts = function () {
+  ['chartAlumnos', 'chartLicencias'].forEach(function (key) {
+    var c = window[key];
+    if (c && typeof c.resize === 'function') c.resize();
+  });
+  try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 
   /* ---------- SIDEBAR COLAPSABLE ---------- */
@@ -41,10 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         target.classList.remove('d-none');
         target.classList.add('animate__animated', 'animate__fadeIn');
         // Recalcular graficas al volver a mostrarse (canvas que estado oculto)
-        setTimeout(function () {
-          if (window.chartAlumnos) window.chartAlumnos.resize();
-          if (window.chartLicencias) window.chartLicencias.resize();
-        }, 80);
+        setTimeout(function () { window.esdriveResizeCharts(); }, 80);
       }
     });
   });

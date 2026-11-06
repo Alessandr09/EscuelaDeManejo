@@ -1,5 +1,15 @@
 <?php require_once __DIR__ . '/../../../php/base.php'; $error = $error ?? ''; ?>
 <div class="app-bg"></div>
+
+<!-- Video de fondo + velo glass -->
+<div class="login-video-wrap" aria-hidden="true">
+  <video class="login-video" autoplay muted loop playsinline preload="metadata"
+         poster="<?= BASE_URL ?>/assets/img/logo.svg">
+    <source src="<?= BASE_URL ?>/assets/video/login-bg.mp4" type="video/mp4">
+  </video>
+  <div class="login-video-veil"></div>
+</div>
+
 <div class="login-wrap">
   <div class="glass login-card animate__animated animate__zoomIn">
     <div class="login-logo">

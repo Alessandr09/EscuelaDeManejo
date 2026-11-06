@@ -24,4 +24,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
 <!-- Tema claro/oscuro -->
-<script src="<?= BASE_URL ?>/assets/js/theme.js" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/theme.js?v=2" defer></script>
