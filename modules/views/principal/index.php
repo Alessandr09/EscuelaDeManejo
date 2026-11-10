@@ -1,4 +1,11 @@
-<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+<?php require_once __DIR__ . '/../../../php/base.php';
+require_once __DIR__ . '/../../../php/db.php';
+
+// Equipo: se alimenta solo de la BD (los empleados nuevos aparecen aqui)
+try { $equipo = db()->query('SELECT * FROM empleados ORDER BY id DESC')->fetchAll(); }
+catch (Exception $e) { $equipo = []; }
+$equipoGrupos = array_chunk($equipo, 3);
+?>
 
 <!-- ============ HERO (adaptado al diseno Canva: ancho completo, imagen de fondo) ============ -->
 <section class="hero-wrap">
@@ -138,6 +145,83 @@
     </div>
   </div>
 </section>
+
+<!-- ============ NUESTRO EQUIPO (carousel automatico desde la BD) ============ -->
+<?php if ($equipo): ?>
+<section class="section section-band" id="equipo">
+  <div class="container">
+    <div class="title-center mb-5">
+      <h2 class="section-title reveal">Nuestro <span>equipo</span></h2>
+      <p class="section-sub reveal">Los instructores y staff que te acompanan hasta tu licencia</p>
+      <div class="title-line reveal"></div>
+    </div>
+
+    <?php if (count($equipoGrupos) > 1): ?>
+      <div id="carruselEquipo" class="carousel slide equipo-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+          <?php foreach ($equipoGrupos as $gi => $grupo): ?>
+            <div class="carousel-item <?= $gi === 0 ? 'active' : '' ?>">
+              <div class="row g-4 justify-content-center">
+                <?php foreach ($grupo as $e): ?>
+                  <div class="col-lg-4 col-md-6">
+                    <div class="equipo-card">
+                      <?php if (!empty($e['imagen'])): ?>
+                        <img class="equipo-foto" src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>">
+                      <?php else: ?>
+                        <div class="equipo-foto equipo-foto-txt"><?= htmlspecialchars(strtoupper(substr(preg_replace('/\s+/','',$e['nombre']),0,2))) ?></div>
+                      <?php endif; ?>
+                      <div class="equipo-nombre"><?= htmlspecialchars($e['nombre']) ?></div>
+                      <div class="equipo-cargo"><?= htmlspecialchars($e['cargo']) ?: 'Instructor' ?></div>
+                      <?php if (!empty($e['telefono'])): ?>
+                        <div class="equipo-dato"><i class="fas fa-phone"></i><?= htmlspecialchars($e['telefono']) ?></div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carruselEquipo" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carruselEquipo" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+
+        <div class="carousel-indicators equipo-indicadores">
+          <?php foreach ($equipoGrupos as $gi => $g): ?>
+            <button type="button" data-bs-target="#carruselEquipo" data-bs-slide-to="<?= $gi ?>"
+                    class="<?= $gi === 0 ? 'active' : '' ?>" aria-label="Grupo <?= $gi + 1 ?>"></button>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    <?php else: ?>
+      <div class="row g-4 justify-content-center">
+        <?php foreach ($equipo as $e): ?>
+          <div class="col-lg-4 col-md-6">
+            <div class="equipo-card">
+              <?php if (!empty($e['imagen'])): ?>
+                <img class="equipo-foto" src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>">
+              <?php else: ?>
+                <div class="equipo-foto equipo-foto-txt"><?= htmlspecialchars(strtoupper(substr(preg_replace('/\s+/','',$e['nombre']),0,2))) ?></div>
+              <?php endif; ?>
+              <div class="equipo-nombre"><?= htmlspecialchars($e['nombre']) ?></div>
+              <div class="equipo-cargo"><?= htmlspecialchars($e['cargo']) ?: 'Instructor' ?></div>
+              <?php if (!empty($e['telefono'])): ?>
+                <div class="equipo-dato"><i class="fas fa-phone"></i><?= htmlspecialchars($e['telefono']) ?></div>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
+</section>
+<?php endif; ?>
 
 <!-- ============ PREGUNTAS FRECUENTES ============ -->
 <section class="section section-band" id="preguntas">

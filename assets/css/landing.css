@@ -510,6 +510,58 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 .testi-name { font-weight: 600; color: var(--text); }
 .testi-role { color: var(--text-mut); font-size: .85rem; }
 
+/* ============ NUESTRO EQUIPO (carousel) ============ */
+.equipo-carousel { position: relative; padding-bottom: 42px; }
+.equipo-card {
+    position: relative;
+    padding: 26px 22px 24px;
+    height: 100%;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    transition: border-color .3s ease, transform .3s ease;
+}
+.equipo-card:hover { border-top-color: var(--gold); transform: translateY(-5px); }
+.equipo-foto {
+    width: 116px; height: 116px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 3px solid var(--gold);
+    background: var(--surface-2);
+}
+.equipo-foto-txt {
+    display: grid; place-items: center;
+    background: var(--gold);
+    color: #241a05;
+    font-family: 'Poppins',sans-serif;
+    font-weight: 700; font-size: 2rem;
+}
+.equipo-nombre {
+    font-family: 'Poppins',sans-serif;
+    font-weight: 700; font-size: 1.05rem; color: var(--text);
+    margin-bottom: 4px;
+}
+.equipo-cargo { color: var(--gold); font-size: .88rem; font-weight: 600; margin-bottom: 10px; }
+.equipo-dato { color: var(--text-mut); font-size: .84rem; }
+.equipo-dato i { color: var(--gold); margin-right: 7px; width: 14px; }
+
+.equipo-indicadores {
+    position: static; margin-top: 22px;
+}
+.equipo-indicadores [data-bs-target] {
+    width: 9px; height: 9px; border-radius: 50%;
+    background-color: var(--gold); border: 0; opacity: .4;
+}
+.equipo-indicadores .active { opacity: 1; }
+.equipo-carousel .carousel-control-prev,
+.equipo-carousel .carousel-control-next { width: 12%; opacity: 0; transition: opacity .25s ease; }
+.equipo-carousel:hover .carousel-control-prev,
+.equipo-carousel:hover .carousel-control-next { opacity: .85; }
+
 /* ============ CTA CONTACTO (fondo parallax) ============ */
 .cta-parallax {
     position: relative;
