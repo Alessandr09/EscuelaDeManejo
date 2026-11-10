@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
 
@@ -6,6 +7,9 @@ try { $equipo = db()->query('SELECT * FROM empleados ORDER BY id DESC')->fetchAl
 catch (Exception $e) { $equipo = []; }
 $equipoGrupos = array_chunk($equipo, 3);
 ?>
+=======
+<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 
 <!-- ============ HERO (adaptado al diseno Canva: ancho completo, imagen de fondo) ============ -->
 <section class="hero-wrap">
@@ -106,6 +110,81 @@ $equipoGrupos = array_chunk($equipo, 3);
   </div>
 </section>
 
+<<<<<<< HEAD
+=======
+<!-- ============ EQUIPO (carrusel 3D) ============ -->
+<section class="section team-section" id="equipo">
+  <div class="container">
+    <div class="title-center mb-5">
+      <h2 class="section-title reveal">Nuestro <span>Equipo</span></h2>
+      <p class="section-sub reveal">Instructores y asesores que te acompañan en cada etapa</p>
+      <div class="title-line reveal"></div>
+    </div>
+
+    <div class="team-stage reveal">
+      <span class="team-ghost-title" aria-hidden="true">OUR TEAM</span>
+
+      <div class="team-carousel">
+        <button class="team-arrow left" type="button" aria-label="Miembro anterior">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <div class="team-track">
+          <?php
+          $equipo = [
+            ['miembro-1.jpg', 'Emily Kim', 'Founder'],
+            ['miembro-2.jpg', 'Michael Steward', 'Creative Director'],
+            ['miembro-3.jpg', 'Emma Rodriguez', 'Lead Developer'],
+            ['miembro-4.jpg', 'Julia Gimmel', 'UX Designer'],
+            ['miembro-5.jpg', 'Lisa Anderson', 'Marketing Manager'],
+            ['miembro-6.jpg', 'James Wilson', 'Product Manager'],
+          ];
+          $totalEquipo = count($equipo);
+
+          foreach ($equipo as $i => $miembro):
+            [$foto, $nombre, $rol] = $miembro;
+            $offset = $i; // El primer miembro (indice 0) es el centro
+            if ($offset === 0) {
+              $clase = 'center';
+            } elseif ($offset === 1) {
+              $clase = 'right-1';
+            } elseif ($offset === 2) {
+              $clase = 'right-2';
+            } elseif ($offset === $totalEquipo - 1) {
+              $clase = 'left-1';
+            } elseif ($offset === $totalEquipo - 2) {
+              $clase = 'left-2';
+            } else {
+              $clase = 'hidden';
+            }
+          ?>
+          <div class="team-card <?= $clase ?>" data-index="<?= $i ?>" data-name="<?= htmlspecialchars($nombre) ?>" data-role="<?= htmlspecialchars($rol) ?>">
+            <img src="<?= BASE_URL ?>/assets/img/equipo/<?= $foto ?>" alt="<?= htmlspecialchars($nombre . ' - ' . $rol) ?>" loading="lazy">
+          </div>
+          <?php endforeach; ?>
+        </div>
+
+        <button class="team-arrow right" type="button" aria-label="Siguiente miembro">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="team-member-info" aria-live="polite">
+        <h3 class="team-member-name"><?= htmlspecialchars($equipo[0][1]) ?></h3>
+        <p class="team-member-role"><?= htmlspecialchars($equipo[0][2]) ?></p>
+      </div>
+
+      <div class="team-dots" aria-label="Seleccionar miembro del equipo">
+        <?php for ($i = 0; $i < $totalEquipo; $i++): ?>
+        <button class="team-dot<?= $i === 0 ? ' active' : '' ?>" type="button" data-index="<?= $i ?>"
+                aria-label="Ver miembro <?= $i + 1 ?>" aria-pressed="<?= $i === 0 ? 'true' : 'false' ?>"></button>
+        <?php endfor; ?>
+      </div>
+    </div>
+  </div>
+</section>
+
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 <!-- ============ TESTIMONIOS ============ -->
 <section class="section" id="testimonios">
   <div class="container">
@@ -146,6 +225,7 @@ $equipoGrupos = array_chunk($equipo, 3);
   </div>
 </section>
 
+<<<<<<< HEAD
 <!-- ============ NUESTRO EQUIPO (carousel automatico desde la BD) ============ -->
 <?php if ($equipo): ?>
 <section class="section section-band" id="equipo">
@@ -223,6 +303,8 @@ $equipoGrupos = array_chunk($equipo, 3);
 </section>
 <?php endif; ?>
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 <!-- ============ PREGUNTAS FRECUENTES ============ -->
 <section class="section section-band" id="preguntas">
   <div class="container">
@@ -295,6 +377,11 @@ $equipoGrupos = array_chunk($equipo, 3);
             <option value="Clase B - Vehiculo particular ($180)" selected>Clase B - Vehiculo particular ($180)</option>
             <option value="Clase C - Vehiculo de carga ($260)">Clase C - Vehiculo de carga ($260)</option>
           </select>
+<<<<<<< HEAD
+=======
+          <label for="f-mensaje">Mensaje <span class="fw-normal text-secondary">(opcional)</span></label>
+          <textarea class="form-control" id="f-mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aqui..."></textarea>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
           <button type="submit" class="btn btn-gold"><i class="fab fa-whatsapp me-2"></i>Enviar por WhatsApp</button>
           <p class="form-note"><i class="fab fa-whatsapp"></i> Tu mensaje se abrira en WhatsApp con tus datos. Sin spam.</p>
         </form>

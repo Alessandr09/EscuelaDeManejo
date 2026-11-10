@@ -22,6 +22,10 @@
           <li><a href="<?= BASE_URL ?>/index.php">Inicio</a></li>
           <li><a href="#cursos">Cursos</a></li>
           <li><a href="#porque">Nosotros</a></li>
+<<<<<<< HEAD
+=======
+          <li><a href="#equipo">Equipo</a></li>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
           <li><a href="#testimonios">Testimonios</a></li>
         </ul>
       </div>

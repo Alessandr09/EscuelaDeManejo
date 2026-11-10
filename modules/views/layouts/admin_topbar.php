@@ -19,10 +19,17 @@
       <i class="fas fa-bell"></i><span class="dot"></span>
     </div>
     <div class="topbar-user">
+<<<<<<< HEAD
       <div class="topbar-avatar"><?= htmlspecialchars(esdrive_iniciales($usuarioActual['nombre'] ?? 'Admin')) ?></div>
       <div class="tu-meta">
         <div class="tu-name"><?= htmlspecialchars($usuarioActual['nombre'] ?? 'Admin') ?></div>
         <div class="tu-role"><?= htmlspecialchars(esdrive_rol_label($usuarioActual['rol'] ?? 'administrador')) ?></div>
+=======
+      <div class="topbar-avatar">AD</div>
+      <div class="tu-meta">
+        <div class="tu-name">Admin</div>
+        <div class="tu-role">Administrador</div>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
       </div>
       <a href="<?= BASE_URL ?>/admin.php?v=logout" class="btn-act del" title="Cerrar sesion"><i class="fas fa-right-from-bracket"></i></a>
     </div>

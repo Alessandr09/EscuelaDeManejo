@@ -1,11 +1,19 @@
 <?php
 require_once __DIR__ . '/php/base.php';
+<<<<<<< HEAD
 require_once __DIR__ . '/php/auth.php';
 session_start();
 
 $auth  = $_SESSION['esdrive_auth'] ?? false;
 $vista = $_GET['v'] ?? 'dashboard';
 $error = '';
+=======
+session_start();
+
+// Autenticacion basica de demo
+$auth = $_SESSION['esdrive_auth'] ?? false;
+$vista = $_GET['v'] ?? 'dashboard';
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 
 if ($vista === 'login') { $auth = false; }
 
@@ -16,6 +24,7 @@ if ($vista === 'logout') {
     exit;
 }
 
+<<<<<<< HEAD
 /* ============ LOGIN (usuarios de la BD) ============ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'login') {
     $usuario = trim($_POST['usuario'] ?? '');
@@ -35,12 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'login
         $error = 'Error al conectar con la base de datos';
     }
     if ($error === '') { $error = 'Usuario o contrasena incorrectos'; }
+=======
+// Login (demo: admin / 1234)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'login') {
+    if ($_POST['usuario'] === 'admin' && $_POST['clave'] === '1234') {
+        $_SESSION['esdrive_auth'] = true;
+        header('Location: ' . BASE_URL . '/admin.php?v=dashboard');
+        exit;
+    } else {
+        $error = 'Credenciales incorrectas';
+    }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 
 // Proteccion de vistas
 if (!$auth) {
     $vista = 'login';
 }
+<<<<<<< HEAD
 
 $usuarioActual = null;
 if ($auth) {
@@ -366,6 +387,8 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
 $mapaVistas = ['dashboard','cuentas','examenes','vehiculos','empleados','cursos','instructores','horarios','reportes','configuracion','usuarios'];
 // Ojo: no pisar 'login' (si no, un usuario sin sesion veria el dashboard)
 if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dashboard'; }
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 ?>
 <!doctype html>
 <html lang="es">
@@ -380,6 +403,7 @@ if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dash
         <main class="admin-main">
           <?php include __DIR__ . '/modules/views/layouts/admin_topbar.php'; ?>
           <div class="admin-content">
+<<<<<<< HEAD
             <?php include __DIR__ . '/modules/views/admin/' . $vista . '.php'; ?>
           </div>
         </main>
@@ -388,3 +412,17 @@ if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dash
     <?php endif; ?>
   </body>
 </html>
+=======
+            <?php
+            $mapa = ['dashboard','cuentas','examenes'];
+            $vista = in_array($vista, $mapa) ? $vista : 'dashboard';
+            include __DIR__ . '/modules/views/admin/' . $vista . '.php';
+            ?>
+          </div>
+        </main>
+      </div>
+      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=2"></script>
+    <?php endif; ?>
+  </body>
+</html>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc

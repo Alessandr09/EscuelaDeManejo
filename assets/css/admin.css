@@ -42,6 +42,7 @@ body.admin-body {
 .sidebar-brand .sb-sub { font-size: .64rem; color: var(--text-mut); letter-spacing: 2px; text-transform: uppercase; }
 .admin-layout.sidebar-collapsed .sb-text { opacity: 0; width: 0; }
 
+<<<<<<< HEAD
 /* Sidebar sin barra de scroll visible (sigue pudiendose bajar con el raton) */
 .sidebar-nav {
     flex: 1; padding: 18px 14px;
@@ -49,6 +50,9 @@ body.admin-body {
     scrollbar-width: none; -ms-overflow-style: none;
 }
 .sidebar-nav::-webkit-scrollbar { width: 0; height: 0; }
+=======
+.sidebar-nav { flex: 1; padding: 18px 14px; overflow-y: auto; overflow-x: hidden; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .sidebar-nav .nav-section {
     font-size: .68rem; text-transform: uppercase; letter-spacing: 1.5px;
     color: var(--text-mut); padding: 14px 12px 8px; white-space: nowrap;
@@ -154,7 +158,11 @@ body.admin-body {
 .topbar-user .tu-role { font-size: .75rem; color: var(--gold); }
 
 .admin-content {
+<<<<<<< HEAD
     padding: 14px 16px;
+=======
+    padding: 20px;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     flex: 1;
     min-height: 0;
     display: flex;
@@ -171,7 +179,11 @@ body.admin-body {
 .dash-panel > .row { flex: 1 1 auto; min-height: 0; margin-left: 0; margin-right: 0; }
 
 /* Panel principal del dashboard: envuelve pills + vistas conmutables */
+<<<<<<< HEAD
 .dash-main {
+=======
+.admin-content > .dash-main {
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     height: auto;
     flex: 1 1 auto;
     min-height: 0;
@@ -182,6 +194,7 @@ body.admin-body {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+<<<<<<< HEAD
     gap: 8px;
     margin-bottom: 9px;
 }
@@ -196,34 +209,70 @@ body.admin-body {
 .kpi-card {
     padding: 10px 14px;
     display: flex; align-items: center; gap: 12px;
+=======
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+/* ============ PAGE HEADER ============ */
+.page-head { margin-bottom: 18px; }
+.page-head h3 { font-weight: 700; margin-bottom: 2px; font-size: 1.35rem; color: var(--text); }
+.page-head h3 span { color: var(--gold); }
+.page-head p { color: var(--text-mut); margin: 0; font-size: .95rem; }
+
+/* ============ KPI CARDS ============ */
+.kpi-card {
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     height: 100%;
     transition: transform .28s ease, border-color .28s ease;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
 }
+<<<<<<< HEAD
 .kpi-card:hover { transform: translateY(-4px); border-color: var(--gold); }
 .kpi-icon {
     width: 40px; height: 40px; flex: 0 0 40px;
     border-radius: var(--radius);
     display: grid; place-items: center;
     font-size: 1.05rem;
+=======
+.kpi-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+.kpi-icon {
+    width: 48px; height: 48px; flex: 0 0 48px;
+    border-radius: var(--radius);
+    display: grid; place-items: center;
+    font-size: 1.2rem;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     background: rgba(233,165,55,.1);
     border: 1px solid var(--gold);
     color: var(--gold);
 }
 .kpi-info .kpi-val {
     font-family: 'Poppins', sans-serif;
+<<<<<<< HEAD
     font-size: 1.2rem; font-weight: 800; color: var(--text); line-height: 1.1;
 }
 .kpi-info .kpi-lbl { color: var(--text-mut); font-size: .75rem; }
 .kpi-trend { font-size: .72rem; font-weight: 600; }
+=======
+    font-size: 1.45rem; font-weight: 800; color: var(--text); line-height: 1.1;
+}
+.kpi-info .kpi-lbl { color: var(--text-mut); font-size: .8rem; }
+.kpi-trend { font-size: .78rem; font-weight: 600; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .kpi-trend.up { color: #46c26e; }
 .kpi-trend.down { color: #e5484d; }
 
 /* ============ PANEL ============ */
 .panel {
+<<<<<<< HEAD
     padding: 13px 15px;
+=======
+    padding: 18px 20px;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     height: 100%;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -232,19 +281,31 @@ body.admin-body {
 .panel-flex { display: flex; flex-direction: column; }
 .panel-title {
     font-family: 'Poppins', sans-serif;
+<<<<<<< HEAD
     font-weight: 600; font-size: .93rem;
     display: flex; align-items: center; gap: 9px;
     margin-bottom: 9px;
+=======
+    font-weight: 600; font-size: 1rem;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     flex: 0 0 auto;
     color: var(--text);
 }
 .panel-title i { color: var(--gold); }
 
+<<<<<<< HEAD
 .chart-wrap { position: relative; flex: 1 1 auto; min-height: 240px; }
+=======
+.chart-wrap { position: relative; flex: 1 1 auto; min-height: 320px; }
+.chart-wrap-donut { flex: 0 0 320px; min-height: 320px; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 
 .panel-flex .table-responsive { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
 .panel-flex .table-responsive::-webkit-scrollbar { width: 0; height: 0; }
 
+<<<<<<< HEAD
 /* ===== Fila del dashboard: carrusel + pills ===== */
 .dash-body { flex: 1 1 auto; min-height: 0; }
 .dash-body > [class*="col-"] { min-height: 0; display: flex; flex-direction: column; }
@@ -434,6 +495,8 @@ body.admin-body {
 /* Alerta de exito */
 .alert-ok { background: rgba(70,194,110,.12); border: 1px solid rgba(70,194,110,.32); color: #46c26e; border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; }
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 /* ============ PILL SWITCHER ============ */
 .dash-pills {
     display: inline-flex; gap: 4px;
@@ -460,6 +523,7 @@ body.admin-body {
     box-shadow: 0 4px 14px rgba(233,165,55,.28);
 }
 
+<<<<<<< HEAD
 /* ============ TABLAS ============
    Colores explicitos por tema: oscuro (azul profuro) y claro (grises suaves) */
 .table-glass {
@@ -481,6 +545,18 @@ body.admin-body {
     letter-spacing: 1px;
     border-bottom: 2px solid var(--gold);
     padding: 11px 14px;
+=======
+/* ============ TABLAS ============ */
+.table-glass { margin-bottom: 0; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.table-glass thead th {
+    background: var(--surface-2);
+    color: var(--text-mut);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     white-space: nowrap;
 }
 .table-glass tbody td {
@@ -489,6 +565,7 @@ body.admin-body {
     vertical-align: middle;
     font-size: .88rem;
     color: var(--text);
+<<<<<<< HEAD
     background: var(--surface);
 }
 .table-glass tbody tr { transition: background .18s ease; }
@@ -510,6 +587,13 @@ html.light-mode .table-glass tbody td {
 html.light-mode .table-glass tbody tr:nth-child(even) td { background: #f7f9fc; }
 html.light-mode .table-glass tbody tr:hover td { background: #eef3fa; filter: none; }
 
+=======
+}
+.table-glass tbody tr { transition: background .18s ease; }
+.table-glass tbody tr:hover { background: var(--surface-2); }
+.table-glass tbody tr:last-child td { border-bottom: none; }
+
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .cell-user { display: flex; align-items: center; gap: 12px; }
 .cell-avatar {
     width: 32px; height: 32px; border-radius: var(--radius); flex: 0 0 32px;
@@ -529,12 +613,15 @@ html.light-mode .table-glass tbody tr:hover td { background: #eef3fa; filter: no
 .b-off   { background: rgba(229,72,77,.15); color: #e5484d; border: 1px solid rgba(229,72,77,.3); }
 .b-info  { background: rgba(120,150,240,.15); color: #7c9cf0; border: 1px solid rgba(120,150,240,.3); }
 
+<<<<<<< HEAD
 /* Badges en tema claro: colores mas profundos para contraste */
 html.light-mode .b-active { background: rgba(21,128,61,.12); color: #15803d; border-color: rgba(21,128,61,.3); }
 html.light-mode .b-pend  { background: rgba(217,119,6,.12); color: #b45309; border-color: rgba(217,119,6,.3); }
 html.light-mode .b-off   { background: rgba(185,28,28,.10); color: #b91c1c; border-color: rgba(185,28,28,.28); }
 html.light-mode .b-info  { background: rgba(30,64,175,.10); color: #1e40af; border-color: rgba(30,64,175,.28); }
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .btn-act {
     width: 34px; height: 34px; border-radius: var(--radius);
     display: inline-grid; place-items: center;
@@ -547,6 +634,7 @@ html.light-mode .b-info  { background: rgba(30,64,175,.10); color: #1e40af; bord
 .btn-act.del:hover { background: #e5484d; border-color:#e5484d; color:#fff; }
 
 /* ============ LOGIN ============ */
+<<<<<<< HEAD
 /* Video de fondo + velo glass */
 .login-video-wrap {
     position: fixed;
@@ -577,16 +665,22 @@ html.light-mode .b-info  { background: rgba(30,64,175,.10); color: #1e40af; bord
     -webkit-backdrop-filter: blur(3px);
 }
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .login-wrap {
     min-height: 100vh;
     display: grid; place-items: center;
     padding: 30px 16px;
+<<<<<<< HEAD
     position: relative;
     z-index: 1;
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 .login-card {
     width: 100%; max-width: 420px;
     padding: 40px 36px;
+<<<<<<< HEAD
     border-radius: var(--radius);
     /* Glass sobre el video */
     background: rgba(18, 24, 38, .55);
@@ -623,6 +717,11 @@ html.light-mode .login-card .form-control:focus {
 /* Sin video (prefers-reduced-motion): ocultar y volver al fondo plano */
 @media (prefers-reduced-motion: reduce) {
     .login-video { animation: none; }
+=======
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 .login-logo { text-align: center; margin-bottom: 26px; }
 .login-logo img { width: 64px; height: 64px; margin-bottom: 12px; }

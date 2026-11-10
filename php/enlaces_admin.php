@@ -21,8 +21,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Estilos propios -->
+<<<<<<< HEAD
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=7">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=7">
+=======
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=6">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=3">
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -30,8 +35,16 @@
 <!-- ApexCharts (dashboard) -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+<<<<<<< HEAD
 <!-- CKEditor 5 (examenes) - v41 GPL: no pide license key -->
 <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@41.0.0/build/ckeditor.js" defer></script>
 
 <!-- Tema claro/oscuro -->
 <script src="<?= BASE_URL ?>/assets/js/theme.js?v=2" defer></script>
+=======
+<!-- CKEditor 5 (examenes) -->
+<script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@44.3.0/build/ckeditor.js" defer></script>
+
+<!-- Tema claro/oscuro -->
+<script src="<?= BASE_URL ?>/assets/js/theme.js" defer></script>
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc

@@ -124,6 +124,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
 }
 
 /* ============ NAVBAR ============ */
+<<<<<<< HEAD
 /* Blanca sobre el hero (diseno Canva): solida siempre, sombra sutil al hacer scroll */
 .nav-esdrive {
     height: var(--nav-h);
@@ -135,6 +136,24 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
     transition: box-shadow var(--transition);
 }
 .nav-esdrive.nav-scrolled {
+=======
+/* Flotante sobre el hero: transparente arriba y solida al hacer scroll */
+.nav-esdrive {
+    height: var(--nav-h);
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1030;
+    transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.nav-esdrive.nav-scrolled {
+    background: var(--surface);
+    border-bottom-color: var(--border);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     box-shadow: 0 4px 20px rgba(15, 36, 64, .08);
 }
 .nav-esdrive .navbar-brand {
@@ -148,6 +167,10 @@ h1, h2, h3, h4, h5, h6, .navbar-brand-text, .btn {
     letter-spacing: .5px;
     color: var(--text);
     line-height: 1;
+<<<<<<< HEAD
+=======
+    transition: color var(--transition);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 .nav-brand-name span { color: var(--gold-soft); }
 html.dark-mode .nav-brand-name span { color: var(--gold); }
@@ -156,6 +179,10 @@ html.dark-mode .nav-brand-name span { color: var(--gold); }
     color: var(--text-mut);
     letter-spacing: 3px;
     text-transform: uppercase;
+<<<<<<< HEAD
+=======
+    transition: color var(--transition);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 .nav-esdrive .nav-link {
     color: var(--text-mut);
@@ -222,8 +249,35 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 }
 #btnToggleTheme:hover { color: var(--gold-soft); border-color: var(--gold); }
 
+<<<<<<< HEAD
 /* ============ SECCIONES ============ */
 .section { padding: 90px 0; }
+=======
+/* Header transparente sobre la imagen: textos claros hasta hacer scroll */
+.nav-esdrive:not(.nav-scrolled) .nav-brand-name,
+.nav-esdrive:not(.nav-scrolled) .nav-link,
+.nav-esdrive:not(.nav-scrolled) .navbar-toggler {
+    color: #ffffff;
+}
+.nav-esdrive:not(.nav-scrolled) .nav-brand-name span { color: var(--gold); }
+.nav-esdrive:not(.nav-scrolled) .nav-brand-sub { color: rgba(255, 255, 255, .78); }
+.nav-esdrive:not(.nav-scrolled) .nav-link:hover,
+.nav-esdrive:not(.nav-scrolled) .nav-link.active { color: var(--gold); }
+.nav-esdrive:not(.nav-scrolled) .navbar-toggler { border-color: rgba(255, 255, 255, .45); }
+.nav-esdrive:not(.nav-scrolled) #btnToggleTheme {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, .45);
+}
+.nav-esdrive:not(.nav-scrolled) #btnToggleTheme:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+/* ============ SECCIONES ============ */
+.section { padding: 90px 0; }
+/* El header fijo no debe tapar el destino de los enlaces internos */
+section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .section-title {
     font-weight: 700;
     font-size: 2.1rem;
@@ -243,9 +297,15 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 /* ============ HERO ============ */
 /* Imagen desde detras del header hasta abajo, con parallax (JS: --hero-py) */
 .hero-wrap {
+<<<<<<< HEAD
     min-height: 84vh;
     min-height: 84svh;
     padding-top: 40px;
+=======
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: calc(var(--nav-h) + 40px);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     padding-bottom: 40px;
     position: relative;
     overflow: hidden;
@@ -475,6 +535,218 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 .feature-item h5 { font-weight: 600; font-size: 1.08rem; color: var(--text); margin-bottom: 6px; }
 .feature-item p { color: var(--text-mut); font-size: .9rem; margin: 0; }
 
+<<<<<<< HEAD
+=======
+/* ============ EQUIPO (carrusel 3D) ============ */
+.team-section { overflow: hidden; }
+
+.team-stage { position: relative; }
+
+/* Titulo decorativo de fondo, como en el diseno original */
+.team-ghost-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(4rem, 9vw, 7.5rem);
+    font-weight: 800;
+    line-height: .85;
+    letter-spacing: -.02em;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    color: transparent;
+    background: linear-gradient(to bottom, rgba(233, 165, 55, .30) 20%, rgba(233, 165, 55, 0) 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+html.dark-mode .team-ghost-title {
+    background-image: linear-gradient(to bottom, rgba(255, 215, 106, .22) 20%, rgba(255, 215, 106, 0) 80%);
+}
+
+.team-carousel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+    height: 430px;
+    margin: 55px auto 0;
+    perspective: 1000px;
+}
+
+.team-track {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .8s cubic-bezier(.25, .46, .45, .94);
+}
+
+.team-card {
+    position: absolute;
+    width: 260px;
+    height: 360px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(15, 36, 64, .15);
+    cursor: pointer;
+    transition: transform .8s cubic-bezier(.25, .46, .45, .94), opacity .8s ease,
+                border-color .3s ease, box-shadow .3s ease;
+    will-change: transform, opacity;
+}
+
+.team-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter .8s ease;
+}
+
+.team-card.center {
+    z-index: 10;
+    transform: scale(1.06) translateZ(0);
+    border-color: var(--gold);
+    box-shadow: 0 24px 50px rgba(15, 36, 64, .22);
+}
+
+.team-card.left-1 {
+    z-index: 5;
+    transform: translateX(-190px) scale(.9) translateZ(-100px);
+    opacity: .9;
+}
+
+.team-card.left-2 {
+    z-index: 1;
+    transform: translateX(-380px) scale(.8) translateZ(-300px);
+    opacity: .7;
+}
+
+.team-card.right-1 {
+    z-index: 5;
+    transform: translateX(190px) scale(.9) translateZ(-100px);
+    opacity: .9;
+}
+
+.team-card.right-2 {
+    z-index: 1;
+    transform: translateX(380px) scale(.8) translateZ(-300px);
+    opacity: .7;
+}
+
+.team-card.left-1 img,
+.team-card.left-2 img,
+.team-card.right-1 img,
+.team-card.right-2 img { filter: grayscale(100%); }
+
+.team-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.team-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #241a05;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(233, 165, 55, .35);
+    transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.team-arrow:hover {
+    background: var(--gold-hover);
+    transform: translateY(-50%) scale(1.06);
+    box-shadow: 0 10px 24px rgba(233, 165, 55, .45);
+}
+.team-arrow:focus-visible,
+.team-dot:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+}
+.team-arrow.left { left: 8px; }
+.team-arrow.right { right: 8px; }
+
+.team-member-info {
+    position: relative;
+    z-index: 2;
+    min-height: 96px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.team-member-name {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: opacity .3s ease-out;
+}
+.team-member-name::before,
+.team-member-name::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: clamp(34px, 7vw, 90px);
+    height: 2px;
+    background: var(--gold);
+}
+.team-member-name::before { right: calc(100% + 22px); }
+.team-member-name::after { left: calc(100% + 22px); }
+
+.team-member-role {
+    margin: 0;
+    color: var(--text-mut);
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: opacity .3s ease-out;
+}
+
+.team-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.team-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(233, 165, 55, .28);
+    cursor: pointer;
+    transition: background .3s ease, transform .3s ease;
+}
+.team-dot.active {
+    background: var(--gold);
+    transform: scale(1.3);
+}
+
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 /* ============ TESTIMONIOS ============ */
 .testi-card {
     position: relative;
@@ -510,6 +782,7 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 .testi-name { font-weight: 600; color: var(--text); }
 .testi-role { color: var(--text-mut); font-size: .85rem; }
 
+<<<<<<< HEAD
 /* ============ NUESTRO EQUIPO (carousel) ============ */
 .equipo-carousel { position: relative; padding-bottom: 42px; }
 .equipo-card {
@@ -562,6 +835,8 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 .equipo-carousel:hover .carousel-control-prev,
 .equipo-carousel:hover .carousel-control-next { opacity: .85; }
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 /* ============ CTA CONTACTO (fondo parallax) ============ */
 .cta-parallax {
     position: relative;
@@ -573,15 +848,24 @@ html.dark-mode .nav-esdrive .nav-link.active { color: var(--gold); }
 }
 .cta-parallax-bg {
     position: absolute;
+<<<<<<< HEAD
     inset: -30% 0;
     background: url('../img/pexels-gustavo-fring-4895404.jpg') center center / cover no-repeat;
+=======
+    inset: -35% 0;
+    background: url('../img/pexels-gustavo-fring-4895404.jpg') center 30% / cover no-repeat;
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
     will-change: transform;
 }
 .cta-parallax::after {
     content: '';
     position: absolute;
     inset: 0;
+<<<<<<< HEAD
     background: linear-gradient(160deg, rgba(15,23,41,.92), rgba(36,48,77,.84));
+=======
+    background: linear-gradient(160deg, rgba(15,23,41,.82), rgba(36,48,77,.72));
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 .cta-parallax .container { position: relative; z-index: 1; }
 .cta-inner { text-align: center; }
@@ -743,6 +1027,35 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
     outline: none;
 }
 .contact-form-card .btn { width: 100%; justify-content: center; }
+<<<<<<< HEAD
+=======
+
+/* CKEditor dentro de la tarjeta de contacto */
+.contact-form-card .ck.ck-editor { margin-bottom: 14px; }
+.contact-form-card .ck.ck-toolbar {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+.contact-form-card .ck.ck-editor__editable_inline {
+    min-height: 140px;
+    max-height: 320px;
+    color: #0f2440;
+    background: #ffffff;
+    border: 1px solid #e2e8f0 !important;
+    border-top: 0;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: .72rem .8rem;
+}
+.contact-form-card .ck.ck-editor__editable:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 .2rem rgba(233,165,55,.35);
+    outline: none;
+}
+.contact-form-card .ck-content p,
+.contact-form-card .ck-content li { color: #0f2440; font-size: .95rem; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 .form-note { font-size: .78rem; color: #64748b; margin: 12px 0 0; text-align: center; }
 .form-note i { color: #25D366; }
 
@@ -768,18 +1081,76 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
         padding: 12px;
     }
     .nav-esdrive .navbar-collapse .nav-cta { margin-top: 8px; }
+<<<<<<< HEAD
 }
 @media (max-width: 576px) {
     .hero-wrap {
         min-height: 72vh;
         min-height: 72svh;
         padding-top: 48px;
+=======
+    /* Con el header transparente, el menu desplegable conserva su panel claro */
+    .nav-esdrive:not(.nav-scrolled) .navbar-collapse .nav-link { color: var(--text-mut); }
+    .nav-esdrive:not(.nav-scrolled) .navbar-collapse .nav-link:hover,
+    .nav-esdrive:not(.nav-scrolled) .navbar-collapse .nav-link.active { color: var(--gold-soft); }
+    .nav-esdrive:not(.nav-scrolled) .navbar-collapse #btnToggleTheme {
+        color: var(--text-mut);
+        border-color: var(--border);
+    }
+    /* Carrusel de equipo */
+    .team-carousel { height: 400px; }
+    .team-card { width: 240px; height: 330px; }
+    .team-card.left-1 { transform: translateX(-175px) scale(.9) translateZ(-100px); }
+    .team-card.right-1 { transform: translateX(175px) scale(.9) translateZ(-100px); }
+    .team-card.left-2 { transform: translateX(-350px) scale(.8) translateZ(-300px); }
+    .team-card.right-2 { transform: translateX(350px) scale(.8) translateZ(-300px); }
+}
+@media (max-width: 768px) {
+    .team-ghost-title { font-size: 4.5rem; }
+    .team-carousel { height: 350px; margin-top: 48px; }
+    .team-card { width: 200px; height: 280px; }
+    .team-card.left-1 { transform: translateX(-125px) scale(.9) translateZ(-100px); }
+    .team-card.right-1 { transform: translateX(125px) scale(.9) translateZ(-100px); }
+    .team-card.left-2 { transform: translateX(-250px) scale(.8) translateZ(-300px); }
+    .team-card.right-2 { transform: translateX(250px) scale(.8) translateZ(-300px); }
+    .team-member-name { font-size: 2rem; }
+    .team-member-name::before,
+    .team-member-name::after { width: 50px; }
+    .team-member-name::before { right: calc(100% + 14px); }
+    .team-member-name::after { left: calc(100% + 14px); }
+    .team-member-role { font-size: 1.1rem; }
+}
+@media (max-width: 576px) {
+    .hero-wrap {
+        padding-top: calc(var(--nav-h) + 48px);
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
         padding-bottom: 48px;
     }
     .nav-brand-sub { display: none; }
     .feature-item { padding: 28px 22px; }
     .cta-parallax { padding: 72px 0; }
     .cta-info { gap: 18px; }
+<<<<<<< HEAD
+=======
+    /* Carrusel de equipo */
+    .team-ghost-title { font-size: 3.6rem; }
+    .team-carousel { height: 310px; margin-top: 42px; }
+    .team-card { width: 170px; height: 240px; border-radius: 12px; }
+    .team-card.center { transform: scale(1.05) translateZ(0); }
+    .team-card.left-1 { transform: translateX(-105px) scale(.9) translateZ(-100px); }
+    .team-card.right-1 { transform: translateX(105px) scale(.9) translateZ(-100px); }
+    .team-card.left-2 { transform: translateX(-205px) scale(.8) translateZ(-300px); }
+    .team-card.right-2 { transform: translateX(205px) scale(.8) translateZ(-300px); }
+    .team-arrow { width: 38px; height: 38px; font-size: .9rem; }
+    .team-arrow.left { left: 0; }
+    .team-arrow.right { right: 0; }
+    .team-member-info { min-height: 84px; margin-top: 14px; }
+    .team-member-name { font-size: 1.8rem; }
+    .team-member-name::before,
+    .team-member-name::after { display: none; }
+    .team-member-role { font-size: .85rem; letter-spacing: .1em; }
+    .team-dots { margin-top: 18px; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }
 
 /* ============ ACCESIBILIDAD: MOVIMIENTO REDUCIDO ============ */
@@ -788,4 +1159,9 @@ html.dark-mode .faq-wrap .accordion-button:not(.collapsed) { color: var(--gold);
     .reveal { opacity: 1 !important; transform: none !important; }
     .course-media img { animation: none; transition: none; }
     .hero-wrap::before, .cta-parallax-bg { transform: none !important; }
+<<<<<<< HEAD
+=======
+    .team-track, .team-card, .team-arrow, .team-dot,
+    .team-member-name, .team-member-role { transition: none !important; }
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 }

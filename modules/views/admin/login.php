@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php'; $error = $error ?? ''; ?>
 <div class="app-bg"></div>
+<<<<<<< HEAD
 
 <!-- Video de fondo + velo glass -->
 <div class="login-video-wrap" aria-hidden="true">
@@ -10,6 +11,8 @@
   <div class="login-video-veil"></div>
 </div>
 
+=======
+>>>>>>> 2f49e7418e273fb5b505fe2b836bc5d281f7ddcc
 <div class="login-wrap">
   <div class="glass login-card animate__animated animate__zoomIn">
     <div class="login-logo">
