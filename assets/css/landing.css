@@ -870,6 +870,27 @@ html.dark-mode .team-ghost-title {
     transition: opacity .3s ease-out;
 }
 
+.team-member-contact {
+    margin-top: 8px;
+    min-height: 24px;
+    transition: opacity .3s ease-out;
+}
+
+.team-member-phone {
+    display: inline-flex;
+    align-items: center;
+    color: var(--gold);
+    font-size: .9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.team-member-phone:hover {
+    color: var(--gold-hover);
+    text-decoration: underline;
+}
+
 .team-dots {
     display: flex;
     justify-content: center;

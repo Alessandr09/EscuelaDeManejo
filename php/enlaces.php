@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
 <!-- Estilos propios (diseno adaptado a la landing, independiente del panel) -->
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/landing.css?v=14">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/landing.css?v=15">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -37,4 +37,4 @@
 <script src="<?= BASE_URL ?>/assets/js/theme-landing.js?v=1" defer></script>
 
 <!-- Efectos del sitio: reveal + parallax + formulario -->
-<script src="<?= BASE_URL ?>/assets/js/site.js?v=12" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/site.js?v=13" defer></script>

@@ -62,7 +62,7 @@
     });
   }
 
-  /* ---------- CARRUSEL DE EQUIPO ---------- */
+  /* ---------- CARRUSEL DE EQUIPO (3D Card Carousel adaptado a BD) ---------- */
   (function initTeamCarousel() {
     var track = document.querySelector('.team-track');
     if (!track) return;
@@ -71,6 +71,7 @@
     var dots = Array.prototype.slice.call(document.querySelectorAll('.team-dot'));
     var memberName = document.querySelector('.team-member-name');
     var memberRole = document.querySelector('.team-member-role');
+    var memberContact = document.querySelector('.team-member-contact');
     var leftArrow = document.querySelector('.team-arrow.left');
     var rightArrow = document.querySelector('.team-arrow.right');
     if (!cards.length || !memberName || !memberRole || !leftArrow || !rightArrow) return;
@@ -81,8 +82,17 @@
 
     function updateMemberInfo() {
       var activeCard = cards[currentIndex];
+      if (!activeCard) return;
       memberName.textContent = activeCard.getAttribute('data-name') || '';
       memberRole.textContent = activeCard.getAttribute('data-role') || '';
+      if (memberContact) {
+        var phone = activeCard.getAttribute('data-phone') || '';
+        if (phone) {
+          memberContact.innerHTML = '<a href="tel:' + phone + '" class="team-member-phone"><i class="fas fa-phone me-1"></i>' + phone + '</a>';
+        } else {
+          memberContact.innerHTML = '';
+        }
+      }
     }
 
     function updateCarousel(newIndex, instant) {
@@ -97,10 +107,10 @@
           card.classList.add('center');
         } else if (offset === 1) {
           card.classList.add('right-1');
-        } else if (offset === 2) {
-          card.classList.add('right-2');
         } else if (offset === total - 1) {
           card.classList.add('left-1');
+        } else if (offset === 2) {
+          card.classList.add('right-2');
         } else if (offset === total - 2) {
           card.classList.add('left-2');
         } else {
@@ -122,11 +132,13 @@
       isAnimating = true;
       memberName.style.opacity = '0';
       memberRole.style.opacity = '0';
+      if (memberContact) memberContact.style.opacity = '0';
 
       window.setTimeout(function () {
         updateMemberInfo();
         memberName.style.opacity = '1';
         memberRole.style.opacity = '1';
+        if (memberContact) memberContact.style.opacity = '1';
       }, 250);
 
       window.setTimeout(function () {
@@ -136,21 +148,27 @@
 
     leftArrow.addEventListener('click', function () {
       updateCarousel(currentIndex - 1);
+      restartAutoplay();
     });
 
     rightArrow.addEventListener('click', function () {
       updateCarousel(currentIndex + 1);
+      restartAutoplay();
     });
 
     dots.forEach(function (dot, i) {
       dot.addEventListener('click', function () {
         updateCarousel(i);
+        restartAutoplay();
       });
     });
 
     cards.forEach(function (card, i) {
       card.addEventListener('click', function () {
-        if (i !== currentIndex) updateCarousel(i);
+        if (i !== currentIndex) {
+          updateCarousel(i);
+          restartAutoplay();
+        }
       });
     });
 
@@ -169,6 +187,7 @@
       }
 
       updateCarousel(currentIndex + (e.key === 'ArrowRight' ? 1 : -1));
+      restartAutoplay();
     });
 
     var touchStartX = 0;
@@ -180,10 +199,39 @@
       var diff = touchStartX - e.changedTouches[0].screenX;
       if (Math.abs(diff) > 50) {
         updateCarousel(currentIndex + (diff > 0 ? 1 : -1));
+        restartAutoplay();
       }
     }, { passive: true });
 
+    /* Autoplay suave cada 5 segundos, pausado al interactuar o pasar el cursor */
+    var autoplayTimer = null;
+    function startAutoplay() {
+      if (reduceMotion || total <= 1) return;
+      stopAutoplay();
+      autoplayTimer = window.setInterval(function () {
+        updateCarousel(currentIndex + 1);
+      }, 5000);
+    }
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+    function restartAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    var carouselBox = document.querySelector('.team-carousel');
+    if (carouselBox) {
+      carouselBox.addEventListener('mouseenter', stopAutoplay);
+      carouselBox.addEventListener('mouseleave', startAutoplay);
+      carouselBox.addEventListener('touchstart', stopAutoplay, { passive: true });
+    }
+
     updateCarousel(0, true);
+    startAutoplay();
   })();
 
   /* ---------- SLIDER DE RAZONES (SWIPER) ---------- */
