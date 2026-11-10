@@ -1,0 +1,351 @@
+/* ============================================================
+   Examen teorico de manejo - hoja de estilos propia
+   Misma paleta del panel admin: navy + dorado
+   ============================================================ */
+
+:root {
+    --ex-navy: #0f2440;
+    --ex-navy-2: #16294a;
+    --ex-bg: #f4f6fb;
+    --ex-surface: #ffffff;
+    --ex-border: #e2e8f0;
+    --ex-gold: #e9a537;
+    --ex-gold-hover: #d97706;
+    --ex-text: #0f2440;
+    --ex-mut: #64748b;
+    --ex-ok: #16a34a;
+    --ex-ok-bg: #f0fdf4;
+    --ex-err: #dc2626;
+    --ex-err-bg: #fef2f2;
+}
+
+* { box-sizing: border-box; }
+
+body.examen-body {
+    margin: 0;
+    background: var(--ex-bg);
+    color: var(--ex-text);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Barra superior ---------- */
+.examen-topbar {
+    background: var(--ex-navy);
+    color: #ffffff;
+    padding: 14px 0;
+    box-shadow: 0 4px 18px rgba(15, 36, 64, .18);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+.examen-topbar-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.examen-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #ffffff;
+}
+.examen-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.examen-brand-text b {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: .5px;
+}
+.examen-brand-text small { color: rgba(255, 255, 255, .72); font-size: .78rem; }
+.examen-topbar-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.examen-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: .78rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .10);
+    border: 1px solid rgba(255, 255, 255, .18);
+    color: rgba(255, 255, 255, .92);
+}
+.examen-pill--ghost {
+    background: transparent;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease;
+}
+.examen-pill--ghost:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .4); color: #ffffff; }
+
+/* ---------- Contenedor ---------- */
+.examen-main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+}
+
+/* ---------- Intro / formulario de aplicacion ---------- */
+.examen-intro {
+    background: var(--ex-surface);
+    border: 1px solid var(--ex-border);
+    border-top: 4px solid var(--ex-gold);
+    border-radius: 10px;
+    padding: 26px 28px;
+    margin-bottom: 22px;
+}
+.examen-intro h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+.examen-intro > p { color: var(--ex-mut); margin: 0 0 20px; }
+
+.examen-alumno { max-width: 420px; }
+.examen-alumno label {
+    display: block;
+    font-weight: 600;
+    font-size: .82rem;
+    margin-bottom: 6px;
+    color: var(--ex-text);
+}
+.examen-alumno .form-control {
+    border: 1px solid var(--ex-border);
+    border-radius: 8px;
+    padding: .6rem .75rem;
+    font-size: .95rem;
+    background: #f8fafc;
+}
+.examen-alumno .form-control:focus {
+    background: #ffffff;
+    border-color: var(--ex-gold);
+    box-shadow: 0 0 0 .2rem rgba(233, 165, 55, .3);
+    outline: none;
+}
+
+/* ---------- Barra de progreso ---------- */
+.examen-progreso { margin-top: 22px; }
+.examen-progreso-texto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--ex-mut);
+    margin-bottom: 6px;
+}
+.examen-progreso-barra {
+    height: 8px;
+    background: #e6ebf3;
+    border-radius: 50px;
+    overflow: hidden;
+}
+.examen-progreso-barra span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--ex-gold), var(--ex-gold-hover));
+    border-radius: 50px;
+    transition: width .25s ease;
+}
+
+/* ---------- Preguntas ---------- */
+.examen-lista { display: flex; flex-direction: column; gap: 14px; }
+.examen-card {
+    background: var(--ex-surface);
+    border: 1px solid var(--ex-border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+.examen-card.es-respondida { border-color: var(--ex-gold); box-shadow: 0 6px 18px rgba(233, 165, 55, .14); }
+.examen-card.es-ok { border-left: 5px solid var(--ex-ok); background: var(--ex-ok-bg); }
+.examen-card.es-error { border-left: 5px solid var(--ex-err); background: var(--ex-err-bg); }
+
+.examen-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+.examen-num {
+    flex: 0 0 38px;
+    width: 38px; height: 38px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--ex-navy);
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+}
+.examen-categoria {
+    display: inline-block;
+    font-size: .66rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ex-gold-hover);
+    margin-bottom: 4px;
+}
+.examen-pregunta {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.45;
+}
+.examen-estado { margin-left: auto; font-size: 1.1rem; }
+.examen-card.es-ok .examen-estado { color: var(--ex-ok); }
+.examen-card.es-error .examen-estado { color: var(--ex-err); }
+
+.examen-opciones { display: grid; gap: 8px; }
+.examen-opcion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border: 1px solid var(--ex-border);
+    border-radius: 8px;
+    background: #fbfcfe;
+    cursor: pointer;
+    font-size: .93rem;
+    transition: border-color .15s ease, background .15s ease;
+}
+.examen-opcion:hover { border-color: var(--ex-gold); background: #fffdf8; }
+.examen-opcion input { accent-color: var(--ex-gold); width: 17px; height: 17px; flex: 0 0 auto; }
+.examen-letra {
+    flex: 0 0 26px;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: 6px;
+    background: #eef2f8;
+    color: var(--ex-navy);
+    font-weight: 700;
+    font-size: .78rem;
+}
+.examen-opcion-texto { flex: 1; }
+.examen-opcion.es-correcta {
+    border-color: var(--ex-ok);
+    background: var(--ex-ok-bg);
+    cursor: default;
+}
+.examen-opcion.es-correcta .examen-letra { background: var(--ex-ok); color: #ffffff; }
+.opcion-check { color: var(--ex-ok); }
+
+.examen-solucion {
+    margin: 12px 0 0;
+    font-size: .84rem;
+    color: var(--ex-mut);
+    border-top: 1px dashed var(--ex-border);
+    padding-top: 10px;
+}
+.examen-solucion strong { color: var(--ex-text); }
+
+/* ---------- Resultado ---------- */
+.examen-resultado {
+    background: var(--ex-surface);
+    border: 1px solid var(--ex-border);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+}
+.examen-resultado.es-aprobado { border-top: 5px solid var(--ex-ok); }
+.examen-resultado.es-reprobado { border-top: 5px solid var(--ex-err); }
+.examen-resultado-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.examen-sello {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+.es-aprobado .examen-sello { background: var(--ex-ok-bg); color: var(--ex-ok); border: 1px solid rgba(22, 163, 74, .3); }
+.es-reprobado .examen-sello { background: var(--ex-err-bg); color: var(--ex-err); border: 1px solid rgba(220, 38, 38, .3); }
+.examen-resultado-datos { flex: 1; min-width: 220px; }
+.examen-resultado-datos h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+.examen-resultado-datos p { margin: 0; color: var(--ex-mut); font-size: .92rem; }
+.examen-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.examen-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--ex-border);
+    background: #ffffff;
+    color: var(--ex-text);
+    font-weight: 600;
+    font-size: .9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.examen-btn:hover { background: #f1f5f9; transform: translateY(-1px); }
+.examen-btn--gold {
+    background: var(--ex-gold);
+    border-color: var(--ex-gold);
+    color: #241a05;
+}
+.examen-btn--gold:hover { background: var(--ex-gold-hover); border-color: var(--ex-gold-hover); color: #241a05; }
+
+.examen-alerta {
+    margin: 18px 0 0;
+    font-size: .87rem;
+    color: var(--ex-err);
+    background: var(--ex-err-bg);
+    border: 1px solid rgba(220, 38, 38, .22);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+/* ---------- Enviar ---------- */
+.examen-enviar {
+    margin-top: 10px;
+    text-align: center;
+    padding: 22px 0 0;
+}
+.examen-enviar .examen-btn { font-size: 1rem; padding: 14px 30px; }
+.examen-nota { color: var(--ex-mut); font-size: .82rem; margin: 0 0 12px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 576px) {
+    .examen-main { padding: 18px 14px 44px; }
+    .examen-intro { padding: 20px 18px; }
+    .examen-intro h1 { font-size: 1.35rem; }
+    .examen-card { padding: 16px 16px; }
+    .examen-pregunta { font-size: .95rem; }
+    .examen-topbar-inner { padding: 0 14px; }
+    .examen-brand-text small { display: none; }
+    .examen-acciones { width: 100%; }
+    .examen-acciones .examen-btn { flex: 1; }
+}
+
+/* ---------- Impresion: solo el resultado ---------- */
+@media print {
+    body.examen-body { background: #ffffff; }
+    .no-print { display: none !important; }
+    .examen-main { max-width: 100%; padding: 0; }
+    .examen-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+    .examen-resultado { box-shadow: none; }
+    .examen-topbar { position: static; box-shadow: none; }
+}

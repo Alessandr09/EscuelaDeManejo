@@ -4,7 +4,12 @@
     <h3>Gestion de <span>examenes</span></h3>
     <p>Crea y administra las evaluaciones teoricas y practicas.</p>
   </div>
-  <button class="btn btn-gold btn-sm" onclick="abrirModalExamen()"><i class="fas fa-plus me-2"></i>Nuevo examen</button>
+  <div class="d-flex gap-2 flex-wrap">
+    <a class="btn btn-gold btn-sm" href="<?= BASE_URL ?>/examen.php" target="_blank" rel="noopener">
+      <i class="fas fa-display me-2"></i>Aplicar examen
+    </a>
+    <button class="btn btn-gold btn-sm" onclick="abrirModalExamen()"><i class="fas fa-plus me-2"></i>Nuevo examen</button>
+  </div>
 </div>
 
 <!-- KPIs rapidos -->
@@ -50,6 +55,7 @@
           <td data-fecha="<?= $f ?>"></td>
           <td><span class="badge-soft <?= $cls ?>"><?= $est ?></span></td>
           <td class="text-end">
+            <a href="<?= BASE_URL ?>/examen.php" target="_blank" rel="noopener" class="btn-act" title="Aplicar examen"><i class="fas fa-display"></i></a>
             <a href="#" class="btn-act"><i class="fas fa-eye"></i></a>
             <a href="#" class="btn-act edit" onclick="abrirModalExamen();return false" title="Editar"><i class="fas fa-pen"></i></a>
             <a href="#" class="btn-act del"><i class="fas fa-trash"></i></a>
