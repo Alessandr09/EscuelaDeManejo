@@ -10,5 +10,10 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', rtrim($scriptDir, '/'));
 }
 
+// Hora local de El Salvador.
+// Se fija siempre (no solo si el php.ini lo deja vacio) porque el servidor web
+// puede venir con UTC: los horarios de los examenes deben compararse en hora local.
+date_default_timezone_set('America/El_Salvador');
+
 define('APP_NOMBRE', 'ESDRIVE');
 define('APP_TAGLINE', 'Escuela de Manejo');

@@ -23,8 +23,8 @@ $activo = function($v) use ($vista){ return $vista === $v ? 'active' : ''; };
     <a class="side-link <?= $activo('examenes') ?>" href="<?= $link('examenes') ?>">
       <i class="fas fa-file-signature"></i><span>Examenes</span><span class="badge">6</span>
     </a>
-    <a class="side-link" href="<?= BASE_URL ?>/examen.php" target="_blank" rel="noopener">
-      <i class="fas fa-display"></i><span>Simulador</span>
+    <a class="side-link" href="<?= BASE_URL ?>/examen-alumnos.php">
+      <i class="fas fa-chalkboard-user"></i><span>Simulador</span>
     </a>
 
     <div class="nav-section">Academico</div>

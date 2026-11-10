@@ -1,6 +1,6 @@
 /* ============================================================
-   Examen teorico de manejo - hoja de estilos propia
-   Misma paleta del panel admin: navy + dorado
+   Examen teorico de manejo - hoja de estilos
+   Paleta del proyecto: navy + dorado (mismo criterio que el panel admin)
    ============================================================ */
 
 :root {
@@ -49,6 +49,7 @@ body.examen-body {
     gap: 16px;
     flex-wrap: wrap;
 }
+.examen-main--ancho .examen-topbar-inner { max-width: 1200px; }
 .examen-brand {
     display: inline-flex;
     align-items: center;
@@ -59,12 +60,12 @@ body.examen-body {
 .examen-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .examen-brand-text b {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.15rem;
-    letter-spacing: .5px;
+    font-size: 1.1rem;
+    letter-spacing: .4px;
 }
-.examen-brand-text small { color: rgba(255, 255, 255, .72); font-size: .78rem; }
+.examen-brand-text small { color: rgba(255, 255, 255, .72); font-size: .76rem; }
 .examen-topbar-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.examen-pill {
+.examen-pill, .examen-alumno-chip {
     display: inline-flex;
     align-items: center;
     font-size: .78rem;
@@ -82,209 +83,135 @@ body.examen-body {
 }
 .examen-pill--ghost:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .4); color: #ffffff; }
 
+/* Cuenta regresiva */
+.examen-timer {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 7px 18px;
+    border-radius: 50px;
+    background: rgba(233, 165, 55, .18);
+    border: 1px solid rgba(233, 165, 55, .55);
+    color: #ffd76a;
+    min-width: 112px;
+    justify-content: center;
+}
+.examen-timer.es-urgente {
+    background: rgba(220, 38, 38, .22);
+    border-color: rgba(220, 38, 38, .6);
+    color: #ffb4b4;
+    animation: latido 1s ease-in-out infinite;
+}
+.examen-timer.es-vencido { background: rgba(220, 38, 38, .35); border-color: var(--ex-err); color: #ffffff; }
+@keyframes latido { 50% { transform: scale(1.05); } }
+
 /* ---------- Contenedor ---------- */
 .examen-main {
     max-width: 980px;
     margin: 0 auto;
     padding: 28px 20px 60px;
 }
+.examen-main--ancho { max-width: 1200px; }
 
-/* ---------- Intro / formulario de aplicacion ---------- */
-.examen-intro {
+/* ---------- Paneles ---------- */
+.examen-panel {
     background: var(--ex-surface);
     border: 1px solid var(--ex-border);
     border-top: 4px solid var(--ex-gold);
     border-radius: 10px;
-    padding: 26px 28px;
+    padding: 28px 30px;
     margin-bottom: 22px;
 }
-.examen-intro h1 {
+.examen-panel--error { border-top-color: var(--ex-err); }
+.examen-panel--login { max-width: 520px; margin: 40px auto; }
+.examen-panel--pregunta { padding: 34px 34px 26px; }
+.examen-panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+.examen-panel h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.7rem;
     font-weight: 700;
-    margin: 0 0 6px;
+    margin: 0 0 8px;
+    line-height: 1.25;
 }
-.examen-intro > p { color: var(--ex-mut); margin: 0 0 20px; }
+.examen-panel-h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 16px;
+}
+.examen-panel-lead { color: var(--ex-mut); margin: 0 0 20px; }
+.examen-kicker {
+    display: inline-flex;
+    align-items: center;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ex-gold-hover);
+    margin-bottom: 10px;
+}
+.examen-categoria {
+    display: inline-block;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ex-gold-hover);
+    margin-bottom: 8px;
+}
+.examen-mut { color: var(--ex-mut); font-size: .8rem; }
+.examen-nota { color: var(--ex-mut); font-size: .85rem; margin: 10px 0 0; }
+.examen-info {
+    list-style: none;
+    padding: 0;
+    margin: 22px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+}
+.examen-info li { color: var(--ex-mut); font-size: .85rem; }
+.examen-info i { color: var(--ex-gold); margin-right: 6px; }
 
-.examen-alumno { max-width: 420px; }
-.examen-alumno label {
+/* ---------- Formularios ---------- */
+.examen-form-acceso { display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
+.examen-form-acceso--fila {
+    max-width: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: end;
+}
+.examen-form-acceso--fila .examen-btn { grid-column: 1 / -1; justify-self: start; }
+.examen-campo label {
     display: block;
     font-weight: 600;
     font-size: .82rem;
     margin-bottom: 6px;
     color: var(--ex-text);
 }
-.examen-alumno .form-control {
+.examen-campo label span { color: var(--ex-mut); font-weight: 400; }
+.examen-campo .form-control {
     border: 1px solid var(--ex-border);
     border-radius: 8px;
     padding: .6rem .75rem;
     font-size: .95rem;
     background: #f8fafc;
 }
-.examen-alumno .form-control:focus {
+.examen-campo .form-control:focus {
     background: #ffffff;
     border-color: var(--ex-gold);
     box-shadow: 0 0 0 .2rem rgba(233, 165, 55, .3);
     outline: none;
 }
 
-/* ---------- Barra de progreso ---------- */
-.examen-progreso { margin-top: 22px; }
-.examen-progreso-texto {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: .82rem;
-    font-weight: 600;
-    color: var(--ex-mut);
-    margin-bottom: 6px;
-}
-.examen-progreso-barra {
-    height: 8px;
-    background: #e6ebf3;
-    border-radius: 50px;
-    overflow: hidden;
-}
-.examen-progreso-barra span {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--ex-gold), var(--ex-gold-hover));
-    border-radius: 50px;
-    transition: width .25s ease;
-}
-
-/* ---------- Preguntas ---------- */
-.examen-lista { display: flex; flex-direction: column; gap: 14px; }
-.examen-card {
-    background: var(--ex-surface);
-    border: 1px solid var(--ex-border);
-    border-radius: 10px;
-    padding: 20px 22px;
-    transition: border-color .2s ease, box-shadow .2s ease;
-}
-.examen-card.es-respondida { border-color: var(--ex-gold); box-shadow: 0 6px 18px rgba(233, 165, 55, .14); }
-.examen-card.es-ok { border-left: 5px solid var(--ex-ok); background: var(--ex-ok-bg); }
-.examen-card.es-error { border-left: 5px solid var(--ex-err); background: var(--ex-err-bg); }
-
-.examen-card-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 14px;
-}
-.examen-num {
-    flex: 0 0 38px;
-    width: 38px; height: 38px;
-    display: grid; place-items: center;
-    border-radius: 50%;
-    background: var(--ex-navy);
-    color: #ffffff;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: .95rem;
-}
-.examen-categoria {
-    display: inline-block;
-    font-size: .66rem;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ex-gold-hover);
-    margin-bottom: 4px;
-}
-.examen-pregunta {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.02rem;
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.45;
-}
-.examen-estado { margin-left: auto; font-size: 1.1rem; }
-.examen-card.es-ok .examen-estado { color: var(--ex-ok); }
-.examen-card.es-error .examen-estado { color: var(--ex-err); }
-
-.examen-opciones { display: grid; gap: 8px; }
-.examen-opcion {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    border: 1px solid var(--ex-border);
-    border-radius: 8px;
-    background: #fbfcfe;
-    cursor: pointer;
-    font-size: .93rem;
-    transition: border-color .15s ease, background .15s ease;
-}
-.examen-opcion:hover { border-color: var(--ex-gold); background: #fffdf8; }
-.examen-opcion input { accent-color: var(--ex-gold); width: 17px; height: 17px; flex: 0 0 auto; }
-.examen-letra {
-    flex: 0 0 26px;
-    width: 26px; height: 26px;
-    display: grid; place-items: center;
-    border-radius: 6px;
-    background: #eef2f8;
-    color: var(--ex-navy);
-    font-weight: 700;
-    font-size: .78rem;
-}
-.examen-opcion-texto { flex: 1; }
-.examen-opcion.es-correcta {
-    border-color: var(--ex-ok);
-    background: var(--ex-ok-bg);
-    cursor: default;
-}
-.examen-opcion.es-correcta .examen-letra { background: var(--ex-ok); color: #ffffff; }
-.opcion-check { color: var(--ex-ok); }
-
-.examen-solucion {
-    margin: 12px 0 0;
-    font-size: .84rem;
-    color: var(--ex-mut);
-    border-top: 1px dashed var(--ex-border);
-    padding-top: 10px;
-}
-.examen-solucion strong { color: var(--ex-text); }
-
-/* ---------- Resultado ---------- */
-.examen-resultado {
-    background: var(--ex-surface);
-    border: 1px solid var(--ex-border);
-    border-radius: 10px;
-    padding: 24px 26px;
-    margin-bottom: 20px;
-}
-.examen-resultado.es-aprobado { border-top: 5px solid var(--ex-ok); }
-.examen-resultado.es-reprobado { border-top: 5px solid var(--ex-err); }
-.examen-resultado-head {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-.examen-sello {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 1.05rem;
-    padding: 12px 20px;
-    border-radius: 10px;
-}
-.es-aprobado .examen-sello { background: var(--ex-ok-bg); color: var(--ex-ok); border: 1px solid rgba(22, 163, 74, .3); }
-.es-reprobado .examen-sello { background: var(--ex-err-bg); color: var(--ex-err); border: 1px solid rgba(220, 38, 38, .3); }
-.examen-resultado-datos { flex: 1; min-width: 220px; }
-.examen-resultado-datos h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 0 0 4px;
-}
-.examen-resultado-datos p { margin: 0; color: var(--ex-mut); font-size: .92rem; }
-.examen-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
-
+/* ---------- Botones ---------- */
 .examen-btn {
     display: inline-flex;
     align-items: center;
@@ -301,51 +228,302 @@ body.examen-body {
     transition: background .2s ease, border-color .2s ease, transform .2s ease;
 }
 .examen-btn:hover { background: #f1f5f9; transform: translateY(-1px); }
+.examen-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .examen-btn--gold {
     background: var(--ex-gold);
     border-color: var(--ex-gold);
     color: #241a05;
 }
-.examen-btn--gold:hover { background: var(--ex-gold-hover); border-color: var(--ex-gold-hover); color: #241a05; }
+.examen-btn--gold:hover:not(:disabled) { background: var(--ex-gold-hover); border-color: var(--ex-gold-hover); color: #241a05; }
+.examen-btn.es-final { background: var(--ex-ok); border-color: var(--ex-ok); color: #ffffff; }
+.examen-btn.es-final:hover:not(:disabled) { background: #15803d; border-color: #15803d; color: #ffffff; }
+.examen-acciones { display: flex; gap: 10px; flex-wrap: wrap; }
 
+/* ---------- Alertas ---------- */
 .examen-alerta {
-    margin: 18px 0 0;
-    font-size: .87rem;
     color: var(--ex-err);
     background: var(--ex-err-bg);
     border: 1px solid rgba(220, 38, 38, .22);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 11px 15px;
+    font-size: .88rem;
+    margin: 0 0 18px;
+}
+.examen-alerta--ok {
+    color: var(--ex-ok);
+    background: var(--ex-ok-bg);
+    border-color: rgba(22, 163, 74, .25);
 }
 
-/* ---------- Enviar ---------- */
-.examen-enviar {
-    margin-top: 10px;
+/* ---------- Espera ---------- */
+.examen-cuenta-espera {
+    margin: 24px 0 8px;
+    padding: 24px;
+    background: var(--ex-navy);
+    border-radius: 10px;
     text-align: center;
-    padding: 22px 0 0;
+    color: #ffffff;
 }
-.examen-enviar .examen-btn { font-size: 1rem; padding: 14px 30px; }
-.examen-nota { color: var(--ex-mut); font-size: .82rem; margin: 0 0 12px; }
+.examen-cuenta-espera span {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffd76a;
+}
+.examen-cuenta-espera small { color: rgba(255, 255, 255, .7); font-size: .82rem; }
+
+/* ---------- Barra de progreso del examen ---------- */
+.examen-barra-progreso {
+    background: var(--ex-surface);
+    border: 1px solid var(--ex-border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 16px;
+}
+.examen-barra-texto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--ex-mut);
+    margin-bottom: 8px;
+}
+.examen-barra-texto strong { color: var(--ex-text); font-size: .95rem; }
+.examen-barra {
+    height: 8px;
+    background: #e6ebf3;
+    border-radius: 50px;
+    overflow: hidden;
+}
+.examen-barra span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--ex-gold), var(--ex-gold-hover));
+    border-radius: 50px;
+    transition: width .3s ease;
+}
+
+/* ---------- Pregunta ---------- */
+.examen-pregunta {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 0 0 22px;
+    line-height: 1.35;
+}
+.examen-opciones { display: grid; gap: 10px; }
+.examen-opcion {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 2px solid var(--ex-border);
+    border-radius: 10px;
+    background: #fbfcfe;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.examen-opcion:hover { border-color: var(--ex-gold); background: #fffdf8; transform: translateX(2px); }
+.examen-opcion input { accent-color: var(--ex-gold); width: 19px; height: 19px; flex: 0 0 auto; }
+.examen-opcion.es-elegida {
+    border-color: var(--ex-gold);
+    background: #fff8ec;
+}
+.examen-letra {
+    flex: 0 0 30px;
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    background: #eef2f8;
+    color: var(--ex-navy);
+    font-weight: 700;
+    font-size: .85rem;
+}
+.examen-opcion.es-elegida .examen-letra { background: var(--ex-gold); color: #241a05; }
+.examen-opcion-texto { flex: 1; }
+.examen-panel-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--ex-border);
+}
+.examen-panel-pie .examen-nota { margin: 0; }
+.examen-panel-pie .examen-btn { font-size: 1rem; padding: 13px 28px; }
+
+/* ---------- Resultado ---------- */
+.examen-panel--resultado {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    flex-wrap: wrap;
+}
+.examen-panel--resultado.es-aprobado { border-top-color: var(--ex-ok); }
+.examen-panel--resultado.es-reprobado { border-top-color: var(--ex-err); }
+.examen-nota-caja {
+    flex: 0 0 132px;
+    width: 132px; height: 132px;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    background: var(--ex-bg);
+    border: 4px solid var(--ex-border);
+}
+.examen-nota-caja.es-aprobado { border-color: var(--ex-ok); background: var(--ex-ok-bg); }
+.examen-nota-caja.es-reprobado { border-color: var(--ex-err); background: var(--ex-err-bg); }
+.examen-nota-numero {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ex-text);
+}
+.examen-nota-label {
+    display: block;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ex-mut);
+    margin-top: 4px;
+}
+.examen-nota-datos { flex: 1; min-width: 260px; }
+.examen-nota-datos .examen-panel-lead { margin-bottom: 6px; }
+
+/* Preguntas falladas */
+.examen-fallada {
+    border: 1px solid var(--ex-border);
+    border-left: 4px solid var(--ex-err);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: var(--ex-err-bg);
+}
+.examen-fallada p { margin: 0 0 6px; font-weight: 600; }
+.examen-fallada small { color: var(--ex-ok); font-weight: 600; }
+
+/* ---------- Consola del instructor ---------- */
+.examen-tabla-wrap { overflow-x: auto; }
+.examen-tabla { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.examen-tabla th {
+    text-align: left;
+    font-size: .7rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ex-mut);
+    padding: 8px 10px;
+    border-bottom: 2px solid var(--ex-border);
+    white-space: nowrap;
+}
+.examen-tabla td { padding: 12px 10px; border-bottom: 1px solid var(--ex-border); vertical-align: middle; }
+.examen-tabla code {
+    background: #eef2f8;
+    color: var(--ex-navy);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.nota-ok { color: var(--ex-ok); font-size: 1.05rem; }
+.nota-error { color: var(--ex-err); font-size: 1.05rem; }
+.examen-estado {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    background: #eef2f8;
+    color: var(--ex-mut);
+}
+.estado-pendiente { background: #fff7e6; color: #b45309; }
+.estado-en_curso { background: #e0f2fe; color: #0369a1; }
+.estado-aprobado { background: var(--ex-ok-bg); color: var(--ex-ok); }
+.estado-reprobado { background: var(--ex-err-bg); color: var(--ex-err); }
+.estado-expirado { background: #f1f5f9; color: #64748b; }
+.examen-btn-mini {
+    display: inline-grid;
+    place-items: center;
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    border: 1px solid var(--ex-border);
+    background: #ffffff;
+    color: var(--ex-text);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: .8rem;
+    transition: background .15s ease, border-color .15s ease;
+}
+.examen-btn-mini:hover { background: #f1f5f9; border-color: var(--ex-gold); }
+.examen-btn-mini--peligro:hover { background: var(--ex-err-bg); border-color: var(--ex-err); color: var(--ex-err); }
+.examen-form-inline { display: inline-flex; gap: 6px; align-items: center; }
+.examen-input-mini {
+    border: 1px solid var(--ex-border);
+    border-radius: 7px;
+    padding: .25rem .4rem;
+    font-size: .78rem;
+    color: var(--ex-text);
+    background: #f8fafc;
+}
+.examen-revision { margin-top: 8px; }
+.examen-revision-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--ex-border);
+    font-size: .88rem;
+}
+.examen-revision-item.es-ok { background: var(--ex-ok-bg); }
+.examen-revision-item.es-error { background: var(--ex-err-bg); }
+.examen-revision-num {
+    flex: 0 0 26px;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: #eef2f8;
+    font-size: .74rem;
+    font-weight: 700;
+}
+.examen-revision-texto { flex: 1; }
+.examen-revision-marca { color: var(--ex-mut); }
+.examen-revision-item.es-ok .examen-revision-marca { color: var(--ex-ok); }
+.examen-revision-item.es-error .examen-revision-marca { color: var(--ex-err); }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .examen-form-acceso--fila { grid-template-columns: 1fr; }
+}
 @media (max-width: 576px) {
     .examen-main { padding: 18px 14px 44px; }
-    .examen-intro { padding: 20px 18px; }
-    .examen-intro h1 { font-size: 1.35rem; }
-    .examen-card { padding: 16px 16px; }
-    .examen-pregunta { font-size: .95rem; }
+    .examen-panel { padding: 20px 18px; }
+    .examen-panel--pregunta { padding: 24px 18px 20px; }
+    .examen-panel h1 { font-size: 1.35rem; }
+    .examen-pregunta { font-size: 1.15rem; }
     .examen-topbar-inner { padding: 0 14px; }
     .examen-brand-text small { display: none; }
-    .examen-acciones { width: 100%; }
-    .examen-acciones .examen-btn { flex: 1; }
+    .examen-alumno-chip { display: none; }
+    .examen-timer { min-width: 96px; font-size: .9rem; }
+    .examen-panel-pie .examen-btn { width: 100%; }
+    .examen-nota-caja { flex: 0 0 104px; width: 104px; height: 104px; }
+    .examen-nota-numero { font-size: 2.2rem; }
+    .examen-opcion { padding: 12px 13px; font-size: .95rem; }
+    .examen-cuenta-espera span { font-size: 2rem; }
 }
 
-/* ---------- Impresion: solo el resultado ---------- */
+/* ---------- Impresion ---------- */
 @media print {
     body.examen-body { background: #ffffff; }
     .no-print { display: none !important; }
     .examen-main { max-width: 100%; padding: 0; }
-    .examen-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
-    .examen-resultado { box-shadow: none; }
+    .examen-panel { box-shadow: none; break-inside: avoid; }
     .examen-topbar { position: static; box-shadow: none; }
 }
