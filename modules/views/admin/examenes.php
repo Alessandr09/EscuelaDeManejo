@@ -105,10 +105,10 @@ $kpis = [
                 </div>
               </div>
             </td>
-            <td><span class="badge-soft b-info"><?= htmlspecialchars($e['curso']) ?: 'ÔÇö' ?></span></td>
+            <td><span class="badge-soft b-info"><?= htmlspecialchars($e['curso']) ?: '&mdash;' ?></span></td>
             <td><?= (int) $e['preguntas'] ?></td>
-            <td><?= htmlspecialchars($e['duracion']) ?: 'ÔÇö' ?></td>
-            <td><?= $e['fecha'] ? date('d/m/Y', strtotime($e['fecha'])) : 'ÔÇö' ?></td>
+            <td><?= htmlspecialchars($e['duracion']) ?: '&mdash;' ?></td>
+            <td><?= $e['fecha'] ? date('d/m/Y', strtotime($e['fecha'])) : '&mdash;' ?></td>
             <td><?= esdrive_badge($e['estado']) ?></td>
             <td class="text-end">
               <?php if ($puede): ?>

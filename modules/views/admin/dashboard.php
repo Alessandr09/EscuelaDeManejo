@@ -133,7 +133,7 @@ $kpis = [
                   $fase = 'libre'; $fechaTs = strtotime($v['disponible_desde']);
                   $texto = 'Vuelve a estar libre a las ' . date('H:i', $fechaTs);
               } elseif ($esDispo) {
-                  $texto = 'Libre ahora ┬À sin horario asignado';
+                  $texto = 'Libre ahora &middot; sin horario asignado';
               } else {
                   $texto = 'En uso ahora';
               }
@@ -158,7 +158,7 @@ $kpis = [
                       <?php else: ?>
                         <span class="badge-soft b-pend"><i class="fas fa-clock me-1"></i>En uso</span>
                       <?php endif; ?>
-                      <span class="flota-placa"><i class="fas fa-id-card me-1"></i><?= htmlspecialchars($v['placa']) ?: 'ÔÇö' ?></span>
+                      <span class="flota-placa"><i class="fas fa-id-card me-1"></i><?= htmlspecialchars($v['placa']) ?: '&mdash;' ?></span>
                     </div>
                     <?php if ($empAsig): ?>
                       <div class="flota-emp"><i class="fas fa-user-tie me-1"></i><?= htmlspecialchars($empAsig) ?></div>
@@ -182,7 +182,7 @@ $kpis = [
             <span class="visually-hidden">Siguiente</span>
           </button>
         </div>
-        <div class="flota-count"><i class="fas fa-circle-info me-1"></i><?= count($vehiculos) ?> en flota ┬À <?= $disponibles ?> libres ahora</div>
+        <div class="flota-count"><i class="fas fa-circle-info me-1"></i><?= count($vehiculos) ?> en flota &middot; <?= $disponibles ?> libres ahora</div>
       <?php else: ?>
         <div class="flota-vacio">
           <i class="fas fa-car-side"></i>

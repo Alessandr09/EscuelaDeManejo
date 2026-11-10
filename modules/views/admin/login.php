@@ -37,7 +37,7 @@
         <label class="form-label">Contrasena</label>
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-lock"></i></span>
-          <input type="password" name="clave" class="form-control" placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó" required>
+          <input type="password" name="clave" class="form-control" placeholder="••••••••" required>
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -45,7 +45,7 @@
           <input class="form-check-input" type="checkbox" id="recordar" style="background:rgba(255,255,255,.06);border-color:var(--glass-brd)">
           <label class="form-check-label" for="recordar" style="color:var(--text-mut);font-size:.85rem">Recordarme</label>
         </div>
-        <a href="#" style="color:var(--gold);font-size:.85rem;text-decoration:none">┬┐Olvidaste tu clave?</a>
+        <a href="#" style="color:var(--gold);font-size:.85rem;text-decoration:none">¿Olvidaste tu clave?</a>
       </div>
       <button type="submit" class="btn btn-gold w-100"><i class="fas fa-right-to-bracket me-2"></i>Ingresar</button>
     </form>

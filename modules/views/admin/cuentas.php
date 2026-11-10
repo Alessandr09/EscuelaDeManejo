@@ -89,8 +89,8 @@ $kpis = [
                 </div>
               </div>
             </td>
-            <td><?= htmlspecialchars($a['telefono']) ?: 'ÔÇö' ?></td>
-            <td><span class="badge-soft b-info"><?= htmlspecialchars($a['curso']) ?: 'ÔÇö' ?></span></td>
+            <td><?= htmlspecialchars($a['telefono']) ?: '&mdash;' ?></td>
+            <td><span class="badge-soft b-info"><?= htmlspecialchars($a['curso']) ?: '&mdash;' ?></span></td>
             <td><?= date('d/m/Y', strtotime($a['creado_en'])) ?></td>
             <td><?= esdrive_badge($a['estado']) ?></td>
             <td class="text-end">

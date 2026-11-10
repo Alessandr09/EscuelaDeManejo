@@ -391,7 +391,7 @@ document.addEventListener('click', function (e) {
   var que = btn.getAttribute('data-que') || 'registro';
   Swal.fire({
     icon: 'warning',
-    title: '┬┐Eliminar ' + que + '?',
+    title: '¿Eliminar ' + que + '?',
     text: 'Se borrara "' + nombre + '".',
     showCancelButton: true,
     confirmButtonText: 'Si, eliminar',
