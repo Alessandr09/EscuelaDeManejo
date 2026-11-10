@@ -51,9 +51,9 @@ de tiempo límite y **nota guardada en la base de datos**.
 
 ## Base de datos
 
-- Motor: **MySQL (WAMP)** · Base: `esdrive` · Conexión PDO en `config/conexion.php`
-  (`root` sin contraseña, se crea sola la primera vez).
-- Tabla: **`examen_alumnos`** (esquema en `config/examen.sql`).
+- Motor: **MySQL (WAMP)** · Base: `esdrive` · Conexión PDO en **`php/db.php`** (la misma que
+  usa el panel admin; `root` sin contraseña, la base y las tablas se crean solas la primera vez).
+- Tabla: **`examen_alumnos`** (creada por `php/db.php`; esquema de referencia en `config/examen.sql`).
 
 | Columna | Tipo | Descripción |
 |---|---|---|
@@ -105,12 +105,17 @@ Si en su rama ya existe ese ítem, se puede quitar sin romper nada.
 ```
 examen.php                    Examen del alumno (acceso, espera, examen, resultado)
 examen-alumnos.php            Consola del instructor
-config/conexion.php           Conexion PDO + creacion de la BD y la tabla
+php/db.php                    Conexion PDO + esquema (compartida con el panel)
+php/auth.php                  Sesiones, roles y permisos (compartida con el panel)
 config/examen_funciones.php   Reglas del examen (ventana, bloqueo, nota)
 config/examen.sql             Esquema de la tabla (referencia para el panel)
 modules/data/preguntas.php    Banco de 50 preguntas
 assets/css/examen.css         Estilos (navy + dorado)
 ```
+
+La consola del instructor usa la **misma sesión y los mismos permisos del panel**
+(`php/auth.php`): solo entran los usuarios con acceso al módulo "Examenes". Si no hay sesión,
+redirige al login del panel (`admin.php?v=login`).
 
 ## Pendientes opcionales
 

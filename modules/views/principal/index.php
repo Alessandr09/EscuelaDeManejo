@@ -1,4 +1,15 @@
-<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+<?php
+require_once __DIR__ . '/../../../php/base.php';
+require_once __DIR__ . '/../../../php/db.php';
+
+// El equipo se alimenta de la tabla `empleados` (se administra desde el panel)
+try {
+    $equipo = db()->query('SELECT * FROM empleados ORDER BY id DESC')->fetchAll();
+} catch (Exception $e) {
+    $equipo = [];
+}
+$equipoGrupos = array_chunk($equipo, 3);
+?>
 
 <!-- ============ HERO (adaptado al diseno Canva: ancho completo, imagen de fondo) ============ -->
 <section class="hero-wrap">
@@ -109,77 +120,82 @@
   </div>
 </section>
 
-<!-- ============ EQUIPO (carrusel 3D) ============ -->
-<section class="section team-section" id="equipo">
+<!-- ============ NUESTRO EQUIPO (carousel automatico desde la BD) ============ -->
+<?php if ($equipo): ?>
+<section class="section section-band" id="equipo">
   <div class="container">
     <div class="title-center mb-5">
       <h2 class="section-title reveal">Nuestro <span>Equipo</span></h2>
-      <p class="section-sub reveal">Instructores y asesores que te acompañan en cada etapa</p>
+      <p class="section-sub reveal">Los instructores y staff que te acompanan hasta tu licencia</p>
       <div class="title-line reveal"></div>
     </div>
 
-    <div class="team-stage reveal">
-      <span class="team-ghost-title" aria-hidden="true">OUR TEAM</span>
-
-      <div class="team-carousel">
-        <button class="team-arrow left" type="button" aria-label="Miembro anterior">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i>
-        </button>
-
-        <div class="team-track">
-          <?php
-          $equipo = [
-            ['miembro-1.jpg', 'Emily Kim', 'Founder'],
-            ['miembro-2.jpg', 'Michael Steward', 'Creative Director'],
-            ['miembro-3.jpg', 'Emma Rodriguez', 'Lead Developer'],
-            ['miembro-4.jpg', 'Julia Gimmel', 'UX Designer'],
-            ['miembro-5.jpg', 'Lisa Anderson', 'Marketing Manager'],
-            ['miembro-6.jpg', 'James Wilson', 'Product Manager'],
-          ];
-          $totalEquipo = count($equipo);
-
-          foreach ($equipo as $i => $miembro):
-            [$foto, $nombre, $rol] = $miembro;
-            $offset = $i; // El primer miembro (indice 0) es el centro
-            if ($offset === 0) {
-              $clase = 'center';
-            } elseif ($offset === 1) {
-              $clase = 'right-1';
-            } elseif ($offset === 2) {
-              $clase = 'right-2';
-            } elseif ($offset === $totalEquipo - 1) {
-              $clase = 'left-1';
-            } elseif ($offset === $totalEquipo - 2) {
-              $clase = 'left-2';
-            } else {
-              $clase = 'hidden';
-            }
-          ?>
-          <div class="team-card <?= $clase ?>" data-index="<?= $i ?>" data-name="<?= htmlspecialchars($nombre) ?>" data-role="<?= htmlspecialchars($rol) ?>">
-            <img src="<?= BASE_URL ?>/assets/img/equipo/<?= $foto ?>" alt="<?= htmlspecialchars($nombre . ' - ' . $rol) ?>" loading="lazy">
-          </div>
+    <?php if (count($equipoGrupos) > 1): ?>
+      <div id="carruselEquipo" class="carousel slide equipo-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+          <?php foreach ($equipoGrupos as $gi => $grupo): ?>
+            <div class="carousel-item <?= $gi === 0 ? 'active' : '' ?>">
+              <div class="row g-4 justify-content-center">
+                <?php foreach ($grupo as $e): ?>
+                  <div class="col-lg-4 col-md-6">
+                    <div class="equipo-card">
+                      <?php if (!empty($e['imagen'])): ?>
+                        <img class="equipo-foto" src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>">
+                      <?php else: ?>
+                        <div class="equipo-foto equipo-foto-txt"><?= htmlspecialchars(strtoupper(substr(preg_replace('/\s+/','',$e['nombre']),0,2))) ?></div>
+                      <?php endif; ?>
+                      <div class="equipo-nombre"><?= htmlspecialchars($e['nombre']) ?></div>
+                      <div class="equipo-cargo"><?= htmlspecialchars($e['cargo']) ?: 'Instructor' ?></div>
+                      <?php if (!empty($e['telefono'])): ?>
+                        <div class="equipo-dato"><i class="fas fa-phone"></i><?= htmlspecialchars($e['telefono']) ?></div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
           <?php endforeach; ?>
         </div>
 
-        <button class="team-arrow right" type="button" aria-label="Siguiente miembro">
-          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carruselEquipo" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
         </button>
-      </div>
+        <button class="carousel-control-next" type="button" data-bs-target="#carruselEquipo" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
 
-      <div class="team-member-info" aria-live="polite">
-        <h3 class="team-member-name"><?= htmlspecialchars($equipo[0][1]) ?></h3>
-        <p class="team-member-role"><?= htmlspecialchars($equipo[0][2]) ?></p>
+        <div class="carousel-indicators equipo-indicadores">
+          <?php foreach ($equipoGrupos as $gi => $g): ?>
+            <button type="button" data-bs-target="#carruselEquipo" data-bs-slide-to="<?= $gi ?>"
+                    class="<?= $gi === 0 ? 'active' : '' ?>" aria-label="Grupo <?= $gi + 1 ?>"></button>
+          <?php endforeach; ?>
+        </div>
       </div>
-
-      <div class="team-dots" aria-label="Seleccionar miembro del equipo">
-        <?php for ($i = 0; $i < $totalEquipo; $i++): ?>
-        <button class="team-dot<?= $i === 0 ? ' active' : '' ?>" type="button" data-index="<?= $i ?>"
-                aria-label="Ver miembro <?= $i + 1 ?>" aria-pressed="<?= $i === 0 ? 'true' : 'false' ?>"></button>
-        <?php endfor; ?>
+    <?php else: ?>
+      <div class="row g-4 justify-content-center">
+        <?php foreach ($equipo as $e): ?>
+          <div class="col-lg-4 col-md-6">
+            <div class="equipo-card">
+              <?php if (!empty($e['imagen'])): ?>
+                <img class="equipo-foto" src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>">
+              <?php else: ?>
+                <div class="equipo-foto equipo-foto-txt"><?= htmlspecialchars(strtoupper(substr(preg_replace('/\s+/','',$e['nombre']),0,2))) ?></div>
+              <?php endif; ?>
+              <div class="equipo-nombre"><?= htmlspecialchars($e['nombre']) ?></div>
+              <div class="equipo-cargo"><?= htmlspecialchars($e['cargo']) ?: 'Instructor' ?></div>
+              <?php if (!empty($e['telefono'])): ?>
+                <div class="equipo-dato"><i class="fas fa-phone"></i><?= htmlspecialchars($e['telefono']) ?></div>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endforeach; ?>
       </div>
-    </div>
+    <?php endif; ?>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ TESTIMONIOS ============ -->
 <section class="section" id="testimonios">
@@ -308,7 +324,7 @@
 
             <div class="form-field form-field-full">
               <label for="f-mensaje">Mensaje <span class="fw-normal text-secondary">(opcional)</span></label>
-              <textarea class="form-control" id="f-mensaje" name="mensaje" rows="2"
+              <textarea class="form-control" id="f-mensaje" name="mensaje" rows="4"
                         placeholder="Escribe tu mensaje aquí..."></textarea>
             </div>
           </div>

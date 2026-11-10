@@ -6,40 +6,44 @@
  * examen y le entrega el codigo de acceso. La nota se guarda en la tabla
  * `examen_alumnos` (misma que leera la vista de examenes del panel admin).
  *
- * Esta pagina NO toca la vista de examenes del panel: es independiente y
- * reutiliza la sesion del admin (admin/1234 en la demo).
+ * Reutiliza la sesion y los permisos del panel admin (php/auth.php):
+ * solo entran los usuarios con acceso al modulo "examenes".
  */
 require_once __DIR__ . '/php/base.php';
-require_once __DIR__ . '/config/conexion.php';
+require_once __DIR__ . '/php/auth.php';
 require_once __DIR__ . '/config/examen_funciones.php';
 
 session_start();
 
-$pdo      = db(false);
+// Conexion tolerante a fallos: si MySQL no responde, se avisa en pantalla
+try {
+    $pdo = db();
+} catch (Throwable $e) {
+    $pdo = null;
+}
+
 $accion   = $_POST['accion'] ?? '';
 $error    = $_SESSION['examen_admin_error'] ?? '';
 $exito    = $_SESSION['examen_admin_ok'] ?? '';
 unset($_SESSION['examen_admin_error'], $_SESSION['examen_admin_ok']);
 
-/* ============ Acceso del instructor (reutiliza la sesion del panel) ============ */
-if ($accion === 'login') {
-    if (($_POST['usuario'] ?? '') === 'admin' && ($_POST['clave'] ?? '') === '1234') {
-        $_SESSION['esdrive_auth'] = true;
-        header('Location: ' . BASE_URL . '/examen-alumnos.php');
+if ($accion === 'logout') {
+    session_destroy();
+    header('Location: ' . BASE_URL . '/admin.php?v=login');
+    exit;
+}
+
+/* ============ Permisos (mismo control que el panel) ============ */
+$autorizado = false;
+if ($pdo) {
+    $usuario = esdrive_usuario();
+    $autorizado = $usuario && esdrive_puede('examenes', 'ver');
+    if (!$autorizado && !isset($_GET['alumno']) && $accion === '') {
+        // Sin sesion o sin permiso: al login del panel
+        header('Location: ' . BASE_URL . '/admin.php?v=login');
         exit;
     }
-    $_SESSION['examen_admin_error'] = 'Credenciales incorrectas';
-    header('Location: ' . BASE_URL . '/examen-alumnos.php');
-    exit;
 }
-
-if ($accion === 'logout') {
-    unset($_SESSION['esdrive_auth']);
-    header('Location: ' . BASE_URL . '/examen-alumnos.php');
-    exit;
-}
-
-$autorizado = !empty($_SESSION['esdrive_auth']);
 
 /* ============ Acciones del instructor ============ */
 if ($autorizado && $pdo) {
@@ -169,27 +173,20 @@ $ahoraInput = date('Y-m-d\TH:i');
 
 <?php elseif (!$autorizado): ?>
     <section class="examen-panel examen-panel--login">
-        <span class="examen-kicker"><i class="fas fa-chalkboard-user me-2"></i>Acceso instructor</span>
+        <span class="examen-kicker"><i class="fas fa-lock me-2"></i>Acceso restringido</span>
         <h1>Consola de examenes</h1>
-        <p class="examen-panel-lead">Ingresa con tus credenciales para inscribir alumnos y habilitar sus examenes.</p>
+        <p class="examen-panel-lead">
+            Necesitas iniciar sesion en el panel con un usuario que tenga acceso al modulo
+            <strong>Examenes</strong> para inscribir alumnos y habilitar sus examenes.
+        </p>
 
         <?php if ($error): ?>
             <p class="examen-alerta"><i class="fas fa-circle-exclamation me-2"></i><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
-        <form method="post" class="examen-form-acceso">
-            <input type="hidden" name="accion" value="login">
-            <div class="examen-campo">
-                <label for="f-usuario"><i class="fas fa-user me-2"></i>Usuario</label>
-                <input type="text" id="f-usuario" name="usuario" class="form-control" required placeholder="admin" autocomplete="username">
-            </div>
-            <div class="examen-campo">
-                <label for="f-clave"><i class="fas fa-lock me-2"></i>Contrasena</label>
-                <input type="password" id="f-clave" name="clave" class="form-control" required placeholder="••••••" autocomplete="current-password">
-            </div>
-            <button type="submit" class="examen-btn examen-btn--gold"><i class="fas fa-arrow-right me-2"></i>Entrar</button>
-        </form>
-        <p class="examen-nota"><i class="fas fa-circle-info me-2"></i>Credenciales de la demo: admin / 1234</p>
+        <a class="examen-btn examen-btn--gold" href="<?= BASE_URL ?>/admin.php?v=login">
+            <i class="fas fa-right-to-bracket me-2"></i>Ir al inicio de sesion del panel
+        </a>
     </section>
 
 <?php else: ?>

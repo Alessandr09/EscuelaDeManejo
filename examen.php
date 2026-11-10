@@ -13,14 +13,20 @@
  *  - al terminar se guarda la nota en la tabla `examen_alumnos`.
  */
 require_once __DIR__ . '/php/base.php';
-require_once __DIR__ . '/config/conexion.php';
+require_once __DIR__ . '/php/db.php';
 require_once __DIR__ . '/config/examen_funciones.php';
 
 session_start();
 
 $preguntas = require __DIR__ . '/modules/data/preguntas.php';
 $total     = count($preguntas);
-$pdo       = db(false);
+
+// Conexion tolerante a fallos: si MySQL no responde, el alumno ve un aviso
+try {
+    $pdo = db();
+} catch (Throwable $e) {
+    $pdo = null;
+}
 
 $accion  = $_POST['accion'] ?? $_GET['accion'] ?? '';
 $error   = $_SESSION['examen_error'] ?? '';

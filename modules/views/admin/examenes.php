@@ -1,104 +1,226 @@
-<?php require_once __DIR__ . '/../../../php/base.php'; ?>
-<div class="page-head d-flex flex-wrap justify-content-between align-items-center gap-3">
-  <div>
-    <h3>Gestion de <span>examenes</span></h3>
-    <p>Crea y administra las evaluaciones teoricas y practicas.</p>
-  </div>
-  <div class="d-flex gap-2 flex-wrap">
-    <a class="btn btn-gold btn-sm" href="<?= BASE_URL ?>/examen.php" target="_blank" rel="noopener">
-      <i class="fas fa-display me-2"></i>Aplicar examen
-    </a>
-    <button class="btn btn-gold btn-sm" onclick="abrirModalExamen()"><i class="fas fa-plus me-2"></i>Nuevo examen</button>
-  </div>
-</div>
+<?php require_once __DIR__ . '/../../../php/base.php';
+require_once __DIR__ . '/../../../php/ui.php';
 
-<!-- KPIs rapidos -->
-<div class="row g-4 mb-4">
-  <div class="col-md-3"><div class="glass kpi-card"><div class="kpi-icon"><i class="fas fa-file-lines"></i></div><div class="kpi-info"><div class="kpi-val">6</div><div class="kpi-lbl">Examenes activos</div></div></div></div>
-  <div class="col-md-3"><div class="glass kpi-card"><div class="kpi-icon"><i class="fas fa-pen-nib"></i></div><div class="kpi-info"><div class="kpi-val">342</div><div class="kpi-lbl">Aplicaciones</div></div></div></div>
-  <div class="col-md-3"><div class="glass kpi-card"><div class="kpi-icon"><i class="fas fa-circle-check"></i></div><div class="kpi-info"><div class="kpi-val">91%</div><div class="kpi-lbl">Aprobados</div></div></div></div>
-  <div class="col-md-3"><div class="glass kpi-card"><div class="kpi-icon"><i class="fas fa-hourglass-half"></i></div><div class="kpi-info"><div class="kpi-val">18</div><div class="kpi-lbl">Pendientes</div></div></div></div>
+$editar = null;
+if (isset($_GET['editar'])) {
+    $st = db()->prepare('SELECT * FROM examenes WHERE id = ?');
+    $st->execute([(int) $_GET['editar']]);
+    $editar = $st->fetch() ?: null;
+}
+
+try {
+    $examenes = db()->query('SELECT * FROM examenes ORDER BY fecha IS NULL, fecha, id DESC')->fetchAll();
+} catch (Exception $e) { $examenes = []; }
+
+$total   = count($examenes);
+$activos = count(array_filter($examenes, fn($e) => $e['estado'] === 'Activo'));
+$borr    = count(array_filter($examenes, fn($e) => $e['estado'] === 'Borrador'));
+$preguntas = array_sum(array_map(fn($e) => (int) $e['preguntas'], $examenes));
+$cursos  = esdrive_opciones_cursos();
+$puede   = esdrive_puede('examenes', 'gestionar');
+
+// JSON para precargar el modal al editar
+$jsonExamenes = [];
+foreach ($examenes as $e) {
+    $jsonExamenes[(int) $e['id']] = [
+        'titulo'      => $e['titulo'],
+        'curso'       => $e['curso'],
+        'preguntas'   => (int) $e['preguntas'],
+        'duracion'    => $e['duracion'],
+        'fecha'       => $e['fecha'] ? date('Y-m-d', strtotime($e['fecha'])) : '',
+        'estado'      => $e['estado'],
+        'descripcion' => $e['descripcion'] ?? '',
+    ];
+}
+
+$kpis = [
+    ['fa-file-signature', $activos,  'Examenes activos',  'b-active'],
+    ['fa-pen-nib',        $total,    'Total examenes',    'b-info'],
+    ['fa-list-ol',        $preguntas,'Preguntas',         'b-info'],
+    ['fa-file-pen',       $borr,     'Borradores',        'b-pend'],
+];
+?>
+<?= esdrive_page_head('Gestion de', 'examenes', 'Crea y administra las evaluaciones teoricas y practicas.',
+    $puede ? '<button type="button" class="btn btn-add" onclick="abrirModalExamen(0)">
+        <i class="fas fa-plus"></i><span>Nuevo examen</span></button>' : '') ?>
+
+<div class="row g-2 mb-3">
+  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
+  <div class="col-xl-3 col-md-6">
+    <div class="glass kpi-card">
+      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
+      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
+    </div>
+  </div>
+  <?php endforeach; ?>
 </div>
 
 <div class="glass panel">
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-    <div class="panel-title mb-0"><i class="fas fa-list-check"></i>Examenes registrados</div>
-    <div class="input-group" style="width:240px">
-      <span class="input-group-text"><i class="fas fa-search"></i></span>
-      <input type="text" class="form-control" placeholder="Buscar examen...">
+  <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
+    <div class="panel-title mb-0"><i class="fas fa-file-signature"></i>Examenes</div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="input-group" style="width:230px">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+        <input type="text" class="form-control" placeholder="Buscar examen..." id="buscarExamen">
+      </div>
+      <select class="form-select" style="width:160px" id="filtroEstadoExamen">
+        <option value="">Todos los estados</option>
+        <option value="Activo">Activo</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Borrador">Borrador</option>
+      </select>
+      <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
+        <i class="fas fa-rotate"></i><span>Actualizar</span>
+      </button>
     </div>
   </div>
 
   <div class="table-responsive">
-    <table class="table table-glass">
+    <table class="table table-glass" id="tablaExamenes">
       <thead>
-        <tr><th>Titulo</th><th>Curso</th><th>Preguntas</th><th>Duracion</th><th>Fecha</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+        <tr>
+          <th>Examen</th>
+          <th>Curso</th>
+          <th>Preguntas</th>
+          <th>Duracion</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th class="text-end">Acciones</th>
+        </tr>
       </thead>
       <tbody>
-        <?php
-        $exams = [
-          ['Seccion A: Senalamiento vial','Clase B',30,'20 min','2026-11-02','Activo','b-active'],
-          ['Manejo defensivo teorico','Clase B',25,'25 min','2026-11-05','Activo','b-active'],
-          ['Normas de transito urbano','Clase A',20,'15 min','2026-11-08','Pendiente','b-pend'],
-          ['Carga y estabilidad','Clase C',35,'40 min','2026-11-12','Borrador','b-info'],
-          ['Renovacion - Actualizacion','Renovacion',15,'10 min','2026-11-15','Activo','b-active'],
-          ['Practico - Circuito cerrado','Clase A',10,'30 min','2026-11-18','Pendiente','b-pend'],
-        ];
-        foreach ($exams as $e):
-          [$tit,$curso,$preg,$dur,$f,$est,$cls] = $e;
-        ?>
-        <tr>
-          <td style="font-weight:600"><?= $tit ?></td>
-          <td><?= $curso ?></td>
-          <td><?= $preg ?></td>
-          <td><?= $dur ?></td>
-          <td data-fecha="<?= $f ?>"></td>
-          <td><span class="badge-soft <?= $cls ?>"><?= $est ?></span></td>
-          <td class="text-end">
-            <a href="<?= BASE_URL ?>/examen.php" target="_blank" rel="noopener" class="btn-act" title="Aplicar examen"><i class="fas fa-display"></i></a>
-            <a href="#" class="btn-act"><i class="fas fa-eye"></i></a>
-            <a href="#" class="btn-act edit" onclick="abrirModalExamen();return false" title="Editar"><i class="fas fa-pen"></i></a>
-            <a href="#" class="btn-act del"><i class="fas fa-trash"></i></a>
-          </td>
-        </tr>
+        <?php if (!$examenes): ?>
+          <tr><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
+            <i class="fas fa-inbox me-2"></i>No hay examenes creados.
+          </td></tr>
+        <?php endif; ?>
+        <?php foreach ($examenes as $e): ?>
+          <tr data-estado="<?= htmlspecialchars($e['estado']) ?>">
+            <td>
+              <div class="cell-user">
+                <div class="cell-avatar"><i class="fas fa-file-lines"></i></div>
+                <div>
+                  <div class="cu-name"><?= htmlspecialchars($e['titulo']) ?></div>
+                  <div class="cu-mail">#<?= (int) $e['id'] ?></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge-soft b-info"><?= htmlspecialchars($e['curso']) ?: 'ÔÇö' ?></span></td>
+            <td><?= (int) $e['preguntas'] ?></td>
+            <td><?= htmlspecialchars($e['duracion']) ?: 'ÔÇö' ?></td>
+            <td><?= $e['fecha'] ? date('d/m/Y', strtotime($e['fecha'])) : 'ÔÇö' ?></td>
+            <td><?= esdrive_badge($e['estado']) ?></td>
+            <td class="text-end">
+              <?php if ($puede): ?>
+                <button type="button" class="btn-act edit" title="Editar" onclick="abrirModalExamen(<?= (int) $e['id'] ?>)">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button type="button" class="btn-act del" title="Eliminar"
+                        data-eliminar="<?= (int) $e['id'] ?>" data-que="examen" data-nombre="<?= htmlspecialchars($e['titulo']) ?>">
+                  <i class="fas fa-trash"></i>
+                </button>
+                <form method="post" id="formEliminar<?= (int) $e['id'] ?>" class="d-none">
+                  <input type="hidden" name="accion" value="eliminar_examen">
+                  <input type="hidden" name="id" value="<?= (int) $e['id'] ?>">
+                </form>
+              <?php else: ?>
+                <span class="badge-soft b-info"><i class="fas fa-eye me-1"></i>Solo lectura</span>
+              <?php endif; ?>
+            </td>
+          </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Modal nuevo examen con CKEditor -->
+<!-- ============ MODAL EXAMEN (CKEditor) ============ -->
 <div class="modal fade" id="modalExamen" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="glass modal-content" style="background:rgba(20,28,46,.9)">
-      <div class="modal-header" style="border-color:var(--glass-brd)">
-        <h5 class="modal-title" style="font-family:'Poppins',sans-serif;font-weight:700"><i class="fas fa-file-signature me-2" style="color:var(--gold)"></i>Nuevo examen</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content modal-esdrive">
+      <div class="modal-head-accent">
+        <h5 class="modal-title"><i class="fas fa-pen-nib me-2"></i>Nuevo examen</h5>
+        <button type="button" class="btn-close-accent" data-bs-dismiss="modal" aria-label="Cerrar"><i class="fas fa-xmark"></i></button>
       </div>
-      <div class="modal-body">
-        <div class="exam-meta mb-3">
-          <div class="em-pill"><b><i class="fas fa-calendar me-1"></i> Fecha:</b> <span id="fechaExamen"></span></div>
-          <div class="em-pill"><b><i class="fas fa-language me-1"></i> Idioma:</b> es</div>
-        </div>
-        <div class="row g-3">
-          <div class="col-md-8">
-            <label class="form-label">Titulo del examen</label>
-            <input type="text" class="form-control" placeholder="Ej. Senalamiento vial - Seccion A">
+      <form method="post" id="formExamen" onsubmit="return prepararExamen()">
+        <input type="hidden" name="accion" value="guardar_examen">
+        <input type="hidden" name="id" value="">
+        <input type="hidden" name="descripcion" value="">
+
+        <div class="modal-body-accent">
+          <div class="row g-3">
+            <div class="col-md-7">
+              <label class="form-label">Titulo del examen</label>
+              <input type="text" name="titulo" class="form-control" required placeholder="Ej: Senalamiento vial">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Curso</label>
+              <select name="curso" class="form-select">
+                <option value="">General / todos</option>
+                <?php foreach ($cursos as $c): ?>
+                  <option value="<?= htmlspecialchars($c['nombre']) ?>"><?= htmlspecialchars($c['nombre']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Preguntas</label>
+              <input type="number" name="preguntas" class="form-control" min="0" value="0">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Duracion</label>
+              <input type="text" name="duracion" class="form-control" placeholder="20 min">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Fecha</label>
+              <input type="date" name="fecha" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select name="estado" class="form-select">
+                <option>Borrador</option>
+                <option>Pendiente</option>
+                <option>Activo</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Contenido / instrucciones</label>
+              <textarea name="editorExamen" id="editorExamen"></textarea>
+            </div>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Curso</label>
-            <select class="form-select"><option>Clase A</option><option>Clase B</option><option>Clase C</option><option>Renovacion</option></select>
-          </div>
         </div>
-        <div class="mt-3">
-          <label class="form-label">Descripcion / Instrucciones</label>
-          <textarea id="editorExamen" rows="6"></textarea>
+
+        <div class="modal-foot-accent">
+          <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-gold"><i class="fas fa-floppy-disk me-2"></i>Guardar examen</button>
         </div>
-      </div>
-      <div class="modal-footer" style="border-color:var(--glass-brd)">
-        <button type="button" class="btn btn-glass btn-sm" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-gold btn-sm" onclick="guardarExamen()"><i class="fas fa-save me-2"></i>Guardar</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+
+<script>
+window.__examenes = <?= json_encode($jsonExamenes, JSON_UNESCAPED_UNICODE) ?>;
+
+document.addEventListener('DOMContentLoaded', function () {
+  var q = document.getElementById('buscarExamen');
+  var f = document.getElementById('filtroEstadoExamen');
+  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaExamenes tbody tr'));
+  function filtrar() {
+    var txt = (q && q.value || '').toLowerCase();
+    var est = f && f.value || '';
+    filas.forEach(function (tr) {
+      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
+      var okEst = !est || tr.getAttribute('data-estado') === est;
+      tr.style.display = (okTxt && okEst) ? '' : 'none';
+    });
+  }
+  if (q) q.addEventListener('input', filtrar);
+  if (f) f.addEventListener('change', filtrar);
+
+  var btn = document.getElementById('btnActualizar');
+  if (btn) btn.addEventListener('click', function () {
+    btn.classList.add('is-spinning');
+    setTimeout(function () { location.reload(); }, 220);
+  });
+});
+</script>
