@@ -18,27 +18,10 @@ $pend    = count(array_filter($alumnos, fn($a) => $a['estado'] === 'Pendiente'))
 $cursos  = esdrive_opciones_cursos();
 $puede   = esdrive_puede('cuentas', 'gestionar');
 
-$kpis = [
-    ['fa-users',        $total,    'Alumnos totales',  'b-info'],
-    ['fa-user-check',   $activos,  'Activos',          'b-active'],
-    ['fa-user-clock',   $pend,     'Pendientes',       'b-pend'],
-    ['fa-graduation-cap', count($cursos), 'Cursos',    'b-info'],
-];
 ?>
 <?= esdrive_page_head('Cuentas', 'de alumnos', 'Administra los registros y accesos de los estudiantes.',
     $puede ? '<button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalAlumno">
         <i class="fas fa-plus"></i><span>Nueva cuenta</span></button>' : '') ?>
-
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -48,12 +31,15 @@ $kpis = [
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" placeholder="Buscar alumno..." id="buscarCuenta">
       </div>
-      <select class="form-select" style="width:160px" id="filtroEstadoCuenta">
-        <option value="">Todos los estados</option>
-        <option value="Activo">Activo</option>
-        <option value="Pendiente">Pendiente</option>
-        <option value="Inactivo">Inactivo</option>
-      </select>
+      <div class="input-group" style="width:190px">
+        <span class="input-group-text"><i class="fas fa-filter"></i></span>
+        <select class="form-select" id="filtroEstadoCuenta">
+          <option value="">Todos los estados</option>
+          <option value="Activo">Activo</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+      </div>
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
       </button>
@@ -114,7 +100,7 @@ $kpis = [
     </table>
   </div>
 
-  <?= esdrive_paginacion('tablaCuentas', 10) ?>
+  <?= esdrive_paginacion('tablaCuentas') ?>
 </div>
 
 <!-- ============ MODAL CUENTA ============ -->
@@ -133,37 +119,52 @@ $kpis = [
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nombre completo</label>
-              <input type="text" name="nombre" class="form-control" required placeholder="Ej: Maria Lopez"
-                     value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ej: Maria Lopez"
+                       value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Correo electronico</label>
-              <input type="email" name="email" class="form-control" placeholder="alumno@email.com"
-                     value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="alumno@email.com"
+                       value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Telefono</label>
-              <input type="text" name="telefono" class="form-control" placeholder="+503 7000-0000"
-                     value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="text" name="telefono" class="form-control" placeholder="+503 7000-0000"
+                       value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Curso</label>
-              <select name="curso" class="form-select">
-                <option value="">Sin curso asignado</option>
-                <?php foreach ($cursos as $c): ?>
-                  <option value="<?= htmlspecialchars($c['nombre']) ?>" <?= (($editar['curso'] ?? '') === $c['nombre']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($c['nombre']) ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                <select name="curso" class="form-select">
+                  <option value="">Sin curso asignado</option>
+                  <?php foreach ($cursos as $c): ?>
+                    <option value="<?= htmlspecialchars($c['nombre']) ?>" <?= (($editar['curso'] ?? '') === $c['nombre']) ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($c['nombre']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Estado</label>
-              <select name="estado" class="form-select">
-                <?php foreach (['Activo', 'Pendiente', 'Inactivo'] as $est): ?>
-                  <option <?= (($editar['estado'] ?? 'Activo') === $est) ? 'selected' : '' ?>><?= $est ?></option>
-                <?php endforeach; ?>
-              </select>
+              <div class="switch-estado">
+                <input type="hidden" name="estado" value="Inactivo">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" role="switch" name="estado" value="Activo"
+                         id="chkEstadoCuenta" <?= (($editar['estado'] ?? 'Activo') === 'Activo') ? 'checked' : '' ?>>
+                </div>
+                <label class="form-check-label" for="chkEstadoCuenta">Cuenta activa (puede inscribirse y presentar examenes)</label>
+              </div>
             </div>
           </div>
         </div>

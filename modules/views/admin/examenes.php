@@ -34,12 +34,15 @@ $estadosFiltro = ['pendiente', 'en_curso', 'aprobado', 'reprobado', 'expirado'];
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" placeholder="Buscar alumno, DUI o codigo..." id="buscarResultado">
       </div>
-      <select class="form-select" style="width:180px" id="filtroEstadoResultado">
+      <div class="input-group" style="width:215px">
+      <span class="input-group-text"><i class="fas fa-filter"></i></span>
+      <select class="form-select" id="filtroEstadoResultado">
         <option value="">Todos los estados</option>
         <?php foreach ($estadosFiltro as $est): ?>
           <option value="<?= htmlspecialchars($est) ?>"><?= htmlspecialchars(examen_etiqueta_estado($est)) ?></option>
         <?php endforeach; ?>
       </select>
+      </div>
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
       </button>
@@ -127,7 +130,7 @@ $estadosFiltro = ['pendiente', 'en_curso', 'aprobado', 'reprobado', 'expirado'];
     </table>
   </div>
 
-  <?= esdrive_paginacion('tablaResultados', 10) ?>
+  <?= esdrive_paginacion('tablaResultados') ?>
 </div>
 
 <script>

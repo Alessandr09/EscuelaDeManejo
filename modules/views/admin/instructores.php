@@ -36,27 +36,10 @@ try {
 
 $puede = esdrive_puede('empleados', 'gestionar');
 
-$kpis = [
-    ['fa-chalkboard-teacher', count($instructores), 'Instructores',   'b-info'],
-    ['fa-calendar-check',     array_sum($horariosPorEmp), 'Horarios asignados', 'b-active'],
-    ['fa-car-side',           array_sum($vehiculosPorEmp), 'Vehiculos asignados', 'b-pend'],
-    ['fa-star',               'Certificados', 'Formacion continua', 'b-info'],
-];
 ?>
 <?= esdrive_page_head('Nuestros', 'instructores', 'Equipo docente: certificaciones, contacto y carga horaria.',
     $puede ? '<button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalInstructor">
         <i class="fas fa-plus"></i><span>Nuevo instructor</span></button>' : '') ?>
-
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -130,7 +113,7 @@ $kpis = [
     </table>
   </div>
 
-  <?= esdrive_paginacion('tablaInstructores', 10) ?>
+  <?= esdrive_paginacion('tablaInstructores') ?>
 </div>
 
 <!-- ============ MODAL INSTRUCTOR ============ -->
@@ -149,27 +132,40 @@ $kpis = [
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nombre completo</label>
-              <input type="text" name="nombre" class="form-control" required placeholder="Ej: Carlos Ramirez"
-                     value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ej: Carlos Ramirez"
+                       value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Cargo</label>
-              <input type="text" name="cargo" class="form-control" placeholder="Ej: Instructor certificado"
-                     value="<?= htmlspecialchars($editar['cargo'] ?? 'Instructor certificado') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                <input type="text" name="cargo" class="form-control" placeholder="Ej: Instructor certificado"
+                       value="<?= htmlspecialchars($editar['cargo'] ?? 'Instructor certificado') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Telefono</label>
-              <input type="text" name="telefono" class="form-control" placeholder="+503 2222-3333"
-                     value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="text" name="telefono" class="form-control" placeholder="+503 2222-3333"
+                       value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Correo</label>
-              <input type="email" name="email" class="form-control" placeholder="instructor@esdrive.com"
-                     value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="instructor@esdrive.com"
+                       value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-12">
               <label class="form-label">Foto (opcional)</label>
-              <input type="file" name="imagen" class="form-control" accept="image/*">
+              <div class="dropzone dropzone-esdrive" id="dzImagenInstructor"></div>
+              <input type="file" name="imagen" accept="image/*" id="inputImagenInstructor" class="d-none">
             </div>
           </div>
         </div>
@@ -195,6 +191,10 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.classList.add('is-spinning');
     setTimeout(function () { location.reload(); }, 220);
   });
+
+  if (typeof esdriveDropzone === 'function') {
+    esdriveDropzone({ dropzone: 'dzImagenInstructor', input: 'inputImagenInstructor' });
+  }
 
   <?php if ($editar): ?>
   new bootstrap.Modal(document.getElementById('modalInstructor')).show();

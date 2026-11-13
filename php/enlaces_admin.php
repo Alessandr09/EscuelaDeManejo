@@ -20,9 +20,19 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Dropzone (subida de imagenes) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
+<script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js" defer></script>
+<script>
+  /* Dropzone se inicializa a mano desde admin.js (esdriveDropzone) */
+  window.addEventListener('DOMContentLoaded', function () {
+    if (window.Dropzone) { Dropzone.autoDiscover = false; }
+  });
+</script>
+
 <!-- Estilos propios -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=7">
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=8">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=17">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>

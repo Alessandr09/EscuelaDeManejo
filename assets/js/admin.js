@@ -352,8 +352,8 @@ window.esdriveTabla = function (cfg) {
   var barra = document.querySelector('.paginacion[data-tabla="' + cfg.tabla + '"]');
   var info = barra ? barra.querySelector('.pag-info') : null;
   var controles = barra ? barra.querySelector('.pag-controles') : null;
-  var porPagina = parseInt(cfg.porPagina || (barra && barra.getAttribute('data-por-pagina')) || 10, 10);
-  if (!(porPagina > 0)) { porPagina = 10; }
+  var porPagina = parseInt(cfg.porPagina || (barra && barra.getAttribute('data-por-pagina')) || 5, 10);
+  if (!(porPagina > 0)) { porPagina = 5; }
   var pagina = 1;
 
   var buscarEl = cfg.buscar ? document.getElementById(cfg.buscar) : null;
@@ -448,14 +448,14 @@ window.esdriveTabla = function (cfg) {
     visibles.slice(ini, fin).forEach(function (tr) { tr.style.display = ''; });
 
     if (barra) {
-      /* Con una sola pagina no hace falta mostrar la barra */
-      if (paginas <= 1) {
-        barra.hidden = true;
-      } else {
-        barra.hidden = false;
-        if (info) { info.textContent = 'Mostrando ' + (total ? ini + 1 : 0) + '-' + fin + ' de ' + total; }
-        dibujarControles(pagina, paginas);
+      /* La barra siempre esta visible: con una sola pagina las flechas quedan deshabilitadas */
+      barra.hidden = false;
+      if (info) {
+        info.textContent = total
+          ? 'Mostrando ' + (ini + 1) + '-' + fin + ' de ' + total
+          : 'Sin registros';
       }
+      dibujarControles(pagina, paginas);
     }
     return { total: total, pagina: pagina, paginas: paginas };
   }
@@ -508,3 +508,128 @@ document.addEventListener('click', function (e) {
     }
   });
 });
+
+/* ============================================================
+   TOASTS de avisos (SweetAlert2, arriba a la derecha)
+   ------------------------------------------------------------
+   PHP deja un nodo oculto con data-flash-toast (ver esdrive_flash
+   en php/ui.php) y aqui se convierte en toast. Tambien se puede
+   lanzar a mano desde cualquier vista:
+
+     esdriveToast('Cambios guardados', 'Se actualizo el curso.');
+   ============================================================ */
+window.esdriveToast = function (titulo, texto, icono) {
+  if (typeof Swal === 'undefined') { return; }
+  var estilos = getComputedStyle(document.documentElement);
+  var fondo = estilos.getPropertyValue('--surface').trim() || '#1a2338';
+  var color = estilos.getPropertyValue('--text').trim() || '#eef2f8';
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: icono || 'success',
+    title: titulo || 'Listo',
+    text: texto || '',
+    showConfirmButton: false,
+    timer: 3200,
+    timerProgressBar: true,
+    background: fondo,
+    color: color,
+    didOpen: function (el) {
+      el.addEventListener('mouseenter', Swal.stopTimer);
+      el.addEventListener('mouseleave', Swal.resumeTimer);
+    }
+  });
+};
+
+(function () {
+  function lanzarToasts() {
+    document.querySelectorAll('[data-flash-toast]').forEach(function (nodo) {
+      window.esdriveToast(
+        nodo.getAttribute('data-titulo'),
+        nodo.getAttribute('data-texto'),
+        nodo.getAttribute('data-icono')
+      );
+      nodo.remove();
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', lanzarToasts);
+  } else {
+    lanzarToasts();
+  }
+})();
+
+/* ============================================================
+   DROPZONE para subir imagenes dentro de un formulario normal
+   ------------------------------------------------------------
+   La vista deja un contenedor y un <input type="file"> oculto con
+   el name que espera PHP; aqui se copia el archivo elegido a ese
+   input para que viaje con el submit del formulario.
+
+     esdriveDropzone({
+       dropzone: 'dzImagenEmp',
+       input: 'inputImagenEmp',
+       previewWrap: 'previewWrapEmp',
+       previewImg: 'previewImgEmp'
+     });
+   ============================================================ */
+window.esdriveDropzone = function (cfg) {
+  cfg = cfg || {};
+  var cont = document.getElementById(cfg.dropzone);
+  var input = document.getElementById(cfg.input);
+  if (!cont || !input || typeof Dropzone === 'undefined') { return null; }
+  Dropzone.autoDiscover = false;
+
+  var wrap = cfg.previewWrap ? document.getElementById(cfg.previewWrap) : null;
+  var img = cfg.previewImg ? document.getElementById(cfg.previewImg) : null;
+
+  function sincronizar() {
+    try {
+      var dt = new DataTransfer();
+      dz.files.forEach(function (f) { dt.items.add(f); });
+      input.files = dt.files;
+    } catch (e) {}
+  }
+
+  var dz = new Dropzone(cont, {
+    url: '#',
+    autoProcessQueue: false,
+    uploadMultiple: false,
+    maxFiles: 1,
+    maxFilesize: 5,
+    acceptedFiles: 'image/*',
+    addRemoveLinks: true,
+    dictRemoveFile: 'Quitar imagen',
+    dictCancelUpload: 'Cancelar',
+    dictDefaultMessage: '<i class="fas fa-cloud-arrow-up"></i><span>Arrastra la imagen aqui o haz clic para elegirla</span>',
+    dictFallbackMessage: 'Tu navegador no permite arrastrar archivos.',
+    dictFileTooBig: 'La imagen supera los 5 MB.',
+    dictInvalidFileType: 'Solo se permiten imagenes (JPG, PNG, WEBP o GIF).',
+    init: function () {
+      var self = this;
+
+      self.on('maxfilesexceeded', function (file) {
+        self.removeAllFiles();
+        self.addFile(file);
+      });
+
+      self.on('addedfile', function (file) {
+        setTimeout(sincronizar, 0);
+        if (wrap && img) {
+          img.src = URL.createObjectURL(file);
+          wrap.classList.remove('d-none');
+        }
+      });
+
+      self.on('removedfile', function () {
+        setTimeout(sincronizar, 0);
+        if (!self.files.length) {
+          if (wrap) wrap.classList.add('d-none');
+          if (img) img.removeAttribute('src');
+        }
+      });
+    }
+  });
+
+  return dz;
+};

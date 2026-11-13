@@ -89,8 +89,16 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         }
     }
 
-    $go = function ($msg, $v = null) use ($vistaRetorno) {
-        header('Location: ' . BASE_URL . '/admin.php?v=' . ($v ?: $vistaRetorno) . '&flash=' . $msg);
+    $go = function ($msg, $v = null) use ($vistaRetorno, $accion) {
+        $op = '';
+        if ($msg === 'ok') {
+            if (strpos($accion, 'eliminar_') === 0) {
+                $op = '&op=eliminado';
+            } elseif (strpos($accion, 'guardar_') === 0) {
+                $op = (int) ($_POST['id'] ?? 0) > 0 ? '&op=actualizado' : '&op=creado';
+            }
+        }
+        header('Location: ' . BASE_URL . '/admin.php?v=' . ($v ?: $vistaRetorno) . '&flash=' . $msg . $op);
         exit;
     };
 
@@ -353,7 +361,7 @@ if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dash
           </div>
         </main>
       </div>
-      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=8"></script>
+      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=11"></script>
     <?php endif; ?>
   </body>
 </html>
