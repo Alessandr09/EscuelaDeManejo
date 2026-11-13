@@ -535,6 +535,55 @@ html.light-mode .b-pend  { background: rgba(217,119,6,.12); color: #b45309; bord
 html.light-mode .b-off   { background: rgba(185,28,28,.10); color: #b91c1c; border-color: rgba(185,28,28,.28); }
 html.light-mode .b-info  { background: rgba(30,64,175,.10); color: #1e40af; border-color: rgba(30,64,175,.28); }
 
+/* ============ NOTAS DE EXAMEN ============ */
+.nota-caja {
+    display: inline-flex; align-items: baseline; gap: 2px;
+    padding: 4px 12px; border-radius: var(--radius);
+    font-family: 'Poppins', sans-serif; font-weight: 800; font-size: .95rem;
+    line-height: 1.2;
+}
+.nota-caja small { font-family: 'Inter', sans-serif; font-size: .66rem; font-weight: 600; opacity: .75; }
+.nt-ok    { background: rgba(70,194,110,.15); color: #46c26e; border: 1px solid rgba(70,194,110,.3); }
+.nt-error { background: rgba(229,72,77,.15); color: #e5484d; border: 1px solid rgba(229,72,77,.3); }
+.nt-muted { background: var(--surface-2); color: var(--text-mut); border: 1px solid var(--border); }
+html.light-mode .nt-ok    { background: rgba(21,128,61,.12); color: #15803d; border-color: rgba(21,128,61,.3); }
+html.light-mode .nt-error { background: rgba(185,28,28,.10); color: #b91c1c; border-color: rgba(185,28,28,.28); }
+
+.barra-nota {
+    height: 6px; border-radius: 999px; overflow: hidden;
+    background: var(--surface-2); border: 1px solid var(--border);
+    min-width: 90px; margin-bottom: 3px;
+}
+.barra-nota i { display: block; height: 100%; border-radius: 999px; }
+.barra-nota i.ok    { background: #46c26e; }
+.barra-nota i.error { background: #e5484d; }
+.barra-nota i.mid   { background: var(--gold); }
+
+/* ============ PAGINACION DE TABLAS ============ */
+.paginacion {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap;
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+.paginacion[hidden] { display: none; }
+.pag-info { font-size: .78rem; color: var(--text-mut); }
+.pag-controles { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.pag-btn {
+    min-width: 32px; height: 32px; padding: 0 9px;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface-2); color: var(--text-mut);
+    font-size: .8rem; font-weight: 600;
+    display: inline-grid; place-items: center;
+    cursor: pointer; transition: all .18s ease;
+}
+.pag-btn:hover:not(:disabled) {
+    color: var(--gold); border-color: var(--gold); background: rgba(233,165,55,.08);
+}
+.pag-btn.is-active { background: var(--gold); border-color: var(--gold); color: #241a05; }
+.pag-btn:disabled { opacity: .35; cursor: not-allowed; }
+.pag-ellipsis { color: var(--text-mut); font-size: .8rem; padding: 0 3px; }
+
 .btn-act {
     width: 34px; height: 34px; border-radius: var(--radius);
     display: inline-grid; place-items: center;

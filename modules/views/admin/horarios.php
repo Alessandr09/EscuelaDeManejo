@@ -81,7 +81,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$horarios): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay horarios programados.
           </td></tr>
         <?php endif; ?>
@@ -122,6 +122,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaHorarios', 10) ?>
 </div>
 
 <!-- ============ MODAL HORARIO ============ -->
@@ -196,20 +198,11 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarHorario');
-  var f = document.getElementById('filtroDia');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaHorarios tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var dia = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okDia = !dia || tr.getAttribute('data-dia') === dia;
-      tr.style.display = (okTxt && okDia) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaHorarios',
+    buscar: 'buscarHorario',
+    filtros: [{ id: 'filtroDia', attr: 'data-dia' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

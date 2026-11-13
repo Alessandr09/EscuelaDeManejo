@@ -86,7 +86,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$instructores): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay instructores registrados.
           </td></tr>
         <?php endif; ?>
@@ -129,6 +129,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaInstructores', 10) ?>
 </div>
 
 <!-- ============ MODAL INSTRUCTOR ============ -->
@@ -183,13 +185,9 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarInstructor');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaInstructores tbody tr'));
-  if (q) q.addEventListener('input', function () {
-    var txt = q.value.toLowerCase();
-    filas.forEach(function (tr) {
-      tr.style.display = tr.textContent.toLowerCase().indexOf(txt) !== -1 ? '' : 'none';
-    });
+  esdriveTabla({
+    tabla: 'tablaInstructores',
+    buscar: 'buscarInstructor'
   });
 
   var btn = document.getElementById('btnActualizar');

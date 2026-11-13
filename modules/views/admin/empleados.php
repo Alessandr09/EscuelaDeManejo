@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
+require_once __DIR__ . '/../../../php/ui.php';
 
 $flash = $_GET['flash'] ?? '';
 $editar = null;
@@ -64,7 +65,7 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
       </thead>
       <tbody>
         <?php if (!$empleados): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay empleados registrados. Pulsa "Agregar" para crear el primero.
           </td></tr>
         <?php endif; ?>
@@ -109,6 +110,8 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaEmpleados', 10) ?>
 </div>
 
 <!-- ============ MODAL AGREGAR / EDITAR EMPLEADO ============ -->
@@ -171,14 +174,9 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var buscar = document.getElementById('buscarEmpleado');
-  var filas  = document.querySelectorAll('#tablaEmpleados tbody tr');
-
-  if (buscar) buscar.addEventListener('input', function () {
-    var q = buscar.value.toLowerCase();
-    filas.forEach(function (f) {
-      f.style.display = f.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
+  esdriveTabla({
+    tabla: 'tablaEmpleados',
+    buscar: 'buscarEmpleado'
   });
 
   var btnAct = document.getElementById('btnActualizarEmp');

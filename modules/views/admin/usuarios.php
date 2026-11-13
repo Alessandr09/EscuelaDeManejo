@@ -83,7 +83,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$usuarios): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay usuarios registrados.
           </td></tr>
         <?php endif; ?>
@@ -136,6 +136,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaUsuarios', 10) ?>
 </div>
 
 <!-- ============ MODAL USUARIO + MATRIZ DE PERMISOS ============ -->
@@ -271,20 +273,11 @@ function aplicarRol() {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Busqueda y filtro de la tabla
-  var q = document.getElementById('buscarUsuario');
-  var f = document.getElementById('filtroRol');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaUsuarios tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var rol = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okRol = !rol || tr.getAttribute('data-rol') === rol;
-      tr.style.display = (okTxt && okRol) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaUsuarios',
+    buscar: 'buscarUsuario',
+    filtros: [{ id: 'filtroRol', attr: 'data-rol' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

@@ -74,7 +74,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$alumnos): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay cuentas de alumnos registradas.
           </td></tr>
         <?php endif; ?>
@@ -113,6 +113,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaCuentas', 10) ?>
 </div>
 
 <!-- ============ MODAL CUENTA ============ -->
@@ -177,20 +179,11 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarCuenta');
-  var f = document.getElementById('filtroEstadoCuenta');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaCuentas tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var est = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okEst = !est || tr.getAttribute('data-estado') === est;
-      tr.style.display = (okTxt && okEst) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaCuentas',
+    buscar: 'buscarCuenta',
+    filtros: [{ id: 'filtroEstadoCuenta', attr: 'data-estado' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

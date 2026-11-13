@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
+require_once __DIR__ . '/../../../php/ui.php';
 
 $flash = $_GET['flash'] ?? '';
 $editar = null;
@@ -73,7 +74,7 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
       </thead>
       <tbody>
         <?php if (!$vehiculos): ?>
-          <tr><td colspan="8" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="8" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay vehiculos registrados. Pulsa "Agregar" para crear el primero.
           </td></tr>
         <?php endif; ?>
@@ -135,6 +136,8 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaVehiculos', 10) ?>
 </div>
 
 <!-- ============ MODAL AGREGAR / EDITAR ============ -->
@@ -235,21 +238,11 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var buscar = document.getElementById('buscarVehiculo');
-  var filtro = document.getElementById('filtroEstado');
-  var filas  = document.querySelectorAll('#tablaVehiculos tbody tr');
-
-  function aplicar() {
-    var q = (buscar.value || '').toLowerCase();
-    var est = filtro.value;
-    filas.forEach(function (f) {
-      var okTexto = f.textContent.toLowerCase().includes(q);
-      var okEstado = !est || f.getAttribute('data-estado') === est;
-      f.style.display = (okTexto && okEstado) ? '' : 'none';
-    });
-  }
-  if (buscar) buscar.addEventListener('input', aplicar);
-  if (filtro) filtro.addEventListener('change', aplicar);
+  esdriveTabla({
+    tabla: 'tablaVehiculos',
+    buscar: 'buscarVehiculo',
+    filtros: [{ id: 'filtroEstado', attr: 'data-estado' }]
+  });
 
   // Actualizar: recarga la pagina (por si hay cambios en la BD)
   var btnAct = document.getElementById('btnActualizar');

@@ -45,7 +45,7 @@ function esdrive_badge(string $estado): string
     if (in_array($e, ['pendiente', 'en curso', 'en_uso', 'programado', 'borrador'], true)) {
         return '<span class="badge-soft b-pend"><i class="fas fa-clock me-1"></i>' . htmlspecialchars($estado) . '</span>';
     }
-    if (in_array($e, ['inactivo', 'inactiva', 'cancelado', 'rechazado'], true)) {
+    if (in_array($e, ['inactivo', 'inactiva', 'cancelado', 'rechazado', 'reprobado', 'reprobada', 'vencido', 'expirado'], true)) {
         return '<span class="badge-soft b-off"><i class="fas fa-circle-xmark me-1"></i>' . htmlspecialchars($estado) . '</span>';
     }
     return '<span class="badge-soft b-info"><i class="fas fa-circle-info me-1"></i>' . htmlspecialchars($estado) . '</span>';
@@ -81,3 +81,21 @@ function esdrive_opciones_cursos(?string $seleccionado = null): array
     foreach ($filas as $f) { $out[] = ['id' => (int) $f['id'], 'nombre' => $f['nombre']]; }
     return $out;
 }
+
+/**
+ * Barra de paginacion para una tabla del panel.
+ *
+ * Los controles los dibuja assets/js/admin.js (esdriveTabla), que ademas
+ * se encarga de aplicar el filtro de busqueda sobre todas las filas.
+ *
+ * @param string $tablaId  id del <table> a paginar
+ * @param int    $porPagina  filas por pagina
+ */
+function esdrive_paginacion(string $tablaId, int $porPagina = 10): string
+{
+    return '<div class="paginacion" data-tabla="' . htmlspecialchars($tablaId) . '" data-por-pagina="' . (int) $porPagina . '" hidden>'
+        . '<span class="pag-info"></span>'
+        . '<div class="pag-controles"></div>'
+        . '</div>';
+}
+

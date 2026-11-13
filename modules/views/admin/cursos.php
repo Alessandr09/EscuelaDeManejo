@@ -75,7 +75,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$cursos): ?>
-          <tr><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay cursos registrados.
           </td></tr>
         <?php endif; ?>
@@ -115,6 +115,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaCursos', 10) ?>
 </div>
 
 <!-- ============ MODAL CURSO ============ -->
@@ -176,13 +178,9 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarCurso');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaCursos tbody tr'));
-  if (q) q.addEventListener('input', function () {
-    var txt = q.value.toLowerCase();
-    filas.forEach(function (tr) {
-      tr.style.display = tr.textContent.toLowerCase().indexOf(txt) !== -1 ? '' : 'none';
-    });
+  esdriveTabla({
+    tabla: 'tablaCursos',
+    buscar: 'buscarCurso'
   });
 
   var btn = document.getElementById('btnActualizar');
