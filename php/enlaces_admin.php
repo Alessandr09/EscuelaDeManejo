@@ -20,18 +20,25 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Dropzone (subida de imagenes) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
+<script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js" defer></script>
+<script>
+  /* Dropzone se inicializa a mano desde admin.js (esdriveDropzone) */
+  window.addEventListener('DOMContentLoaded', function () {
+    if (window.Dropzone) { Dropzone.autoDiscover = false; }
+  });
+</script>
+
 <!-- Estilos propios -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=7">
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=7">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=17">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
 <!-- ApexCharts (dashboard) -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-<!-- CKEditor 5 (examenes) - v41 GPL: no pide license key -->
-<script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@41.0.0/build/ckeditor.js" defer></script>
 
 <!-- Tema claro/oscuro -->
 <script src="<?= BASE_URL ?>/assets/js/theme.js?v=2" defer></script>

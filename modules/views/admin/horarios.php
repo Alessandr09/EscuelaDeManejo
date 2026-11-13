@@ -25,27 +25,10 @@ catch (Exception $e) { $empleados = []; }
 $cupoTotal = array_sum(array_map(fn($h) => (int) $h['cupo'], $horarios));
 $puede     = esdrive_puede('horarios', 'gestionar');
 
-$kpis = [
-    ['fa-calendar-days', count($horarios), 'Horarios',        'b-info'],
-    ['fa-users',         $cupoTotal,       'Cupo total',      'b-active'],
-    ['fa-graduation-cap', count($cursos),  'Cursos con horario', 'b-pend'],
-    ['fa-chalkboard-teacher', count($empleados), 'Instructores', 'b-info'],
-];
 ?>
 <?= esdrive_page_head('Gestion de', 'horarios', 'Programa las clases por dia, hora, curso e instructor.',
     $puede ? '<button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalHorario">
         <i class="fas fa-plus"></i><span>Nuevo horario</span></button>' : '') ?>
-
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -55,12 +38,15 @@ $kpis = [
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" placeholder="Buscar..." id="buscarHorario">
       </div>
-      <select class="form-select" style="width:160px" id="filtroDia">
+      <div class="input-group" style="width:190px">
+      <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+      <select class="form-select" id="filtroDia">
         <option value="">Todos los dias</option>
         <?php foreach (['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'] as $d): ?>
           <option value="<?= $d ?>"><?= $d ?></option>
         <?php endforeach; ?>
       </select>
+      </div>
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
       </button>
@@ -81,7 +67,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$horarios): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay horarios programados.
           </td></tr>
         <?php endif; ?>
@@ -122,6 +108,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaHorarios') ?>
 </div>
 
 <!-- ============ MODAL HORARIO ============ -->
@@ -140,47 +128,65 @@ $kpis = [
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Dia</label>
-              <select name="dia" class="form-select" required>
-                <?php foreach (['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'] as $d): ?>
-                  <option <?= (($editar['dia'] ?? '') === $d) ? 'selected' : '' ?>><?= $d ?></option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                <select name="dia" class="form-select" required>
+                  <?php foreach (['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'] as $d): ?>
+                    <option <?= (($editar['dia'] ?? '') === $d) ? 'selected' : '' ?>><?= $d ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Inicio</label>
-              <input type="time" name="hora_inicio" class="form-control" required
-                     value="<?= htmlspecialchars($editar['hora_inicio'] ?? '08:00') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <input type="time" name="hora_inicio" class="form-control" required
+                       value="<?= htmlspecialchars($editar['hora_inicio'] ?? '08:00') ?>">
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Fin</label>
-              <input type="time" name="hora_fin" class="form-control"
-                     value="<?= htmlspecialchars($editar['hora_fin'] ?? '10:00') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <input type="time" name="hora_fin" class="form-control"
+                       value="<?= htmlspecialchars($editar['hora_fin'] ?? '10:00') ?>">
+              </div>
             </div>
             <div class="col-md-5">
               <label class="form-label">Curso</label>
-              <select name="curso_id" class="form-select">
-                <option value="">Sin curso</option>
-                <?php foreach ($cursos as $c): ?>
-                  <option value="<?= $c['id'] ?>" <?= ((int) ($editar['curso_id'] ?? 0) === $c['id']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($c['nombre']) ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                <select name="curso_id" class="form-select">
+                  <option value="">Sin curso</option>
+                  <?php foreach ($cursos as $c): ?>
+                    <option value="<?= $c['id'] ?>" <?= ((int) ($editar['curso_id'] ?? 0) === $c['id']) ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($c['nombre']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
             <div class="col-md-4">
               <label class="form-label">Instructor</label>
-              <select name="empleado_id" class="form-select">
-                <option value="">Sin asignar</option>
-                <?php foreach ($empleados as $e): ?>
-                  <option value="<?= (int) $e['id'] ?>" <?= ((int) ($editar['empleado_id'] ?? 0) === (int) $e['id']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($e['nombre']) ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+                <select name="empleado_id" class="form-select">
+                  <option value="">Sin asignar</option>
+                  <?php foreach ($empleados as $e): ?>
+                    <option value="<?= (int) $e['id'] ?>" <?= ((int) ($editar['empleado_id'] ?? 0) === (int) $e['id']) ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($e['nombre']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Cupo</label>
-              <input type="number" name="cupo" min="0" class="form-control" value="<?= (int) ($editar['cupo'] ?? 4) ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-users"></i></span>
+                <input type="number" name="cupo" min="0" class="form-control" value="<?= (int) ($editar['cupo'] ?? 4) ?>">
+              </div>
             </div>
           </div>
         </div>
@@ -196,20 +202,11 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarHorario');
-  var f = document.getElementById('filtroDia');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaHorarios tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var dia = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okDia = !dia || tr.getAttribute('data-dia') === dia;
-      tr.style.display = (okTxt && okDia) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaHorarios',
+    buscar: 'buscarHorario',
+    filtros: [{ id: 'filtroDia', attr: 'data-dia' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

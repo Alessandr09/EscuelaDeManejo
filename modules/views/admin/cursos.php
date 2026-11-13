@@ -24,27 +24,10 @@ $activos = count(array_filter($cursos, fn($c) => $c['estado'] === 'Activo'));
 $ingresos = array_sum(array_map(fn($c) => (float) $c['precio'], $cursos));
 $puede = esdrive_puede('cursos', 'gestionar');
 
-$kpis = [
-    ['fa-graduation-cap', count($cursos), 'Cursos',        'b-info'],
-    ['fa-circle-check',   $activos,       'Activos',       'b-active'],
-    ['fa-users',          array_sum($porCurso), 'Alumnos inscritos', 'b-info'],
-    ['fa-dollar-sign',    '$' . number_format($ingresos, 0), 'Valor total', 'b-pend'],
-];
 ?>
 <?= esdrive_page_head('Gestion de', 'cursos', 'Administra la oferta academica: precios, duracion y estados.',
     $puede ? '<button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalCurso">
         <i class="fas fa-plus"></i><span>Nuevo curso</span></button>' : '') ?>
-
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -75,7 +58,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$cursos): ?>
-          <tr><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay cursos registrados.
           </td></tr>
         <?php endif; ?>
@@ -115,6 +98,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaCursos') ?>
 </div>
 
 <!-- ============ MODAL CURSO ============ -->
@@ -133,34 +118,52 @@ $kpis = [
           <div class="row g-3">
             <div class="col-md-7">
               <label class="form-label">Nombre del curso</label>
-              <input type="text" name="nombre" class="form-control" required placeholder="Ej: Clase B - Particular"
-                     value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ej: Clase B - Particular"
+                       value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-5">
               <label class="form-label">Codigo</label>
-              <input type="text" name="codigo" class="form-control" placeholder="Ej: CB"
-                     value="<?= htmlspecialchars($editar['codigo'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                <input type="text" name="codigo" class="form-control" placeholder="Ej: CB"
+                       value="<?= htmlspecialchars($editar['codigo'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-4">
               <label class="form-label">Precio (USD)</label>
-              <input type="number" step="0.01" min="0" name="precio" class="form-control" value="<?= htmlspecialchars($editar['precio'] ?? '0') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                <input type="number" step="0.01" min="0" name="precio" class="form-control" value="<?= htmlspecialchars($editar['precio'] ?? '0') ?>">
+              </div>
             </div>
             <div class="col-md-4">
               <label class="form-label">Duracion</label>
-              <input type="text" name="duracion" class="form-control" placeholder="Ej: 4 semanas"
-                     value="<?= htmlspecialchars($editar['duracion'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <input type="text" name="duracion" class="form-control" placeholder="Ej: 4 semanas"
+                       value="<?= htmlspecialchars($editar['duracion'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-4">
               <label class="form-label">Estado</label>
-              <select name="estado" class="form-select">
-                <?php foreach (['Activo', 'Pendiente', 'Inactivo'] as $est): ?>
-                  <option <?= (($editar['estado'] ?? 'Activo') === $est) ? 'selected' : '' ?>><?= $est ?></option>
-                <?php endforeach; ?>
-              </select>
+              <div class="switch-estado">
+                <input type="hidden" name="estado" value="Inactivo">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" role="switch" name="estado" value="Activo"
+                         id="chkEstadoCurso" <?= (($editar['estado'] ?? 'Activo') === 'Activo') ? 'checked' : '' ?>>
+                </div>
+                <label class="form-check-label" for="chkEstadoCurso">Curso activo</label>
+              </div>
             </div>
             <div class="col-12">
               <label class="form-label">Descripcion</label>
-              <textarea name="descripcion" class="form-control" rows="3" placeholder="Que incluye el curso..."><?= htmlspecialchars($editar['descripcion'] ?? '') ?></textarea>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                <textarea name="descripcion" class="form-control" rows="3" placeholder="Que incluye el curso..."><?= htmlspecialchars($editar['descripcion'] ?? '') ?></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -176,13 +179,9 @@ $kpis = [
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarCurso');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaCursos tbody tr'));
-  if (q) q.addEventListener('input', function () {
-    var txt = q.value.toLowerCase();
-    filas.forEach(function (tr) {
-      tr.style.display = tr.textContent.toLowerCase().indexOf(txt) !== -1 ? '' : 'none';
-    });
+  esdriveTabla({
+    tabla: 'tablaCursos',
+    buscar: 'buscarCurso'
   });
 
   var btn = document.getElementById('btnActualizar');

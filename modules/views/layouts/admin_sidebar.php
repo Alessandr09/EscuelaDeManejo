@@ -12,7 +12,7 @@ $badge = function ($tabla, $filtro = '') {
     } catch (Exception $e) { return 0; }
 };
 $nCuentas  = $badge('alumnos');
-$nExamenes = $badge('examenes', "estado <> 'Borrador'");
+$nExamenes = $badge('examen_alumnos');
 $nVehi     = $badge('vehiculos', "estado = 'disponible'");
 $nEmp      = $badge('empleados');
 $nCursos   = $badge('cursos', "estado = 'Activo'");

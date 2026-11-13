@@ -69,8 +69,6 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         'eliminar_empleado'  => ['empleados',     'gestionar'],
         'guardar_alumno'     => ['cuentas',       'gestionar'],
         'eliminar_alumno'    => ['cuentas',       'gestionar'],
-        'guardar_examen'     => ['examenes',      'gestionar'],
-        'eliminar_examen'    => ['examenes',      'gestionar'],
         'guardar_curso'      => ['cursos',        'gestionar'],
         'eliminar_curso'     => ['cursos',        'gestionar'],
         'guardar_horario'    => ['horarios',      'gestionar'],
@@ -91,8 +89,16 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
         }
     }
 
-    $go = function ($msg, $v = null) use ($vistaRetorno) {
-        header('Location: ' . BASE_URL . '/admin.php?v=' . ($v ?: $vistaRetorno) . '&flash=' . $msg);
+    $go = function ($msg, $v = null) use ($vistaRetorno, $accion) {
+        $op = '';
+        if ($msg === 'ok') {
+            if (strpos($accion, 'eliminar_') === 0) {
+                $op = '&op=eliminado';
+            } elseif (strpos($accion, 'guardar_') === 0) {
+                $op = (int) ($_POST['id'] ?? 0) > 0 ? '&op=actualizado' : '&op=creado';
+            }
+        }
+        header('Location: ' . BASE_URL . '/admin.php?v=' . ($v ?: $vistaRetorno) . '&flash=' . $msg . $op);
         exit;
     };
 
@@ -213,35 +219,6 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
     if ($accion === 'eliminar_alumno') {
         db()->prepare('DELETE FROM alumnos WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
         $go('ok', 'cuentas');
-    }
-
-    /* ---------- EXAMENES ---------- */
-    if ($accion === 'guardar_examen') {
-        $id     = (int) ($_POST['id'] ?? 0);
-        $titulo = trim($_POST['titulo'] ?? '');
-        $curso  = trim($_POST['curso'] ?? '');
-        $preg   = (int) ($_POST['preguntas'] ?? 0);
-        $dur    = trim($_POST['duracion'] ?? '');
-        $fecha  = trim($_POST['fecha'] ?? '');
-        $fecha  = $fecha ? date('Y-m-d', strtotime(str_replace('T', ' ', $fecha))) : null;
-        $estado = trim($_POST['estado'] ?? 'Borrador');
-        $desc   = $_POST['descripcion'] ?? '';
-        if ($titulo === '') { $go('error', 'examenes'); }
-
-        $pdo = db();
-        if ($id > 0) {
-            $st = $pdo->prepare('UPDATE examenes SET titulo=?, curso=?, preguntas=?, duracion=?, fecha=?, estado=?, descripcion=? WHERE id=?');
-            $st->execute([$titulo, $curso, $preg, $dur, $fecha, $estado, $desc, $id]);
-        } else {
-            $st = $pdo->prepare('INSERT INTO examenes (titulo, curso, preguntas, duracion, fecha, estado, descripcion) VALUES (?,?,?,?,?,?,?)');
-            $st->execute([$titulo, $curso, $preg, $dur, $fecha, $estado, $desc]);
-        }
-        $go('ok', 'examenes');
-    }
-
-    if ($accion === 'eliminar_examen') {
-        db()->prepare('DELETE FROM examenes WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
-        $go('ok', 'examenes');
     }
 
     /* ---------- CURSOS ---------- */
@@ -384,7 +361,7 @@ if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dash
           </div>
         </main>
       </div>
-      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=7"></script>
+      <script src="<?= BASE_URL ?>/assets/js/admin.js?v=11"></script>
     <?php endif; ?>
   </body>
 </html>

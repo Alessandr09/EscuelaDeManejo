@@ -27,27 +27,10 @@ if ($editar) {
     }
 }
 
-$kpis = [
-    ['fa-user-shield', count($usuarios), 'Usuarios',   'b-info'],
-    ['fa-user-check',  $nActivo,         'Activos',    'b-active'],
-    ['fa-users-gear',  count($roles),    'Roles',      'b-pend'],
-    ['fa-layer-group', count($modulos),  'Modulos',    'b-info'],
-];
 ?>
 <?= esdrive_page_head('Usuarios y', 'permisos', 'Crea cuentas de acceso al panel y define que puede hacer cada una.',
     $puede ? '<button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#modalUsuario">
         <i class="fas fa-plus"></i><span>Nuevo usuario</span></button>' : '') ?>
-
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -57,12 +40,15 @@ $kpis = [
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" placeholder="Buscar usuario..." id="buscarUsuario">
       </div>
-      <select class="form-select" style="width:170px" id="filtroRol">
+      <div class="input-group" style="width:200px">
+      <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+      <select class="form-select" id="filtroRol">
         <option value="">Todos los roles</option>
         <?php foreach (array_keys($roles) as $r): ?>
           <option value="<?= $r ?>"><?= esdrive_rol_label($r) ?></option>
         <?php endforeach; ?>
       </select>
+      </div>
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
       </button>
@@ -83,7 +69,7 @@ $kpis = [
       </thead>
       <tbody>
         <?php if (!$usuarios): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay usuarios registrados.
           </td></tr>
         <?php endif; ?>
@@ -136,6 +122,8 @@ $kpis = [
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaUsuarios') ?>
 </div>
 
 <!-- ============ MODAL USUARIO + MATRIZ DE PERMISOS ============ -->
@@ -154,31 +142,46 @@ $kpis = [
           <div class="row g-3 mb-4">
             <div class="col-md-5">
               <label class="form-label">Nombre completo</label>
-              <input type="text" name="nombre" class="form-control" required placeholder="Ej: Ana Martinez"
-                     value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ej: Ana Martinez"
+                       value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Usuario (login)</label>
-              <input type="text" name="usuario" class="form-control" required placeholder="ana"
-                     value="<?= htmlspecialchars($editar['usuario'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                <input type="text" name="usuario" class="form-control" required placeholder="ana"
+                       value="<?= htmlspecialchars($editar['usuario'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-4">
               <label class="form-label">Contrasena <?= $editar ? '(dejar vacio para no cambiar)' : '' ?></label>
-              <input type="password" name="clave" class="form-control" <?= $editar ? '' : 'required' ?>
-                     minlength="4" placeholder="Minimo 4 caracteres">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="clave" class="form-control" <?= $editar ? '' : 'required' ?>
+                       minlength="4" placeholder="Minimo 4 caracteres">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Rol</label>
-              <select name="rol" class="form-select" id="selectRol" onchange="aplicarRol()">
-                <?php foreach ($roles as $r => $desc): ?>
-                  <option value="<?= $r ?>" <?= (($editar['rol'] ?? 'operador') === $r) ? 'selected' : '' ?>><?= esdrive_rol_label($r) ?> — <?= htmlspecialchars($desc) ?></option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                <select name="rol" class="form-select" id="selectRol" onchange="aplicarRol()">
+                  <?php foreach ($roles as $r => $desc): ?>
+                    <option value="<?= $r ?>" <?= (($editar['rol'] ?? 'operador') === $r) ? 'selected' : '' ?>><?= esdrive_rol_label($r) ?> — <?= htmlspecialchars($desc) ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
-            <div class="col-md-6 d-flex align-items-end">
-              <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" name="activo" id="chkActivo"
-                       <?= (!$editar || (int) $editar['activo'] === 1) ? 'checked' : '' ?>>
+            <div class="col-md-6">
+              <label class="form-label">Estado</label>
+              <div class="switch-estado">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" role="switch" name="activo" id="chkActivo"
+                         <?= (!$editar || (int) $editar['activo'] === 1) ? 'checked' : '' ?>>
+                </div>
                 <label class="form-check-label" for="chkActivo">Cuenta activa (puede ingresar al admin)</label>
               </div>
             </div>
@@ -271,20 +274,11 @@ function aplicarRol() {
 
 document.addEventListener('DOMContentLoaded', function () {
   // Busqueda y filtro de la tabla
-  var q = document.getElementById('buscarUsuario');
-  var f = document.getElementById('filtroRol');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaUsuarios tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var rol = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okRol = !rol || tr.getAttribute('data-rol') === rol;
-      tr.style.display = (okTxt && okRol) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaUsuarios',
+    buscar: 'buscarUsuario',
+    filtros: [{ id: 'filtroRol', attr: 'data-rol' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

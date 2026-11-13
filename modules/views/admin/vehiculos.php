@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
+require_once __DIR__ . '/../../../php/ui.php';
 
 $flash = $_GET['flash'] ?? '';
 $editar = null;
@@ -28,11 +29,7 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
   </div>
 </div>
 
-<?php if ($flash === 'ok'): ?>
-  <div class="alert alert-ok"><i class="fas fa-circle-check me-2"></i>Operacion realizada correctamente.</div>
-<?php elseif ($flash === 'error'): ?>
-  <div class="alert"><i class="fas fa-circle-exclamation me-2"></i>No se pudo completar la operacion.</div>
-<?php endif; ?>
+<?= esdrive_flash() ?>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -42,11 +39,14 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" placeholder="Buscar vehiculo..." id="buscarVehiculo">
       </div>
-      <select class="form-select" style="width:170px" id="filtroEstado">
+      <div class="input-group" style="width:200px">
+      <span class="input-group-text"><i class="fas fa-filter"></i></span>
+      <select class="form-select" id="filtroEstado">
         <option value="">Todos los estados</option>
         <option value="disponible">Disponible</option>
         <option value="en_uso">En uso</option>
       </select>
+      </div>
       <!-- Actualizar: recarga la tabla por si hay cambios -->
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
@@ -73,7 +73,7 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
       </thead>
       <tbody>
         <?php if (!$vehiculos): ?>
-          <tr><td colspan="8" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="8" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay vehiculos registrados. Pulsa "Agregar" para crear el primero.
           </td></tr>
         <?php endif; ?>
@@ -135,6 +135,8 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaVehiculos') ?>
 </div>
 
 <!-- ============ MODAL AGREGAR / EDITAR ============ -->
@@ -153,70 +155,96 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              <input type="text" name="nombre" class="form-control" required
-                     placeholder="Ej: Sedan manual" value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-car"></i></span>
+                <input type="text" name="nombre" class="form-control" required
+                       placeholder="Ej: Sedan manual" value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Placa</label>
-              <input type="text" name="placa" class="form-control" placeholder="ESD-000"
-                     value="<?= htmlspecialchars($editar['placa'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                <input type="text" name="placa" class="form-control" placeholder="ESD-000"
+                       value="<?= htmlspecialchars($editar['placa'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-3">
               <label class="form-label">Tipo</label>
-              <input type="text" name="tipo" class="form-control" placeholder="Sedan"
-                     value="<?= htmlspecialchars($editar['tipo'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-car-side"></i></span>
+                <input type="text" name="tipo" class="form-control" placeholder="Sedan"
+                       value="<?= htmlspecialchars($editar['tipo'] ?? '') ?>">
+              </div>
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Estado</label>
-              <select name="estado" class="form-select">
-                <option value="disponible" <?= ($editar['estado'] ?? 'disponible') === 'disponible' ? 'selected' : '' ?>>Disponible</option>
-                <option value="en_uso" <?= ($editar['estado'] ?? '') === 'en_uso' ? 'selected' : '' ?>>En uso</option>
-              </select>
+              <div class="switch-estado">
+                <input type="hidden" name="estado" value="disponible">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" role="switch" name="estado" value="en_uso"
+                         id="chkEstadoVehiculo" <?= ($editar['estado'] ?? '') === 'en_uso' ? 'checked' : '' ?>>
+                </div>
+                <label class="form-check-label" for="chkEstadoVehiculo">Vehiculo en uso ahora</label>
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Disponible desde</label>
-              <input type="datetime-local" name="disponible_desde" class="form-control"
-                     value="<?= !empty($editar['disponible_desde']) ? date('Y-m-d\TH:i', strtotime($editar['disponible_desde'])) : '' ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                <input type="datetime-local" name="disponible_desde" class="form-control"
+                       value="<?= !empty($editar['disponible_desde']) ? date('Y-m-d\TH:i', strtotime($editar['disponible_desde'])) : '' ?>">
+              </div>
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Proximo uso</label>
-              <input type="datetime-local" name="proximo_uso" class="form-control"
-                     value="<?= !empty($editar['proximo_uso']) ? date('Y-m-d\TH:i', strtotime($editar['proximo_uso'])) : '' ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
+                <input type="datetime-local" name="proximo_uso" class="form-control"
+                       value="<?= !empty($editar['proximo_uso']) ? date('Y-m-d\TH:i', strtotime($editar['proximo_uso'])) : '' ?>">
+              </div>
               <small class="hint">Cuando se usara de nuevo. Al faltar 1 hora corre una cuenta regresiva en el carrusel.</small>
             </div>
             <div class="col-md-6">
               <label class="form-label">Empleado asignado</label>
-              <select name="empleado_id" class="form-select">
-                <option value="">Sin asignar</option>
-                <?php foreach ($empleados as $emp): ?>
-                  <option value="<?= (int) $emp['id'] ?>" <?= ((int)($editar['empleado_id'] ?? 0)) === (int)$emp['id'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($emp['nombre']) ?><?= $emp['cargo'] ? ' — ' . htmlspecialchars($emp['cargo']) : '' ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                <select name="empleado_id" class="form-select">
+                  <option value="">Sin asignar</option>
+                  <?php foreach ($empleados as $emp): ?>
+                    <option value="<?= (int) $emp['id'] ?>" <?= ((int)($editar['empleado_id'] ?? 0)) === (int)$emp['id'] ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($emp['nombre']) ?><?= $emp['cargo'] ? ' — ' . htmlspecialchars($emp['cargo']) : '' ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
               <small class="hint">Aparece en la ficha del vehiculo cuando esta en uso.</small>
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Tiempo en uso</label>
-              <input type="text" name="tiempo_uso" class="form-control" placeholder="Ej: 4 horas"
-                     value="<?= htmlspecialchars($editar['tiempo_uso'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                <input type="text" name="tiempo_uso" class="form-control" placeholder="Ej: 4 horas"
+                       value="<?= htmlspecialchars($editar['tiempo_uso'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Tiempo libre</label>
-              <input type="text" name="tiempo_libre" class="form-control" placeholder="Ej: 2 horas"
-                     value="<?= htmlspecialchars($editar['tiempo_libre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-mug-hot"></i></span>
+                <input type="text" name="tiempo_libre" class="form-control" placeholder="Ej: 2 horas"
+                       value="<?= htmlspecialchars($editar['tiempo_libre'] ?? '') ?>">
+              </div>
             </div>
 
             <div class="col-12">
               <label class="form-label">Imagen del vehiculo</label>
-              <input type="file" name="imagen" class="form-control" accept="image/*" id="inputImagen">
+              <div class="dropzone dropzone-esdrive" id="dzImagenVehiculo"></div>
+              <input type="file" name="imagen" accept="image/*" id="inputImagenVehiculo" class="d-none">
               <small class="hint">JPG o PNG. Se muestra en la tabla y en el carrusel del dashboard.</small>
-              <div class="preview-wrap d-none" id="previewWrap">
-                <img id="previewImg" alt="Vista previa">
-              </div>
               <?php if (!empty($editar['imagen'])): ?>
                 <div class="preview-wrap"><img src="<?= htmlspecialchars($editar['imagen']) ?>" alt="Imagen actual"></div>
               <?php endif; ?>
@@ -235,21 +263,11 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var buscar = document.getElementById('buscarVehiculo');
-  var filtro = document.getElementById('filtroEstado');
-  var filas  = document.querySelectorAll('#tablaVehiculos tbody tr');
-
-  function aplicar() {
-    var q = (buscar.value || '').toLowerCase();
-    var est = filtro.value;
-    filas.forEach(function (f) {
-      var okTexto = f.textContent.toLowerCase().includes(q);
-      var okEstado = !est || f.getAttribute('data-estado') === est;
-      f.style.display = (okTexto && okEstado) ? '' : 'none';
-    });
-  }
-  if (buscar) buscar.addEventListener('input', aplicar);
-  if (filtro) filtro.addEventListener('change', aplicar);
+  esdriveTabla({
+    tabla: 'tablaVehiculos',
+    buscar: 'buscarVehiculo',
+    filtros: [{ id: 'filtroEstado', attr: 'data-estado' }]
+  });
 
   // Actualizar: recarga la pagina (por si hay cambios en la BD)
   var btnAct = document.getElementById('btnActualizar');
@@ -258,16 +276,9 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { location.reload(); }, 220);
   });
 
-  // Vista previa de la imagen
-  var input = document.getElementById('inputImagen');
-  if (input) input.addEventListener('change', function () {
-    var wrap = document.getElementById('previewWrap');
-    var img  = document.getElementById('previewImg');
-    if (input.files && input.files[0]) {
-      img.src = URL.createObjectURL(input.files[0]);
-      wrap.classList.remove('d-none');
-    }
-  });
+  if (typeof esdriveDropzone === 'function') {
+    esdriveDropzone({ dropzone: 'dzImagenVehiculo', input: 'inputImagenVehiculo' });
+  }
 
   // Si llegamos con ?editar=... abrir el modal
   <?php if ($editar): ?>

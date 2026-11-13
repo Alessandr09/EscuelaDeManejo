@@ -413,6 +413,38 @@ body.examen-body {
 
 /* ---------- Consola del instructor ---------- */
 .examen-tabla-wrap { overflow-x: auto; }
+
+/* Paginacion del listado del instructor */
+.examen-paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--ex-border);
+}
+.examen-pag-info { font-size: .8rem; color: var(--ex-mut); }
+.examen-pag-controles { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.examen-pag-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 9px;
+    border-radius: 7px;
+    border: 1px solid var(--ex-border);
+    background: #ffffff;
+    color: var(--ex-mut);
+    font-size: .8rem;
+    font-weight: 600;
+    display: inline-grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all .18s ease;
+}
+.examen-pag-btn:hover:not(:disabled) { color: var(--ex-gold-hover); border-color: var(--ex-gold); }
+.examen-pag-btn.is-active { background: var(--ex-gold); border-color: var(--ex-gold); color: #241a05; }
+.examen-pag-btn:disabled { opacity: .35; cursor: not-allowed; }
 .examen-tabla { width: 100%; border-collapse: collapse; font-size: .9rem; }
 .examen-tabla th {
     text-align: left;

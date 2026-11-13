@@ -29,9 +29,12 @@ $cfgActual = function_exists('esdrive_cfg') ? esdrive_cfg() : null;
         <div class="row g-3">
           <?php foreach ($campos as $clave => [$lbl, $ph, $icono]): ?>
           <div class="col-md-6">
-            <label class="form-label"><i class="fas <?= $icono ?> me-1" style="color:var(--gold)"></i><?= htmlspecialchars($lbl) ?></label>
-            <input type="text" name="<?= $clave ?>" class="form-control" placeholder="<?= htmlspecialchars($ph) ?>"
-                   value="<?= htmlspecialchars($cfg[$clave] ?? '') ?>" <?= $puede ? '' : 'readonly' ?>>
+            <label class="form-label"><?= htmlspecialchars($lbl) ?></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas <?= $icono ?>"></i></span>
+              <input type="text" name="<?= $clave ?>" class="form-control" placeholder="<?= htmlspecialchars($ph) ?>"
+                     value="<?= htmlspecialchars($cfg[$clave] ?? '') ?>" <?= $puede ? '' : 'readonly' ?>>
+            </div>
           </div>
           <?php endforeach; ?>
         </div>

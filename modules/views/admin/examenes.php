@@ -1,74 +1,48 @@
-<?php require_once __DIR__ . '/../../../php/base.php';
+<?php
+/**
+ * Examenes (admin): resultados de los examenes realizados por los alumnos.
+ *
+ * Los datos salen de la tabla `examen_alumnos` (nota, aciertos, porcentaje y
+ * estado de cada alumno). Para inscribir alumnos y habilitar sus examenes
+ * se usa la Consola de examenes (examen-alumnos.php).
+ */
+require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/ui.php';
+require_once __DIR__ . '/../../../config/examen_funciones.php';
 
-$editar = null;
-if (isset($_GET['editar'])) {
-    $st = db()->prepare('SELECT * FROM examenes WHERE id = ?');
-    $st->execute([(int) $_GET['editar']]);
-    $editar = $st->fetch() ?: null;
-}
-
+/* ---------------- Resultados ---------------- */
 try {
-    $examenes = db()->query('SELECT * FROM examenes ORDER BY fecha IS NULL, fecha, id DESC')->fetchAll();
-} catch (Exception $e) { $examenes = []; }
+    $resultados = db()->query(
+        'SELECT * FROM examen_alumnos ORDER BY terminado_en IS NULL, terminado_en DESC, id DESC'
+    )->fetchAll();
+} catch (Exception $e) { $resultados = []; }
 
-$total   = count($examenes);
-$activos = count(array_filter($examenes, fn($e) => $e['estado'] === 'Activo'));
-$borr    = count(array_filter($examenes, fn($e) => $e['estado'] === 'Borrador'));
-$preguntas = array_sum(array_map(fn($e) => (int) $e['preguntas'], $examenes));
-$cursos  = esdrive_opciones_cursos();
-$puede   = esdrive_puede('examenes', 'gestionar');
-
-// JSON para precargar el modal al editar
-$jsonExamenes = [];
-foreach ($examenes as $e) {
-    $jsonExamenes[(int) $e['id']] = [
-        'titulo'      => $e['titulo'],
-        'curso'       => $e['curso'],
-        'preguntas'   => (int) $e['preguntas'],
-        'duracion'    => $e['duracion'],
-        'fecha'       => $e['fecha'] ? date('Y-m-d', strtotime($e['fecha'])) : '',
-        'estado'      => $e['estado'],
-        'descripcion' => $e['descripcion'] ?? '',
-    ];
-}
-
-$kpis = [
-    ['fa-file-signature', $activos,  'Examenes activos',  'b-active'],
-    ['fa-pen-nib',        $total,    'Total examenes',    'b-info'],
-    ['fa-list-ol',        $preguntas,'Preguntas',         'b-info'],
-    ['fa-file-pen',       $borr,     'Borradores',        'b-pend'],
-];
+/* Filtro por estado (mismos valores que guarda la BD) */
+$estadosFiltro = ['pendiente', 'en_curso', 'aprobado', 'reprobado', 'expirado'];
 ?>
-<?= esdrive_page_head('Gestion de', 'examenes', 'Crea y administra las evaluaciones teoricas y practicas.',
-    $puede ? '<button type="button" class="btn btn-add" onclick="abrirModalExamen(0)">
-        <i class="fas fa-plus"></i><span>Nuevo examen</span></button>' : '') ?>
 
-<div class="row g-2 mb-3">
-  <?php foreach ($kpis as $k): [$icon, $val, $lbl, $cls] = $k; ?>
-  <div class="col-xl-3 col-md-6">
-    <div class="glass kpi-card">
-      <div class="kpi-icon"><i class="fas <?= $icon ?>"></i></div>
-      <div class="kpi-info"><div class="kpi-val"><?= $val ?></div><div class="kpi-lbl"><?= $lbl ?></div></div>
-    </div>
-  </div>
-  <?php endforeach; ?>
-</div>
+<?= esdrive_page_head('Resultados de', 'examenes',
+    'Notas obtenidas por los alumnos en los examenes realizados.',
+    '<a class="btn btn-add" href="' . BASE_URL . '/examen-alumnos.php">
+        <i class="fas fa-user-plus"></i><span>Inscribir alumno</span></a>') ?>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
-    <div class="panel-title mb-0"><i class="fas fa-file-signature"></i>Examenes</div>
+    <div class="panel-title mb-0"><i class="fas fa-graduation-cap"></i>Resultados de los alumnos</div>
     <div class="d-flex gap-2 flex-wrap">
-      <div class="input-group" style="width:230px">
+      <div class="input-group" style="width:240px">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
-        <input type="text" class="form-control" placeholder="Buscar examen..." id="buscarExamen">
+        <input type="text" class="form-control" placeholder="Buscar alumno, DUI o codigo..." id="buscarResultado">
       </div>
-      <select class="form-select" style="width:160px" id="filtroEstadoExamen">
+      <div class="input-group" style="width:215px">
+      <span class="input-group-text"><i class="fas fa-filter"></i></span>
+      <select class="form-select" id="filtroEstadoResultado">
         <option value="">Todos los estados</option>
-        <option value="Activo">Activo</option>
-        <option value="Pendiente">Pendiente</option>
-        <option value="Borrador">Borrador</option>
+        <?php foreach ($estadosFiltro as $est): ?>
+          <option value="<?= htmlspecialchars($est) ?>"><?= htmlspecialchars(examen_etiqueta_estado($est)) ?></option>
+        <?php endforeach; ?>
       </select>
+      </div>
       <button type="button" class="btn btn-refresh" id="btnActualizar" title="Actualizar tabla">
         <i class="fas fa-rotate"></i><span>Actualizar</span>
       </button>
@@ -76,146 +50,96 @@ $kpis = [
   </div>
 
   <div class="table-responsive">
-    <table class="table table-glass" id="tablaExamenes">
+    <table class="table table-glass" id="tablaResultados">
       <thead>
         <tr>
-          <th>Examen</th>
-          <th>Curso</th>
-          <th>Preguntas</th>
-          <th>Duracion</th>
-          <th>Fecha</th>
+          <th>Alumno</th>
+          <th>Codigo</th>
           <th>Estado</th>
+          <th class="text-center">Aciertos</th>
+          <th class="text-center">Nota</th>
+          <th style="min-width:150px">Porcentaje</th>
+          <th>Termino</th>
           <th class="text-end">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <?php if (!$examenes): ?>
-          <tr><td colspan="7" class="text-center" style="padding:28px;color:var(--text-mut)">
-            <i class="fas fa-inbox me-2"></i>No hay examenes creados.
+        <?php if (!$resultados): ?>
+          <tr class="fila-vacia"><td colspan="8" class="text-center" style="padding:28px;color:var(--text-mut)">
+            <i class="fas fa-inbox me-2"></i>Todavia no hay resultados de examenes.
           </td></tr>
         <?php endif; ?>
-        <?php foreach ($examenes as $e): ?>
-          <tr data-estado="<?= htmlspecialchars($e['estado']) ?>">
+        <?php foreach ($resultados as $r): ?>
+          <?php
+            $estado = (string) $r['estado'];
+            $nota   = (int) $r['nota'];
+            $pct    = (float) $r['porcentaje'];
+            $rendido = in_array($estado, ['aprobado', 'reprobado'], true);
+            $claseNota = $estado === 'aprobado' ? 'nt-ok' : ($estado === 'reprobado' ? 'nt-error' : 'nt-muted');
+            $claseBarra = $estado === 'aprobado' ? 'ok' : ($estado === 'reprobado' ? 'error' : 'mid');
+          ?>
+          <tr data-estado="<?= htmlspecialchars($estado) ?>">
             <td>
               <div class="cell-user">
-                <div class="cell-avatar"><i class="fas fa-file-lines"></i></div>
+                <div class="cell-avatar" style="background:<?= esdrive_color_avatar($r['nombre']) ?>"><?= esdrive_ini($r['nombre']) ?></div>
                 <div>
-                  <div class="cu-name"><?= htmlspecialchars($e['titulo']) ?></div>
-                  <div class="cu-mail">#<?= (int) $e['id'] ?></div>
+                  <div class="cu-name"><?= htmlspecialchars($r['nombre']) ?></div>
+                  <div class="cu-mail"><?= $r['dui'] ? 'DUI ' . htmlspecialchars($r['dui']) : 'Sin DUI' ?></div>
                 </div>
               </div>
             </td>
-            <td><span class="badge-soft b-info"><?= htmlspecialchars($e['curso']) ?: '&mdash;' ?></span></td>
-            <td><?= (int) $e['preguntas'] ?></td>
-            <td><?= htmlspecialchars($e['duracion']) ?: '&mdash;' ?></td>
-            <td><?= $e['fecha'] ? date('d/m/Y', strtotime($e['fecha'])) : '&mdash;' ?></td>
-            <td><?= esdrive_badge($e['estado']) ?></td>
-            <td class="text-end">
-              <?php if ($puede): ?>
-                <button type="button" class="btn-act edit" title="Editar" onclick="abrirModalExamen(<?= (int) $e['id'] ?>)">
-                  <i class="fas fa-pen"></i>
-                </button>
-                <button type="button" class="btn-act del" title="Eliminar"
-                        data-eliminar="<?= (int) $e['id'] ?>" data-que="examen" data-nombre="<?= htmlspecialchars($e['titulo']) ?>">
-                  <i class="fas fa-trash"></i>
-                </button>
-                <form method="post" id="formEliminar<?= (int) $e['id'] ?>" class="d-none">
-                  <input type="hidden" name="accion" value="eliminar_examen">
-                  <input type="hidden" name="id" value="<?= (int) $e['id'] ?>">
-                </form>
+            <td><code><?= htmlspecialchars($r['codigo']) ?></code></td>
+            <td><?= esdrive_badge(examen_etiqueta_estado($estado)) ?></td>
+            <td class="text-center">
+              <?php if ($rendido): ?>
+                <?= (int) $r['aciertos'] ?> / <?= (int) $r['total'] ?>
               <?php else: ?>
-                <span class="badge-soft b-info"><i class="fas fa-eye me-1"></i>Solo lectura</span>
+                <span style="color:var(--text-mut)">&mdash;</span>
               <?php endif; ?>
+            </td>
+            <td class="text-center">
+              <?php if ($rendido): ?>
+                <span class="nota-caja <?= $claseNota ?>"><?= $nota ?><small>/100</small></span>
+              <?php else: ?>
+                <span style="color:var(--text-mut)">&mdash;</span>
+              <?php endif; ?>
+            </td>
+            <td>
+              <div class="barra-nota" title="<?= $pct ?>%">
+                <i class="<?= $claseBarra ?>" style="width:<?= max(0, min(100, $pct)) ?>%"></i>
+              </div>
+              <small style="color:var(--text-mut)"><?= number_format($pct, 2) ?>%</small>
+            </td>
+            <td>
+              <?php if ($r['terminado_en']): ?>
+                <?= date('d/m/Y', strtotime($r['terminado_en'])) ?>
+                <small style="color:var(--text-mut)"><?= date('h:i A', strtotime($r['terminado_en'])) ?></small>
+              <?php else: ?>
+                <span style="color:var(--text-mut)">&mdash;</span>
+              <?php endif; ?>
+            </td>
+            <td class="text-end">
+              <a class="btn-act" title="Ver detalle"
+                 href="<?= BASE_URL ?>/examen-alumnos.php?alumno=<?= (int) $r['id'] ?>">
+                <i class="fas fa-eye"></i>
+              </a>
             </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
   </div>
-</div>
 
-<!-- ============ MODAL EXAMEN (CKEditor) ============ -->
-<div class="modal fade" id="modalExamen" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content modal-esdrive">
-      <div class="modal-head-accent">
-        <h5 class="modal-title"><i class="fas fa-pen-nib me-2"></i>Nuevo examen</h5>
-        <button type="button" class="btn-close-accent" data-bs-dismiss="modal" aria-label="Cerrar"><i class="fas fa-xmark"></i></button>
-      </div>
-      <form method="post" id="formExamen" onsubmit="return prepararExamen()">
-        <input type="hidden" name="accion" value="guardar_examen">
-        <input type="hidden" name="id" value="">
-        <input type="hidden" name="descripcion" value="">
-
-        <div class="modal-body-accent">
-          <div class="row g-3">
-            <div class="col-md-7">
-              <label class="form-label">Titulo del examen</label>
-              <input type="text" name="titulo" class="form-control" required placeholder="Ej: Senalamiento vial">
-            </div>
-            <div class="col-md-5">
-              <label class="form-label">Curso</label>
-              <select name="curso" class="form-select">
-                <option value="">General / todos</option>
-                <?php foreach ($cursos as $c): ?>
-                  <option value="<?= htmlspecialchars($c['nombre']) ?>"><?= htmlspecialchars($c['nombre']) ?></option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Preguntas</label>
-              <input type="number" name="preguntas" class="form-control" min="0" value="0">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Duracion</label>
-              <input type="text" name="duracion" class="form-control" placeholder="20 min">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Fecha</label>
-              <input type="date" name="fecha" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Estado</label>
-              <select name="estado" class="form-select">
-                <option>Borrador</option>
-                <option>Pendiente</option>
-                <option>Activo</option>
-              </select>
-            </div>
-            <div class="col-12">
-              <label class="form-label">Contenido / instrucciones</label>
-              <textarea name="editorExamen" id="editorExamen"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-foot-accent">
-          <button type="button" class="btn btn-glass" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-gold"><i class="fas fa-floppy-disk me-2"></i>Guardar examen</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <?= esdrive_paginacion('tablaResultados') ?>
 </div>
 
 <script>
-window.__examenes = <?= json_encode($jsonExamenes, JSON_UNESCAPED_UNICODE) ?>;
-
 document.addEventListener('DOMContentLoaded', function () {
-  var q = document.getElementById('buscarExamen');
-  var f = document.getElementById('filtroEstadoExamen');
-  var filas = Array.prototype.slice.call(document.querySelectorAll('#tablaExamenes tbody tr'));
-  function filtrar() {
-    var txt = (q && q.value || '').toLowerCase();
-    var est = f && f.value || '';
-    filas.forEach(function (tr) {
-      var okTxt = tr.textContent.toLowerCase().indexOf(txt) !== -1;
-      var okEst = !est || tr.getAttribute('data-estado') === est;
-      tr.style.display = (okTxt && okEst) ? '' : 'none';
-    });
-  }
-  if (q) q.addEventListener('input', filtrar);
-  if (f) f.addEventListener('change', filtrar);
+  esdriveTabla({
+    tabla: 'tablaResultados',
+    buscar: 'buscarResultado',
+    filtros: [{ id: 'filtroEstadoResultado', attr: 'data-estado' }]
+  });
 
   var btn = document.getElementById('btnActualizar');
   if (btn) btn.addEventListener('click', function () {

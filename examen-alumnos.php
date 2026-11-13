@@ -133,7 +133,7 @@ $ahoraInput = date('Y-m-d\TH:i');
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/examen.css?v=2">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/examen.css?v=3">
     <link rel="icon" type="image/svg+xml" href="<?= BASE_URL ?>/assets/img/logo.svg">
 </head>
 <body class="examen-body">
@@ -290,7 +290,7 @@ $ahoraInput = date('Y-m-d\TH:i');
                 <p class="examen-nota"><i class="fas fa-circle-info me-2"></i>Todavia no hay alumnos inscritos.</p>
             <?php else: ?>
                 <div class="examen-tabla-wrap">
-                    <table class="examen-tabla">
+                    <table class="examen-tabla" id="tablaAlumnosExamen">
                         <thead>
                             <tr>
                                 <th>Alumno</th>
@@ -352,6 +352,10 @@ $ahoraInput = date('Y-m-d\TH:i');
                         </tbody>
                     </table>
                 </div>
+                <div class="examen-paginacion" data-tabla="tablaAlumnosExamen" data-por-pagina="5">
+                    <span class="examen-pag-info"></span>
+                    <div class="examen-pag-controles"></div>
+                </div>
             <?php endif; ?>
         </section>
     <?php endif; ?>
@@ -366,6 +370,54 @@ document.querySelectorAll('form[data-confirmar]').forEach(function (form) {
     form.addEventListener('submit', function (ev) {
         if (!confirm(form.getAttribute('data-confirmar'))) ev.preventDefault();
     });
+});
+</script>
+<script>
+/* Paginacion del listado de alumnos (5 por pagina) */
+document.addEventListener('DOMContentLoaded', function () {
+    var tabla = document.getElementById('tablaAlumnosExamen');
+    if (!tabla) { return; }
+    var cuerpo = tabla.querySelector('tbody');
+    var barra = document.querySelector('.examen-paginacion[data-tabla="tablaAlumnosExamen"]');
+    if (!cuerpo || !barra) { return; }
+
+    var info = barra.querySelector('.examen-pag-info');
+    var controles = barra.querySelector('.examen-pag-controles');
+    var porPagina = parseInt(barra.getAttribute('data-por-pagina'), 10) || 5;
+    var filas = Array.prototype.slice.call(cuerpo.querySelectorAll('tr'));
+    var pagina = 1;
+    var paginas = Math.max(1, Math.ceil(filas.length / porPagina));
+
+    function pintar() {
+        var ini = (pagina - 1) * porPagina;
+        var fin = Math.min(ini + porPagina, filas.length);
+        filas.forEach(function (tr, i) { tr.style.display = (i >= ini && i < fin) ? '' : 'none'; });
+        info.textContent = filas.length
+            ? 'Mostrando ' + (ini + 1) + '-' + fin + ' de ' + filas.length
+            : 'Sin registros';
+
+        var html = '<button type="button" class="examen-pag-btn" data-pag="prev"'
+            + (pagina <= 1 ? ' disabled' : '') + '><i class="fas fa-chevron-left"></i></button>';
+        for (var n = 1; n <= paginas; n++) {
+            html += '<button type="button" class="examen-pag-btn' + (n === pagina ? ' is-active' : '')
+                + '" data-pag="' + n + '">' + n + '</button>';
+        }
+        html += '<button type="button" class="examen-pag-btn" data-pag="next"'
+            + (pagina >= paginas ? ' disabled' : '') + '><i class="fas fa-chevron-right"></i></button>';
+        controles.innerHTML = html;
+    }
+
+    controles.addEventListener('click', function (ev) {
+        var btn = ev.target.closest('.examen-pag-btn');
+        if (!btn || btn.disabled) { return; }
+        var destino = btn.getAttribute('data-pag');
+        if (destino === 'prev') { pagina--; }
+        else if (destino === 'next') { pagina++; }
+        else { pagina = parseInt(destino, 10); }
+        pintar();
+    });
+
+    pintar();
 });
 </script>
 </body>

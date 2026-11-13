@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
+require_once __DIR__ . '/../../../php/ui.php';
 
 $flash = $_GET['flash'] ?? '';
 $editar = null;
@@ -27,11 +28,7 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
   </div>
 </div>
 
-<?php if ($flash === 'ok'): ?>
-  <div class="alert alert-ok"><i class="fas fa-circle-check me-2"></i>Operacion realizada correctamente.</div>
-<?php elseif ($flash === 'error'): ?>
-  <div class="alert"><i class="fas fa-circle-exclamation me-2"></i>No se pudo completar la operacion.</div>
-<?php endif; ?>
+<?= esdrive_flash() ?>
 
 <div class="glass panel">
   <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-3">
@@ -64,7 +61,7 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
       </thead>
       <tbody>
         <?php if (!$empleados): ?>
-          <tr><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
+          <tr class="fila-vacia"><td colspan="6" class="text-center" style="padding:28px;color:var(--text-mut)">
             <i class="fas fa-inbox me-2"></i>No hay empleados registrados. Pulsa "Agregar" para crear el primero.
           </td></tr>
         <?php endif; ?>
@@ -109,6 +106,8 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
       </tbody>
     </table>
   </div>
+
+  <?= esdrive_paginacion('tablaEmpleados') ?>
 </div>
 
 <!-- ============ MODAL AGREGAR / EDITAR EMPLEADO ============ -->
@@ -127,32 +126,42 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nombre completo</label>
-              <input type="text" name="nombre" class="form-control" required
-                     placeholder="Ej: Carlos Ramírez" value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="nombre" class="form-control" required
+                       placeholder="Ej: Carlos Ramírez" value="<?= htmlspecialchars($editar['nombre'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Cargo</label>
-              <input type="text" name="cargo" class="form-control" placeholder="Ej: Instructor certificado"
-                     value="<?= htmlspecialchars($editar['cargo'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                <input type="text" name="cargo" class="form-control" placeholder="Ej: Instructor certificado"
+                       value="<?= htmlspecialchars($editar['cargo'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Telefono</label>
-              <input type="text" name="telefono" class="form-control" placeholder="+503 2222-3333"
-                     value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="text" name="telefono" class="form-control" placeholder="+503 2222-3333"
+                       value="<?= htmlspecialchars($editar['telefono'] ?? '') ?>">
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" placeholder="correo@esdrive.com"
-                     value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="correo@esdrive.com"
+                       value="<?= htmlspecialchars($editar['email'] ?? '') ?>">
+              </div>
             </div>
 
             <div class="col-12">
               <label class="form-label">Foto del empleado</label>
-              <input type="file" name="imagen" class="form-control" accept="image/*" id="inputImagenEmp">
+              <div class="dropzone dropzone-esdrive" id="dzImagenEmp"></div>
+              <input type="file" name="imagen" accept="image/*" id="inputImagenEmp" class="d-none">
               <small class="hint">JPG o PNG. Se muestra en el carousel "Nuestro equipo" de la pagina principal automaticamente.</small>
-              <div class="preview-wrap d-none" id="previewWrapEmp">
-                <img id="previewImgEmp" alt="Vista previa">
-              </div>
               <?php if (!empty($editar['imagen'])): ?>
                 <div class="preview-wrap"><img src="<?= htmlspecialchars($editar['imagen']) ?>" alt="Foto actual"></div>
               <?php endif; ?>
@@ -171,14 +180,9 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var buscar = document.getElementById('buscarEmpleado');
-  var filas  = document.querySelectorAll('#tablaEmpleados tbody tr');
-
-  if (buscar) buscar.addEventListener('input', function () {
-    var q = buscar.value.toLowerCase();
-    filas.forEach(function (f) {
-      f.style.display = f.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
+  esdriveTabla({
+    tabla: 'tablaEmpleados',
+    buscar: 'buscarEmpleado'
   });
 
   var btnAct = document.getElementById('btnActualizarEmp');
@@ -187,15 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { location.reload(); }, 220);
   });
 
-  var input = document.getElementById('inputImagenEmp');
-  if (input) input.addEventListener('change', function () {
-    var wrap = document.getElementById('previewWrapEmp');
-    var img  = document.getElementById('previewImgEmp');
-    if (input.files && input.files[0]) {
-      img.src = URL.createObjectURL(input.files[0]);
-      wrap.classList.remove('d-none');
-    }
-  });
+  if (typeof esdriveDropzone === 'function') {
+    esdriveDropzone({ dropzone: 'dzImagenEmp', input: 'inputImagenEmp' });
+  }
 
   <?php if ($editar): ?>
   var m = new bootstrap.Modal(document.getElementById('modalEmpleado'));

@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/ui.php';
+require_once __DIR__ . '/../../../config/examen_funciones.php';
 
 /* ============ DATOS REALES ============ */
 $q = function ($sql, $args = []) {
@@ -61,12 +62,8 @@ foreach ($mesesClave as $mk) { $valores[] = $porMes[$mk] ?? 0; }
 // Ultimos registros de alumnos
 $ultimos = $q('SELECT * FROM alumnos ORDER BY creado_en DESC, id DESC LIMIT 6');
 
-// Horarios de la semana
-$horariosHoy = $q('SELECT h.*, c.nombre AS curso, e.nombre AS instructor
-                   FROM horarios h
-                   LEFT JOIN cursos c ON c.id = h.curso_id
-                   LEFT JOIN empleados e ON e.id = h.empleado_id
-                   ORDER BY FIELD(h.dia, "Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"), h.hora_inicio LIMIT 4');
+// Ultimos examenes rendidos por los alumnos
+$ultimosExamenes = $q('SELECT * FROM examen_alumnos ORDER BY terminado_en IS NULL, terminado_en DESC, id DESC LIMIT 8');
 
 $kpis = [
     ['fa-user-graduate', (string) $alumnosActivos, 'Alumnos activos', $alumnosTotal . ' inscritos', 'up'],
@@ -113,7 +110,7 @@ $kpis = [
     <div class="glass panel panel-flex">
       <div class="panel-title"><i class="fas fa-car-side"></i>Flota de vehiculos</div>
       <?php if ($vehiculos): ?>
-        <div id="carruselFlota" class="carousel slide flota-carousel" data-bs-ride="carousel">
+        <div id="carruselFlota" class="carousel slide flota-carousel" data-bs-touch="true">
           <div class="carousel-indicators">
             <?php foreach ($vehiculos as $i => $v): ?>
               <button type="button" data-bs-target="#carruselFlota" data-bs-slide-to="<?= $i ?>"
@@ -210,16 +207,15 @@ $kpis = [
               <i class="fas fa-user-clock me-2"></i>Ultimos registros
             </button>
           </li>
-          <?php if (esdrive_puede('horarios')): ?>
+          <?php if (esdrive_puede('examenes')): ?>
           <li class="nav-item">
-            <button type="button" class="nav-link" data-panel="panelHorarios">
-              <i class="fas fa-calendar-days me-2"></i>Horarios
+            <button type="button" class="nav-link" data-panel="panelExaminados">
+              <i class="fas fa-file-signature me-2"></i>Ultimos examinados
             </button>
           </li>
           <?php endif; ?>
         </ul>
         <?php if (esdrive_puede('reportes')): ?>
-          <a href="<?= BASE_URL ?>/admin.php?v=reportes" class="btn btn-glass btn-sm"><i class="fas fa-chart-pie me-2"></i>Ver reportes</a>
         <?php endif; ?>
       </div>
 
@@ -236,7 +232,7 @@ $kpis = [
         <div class="glass panel panel-flex">
           <div class="panel-title"><i class="fas fa-user-clock"></i>Ultimos registros</div>
           <div class="table-responsive">
-            <table class="table table-glass">
+            <table class="table table-glass" id="tablaDashRegistros">
               <thead>
                 <tr><th>Alumno</th><th>Curso</th><th>Fecha</th><th>Estado</th></tr>
               </thead>
@@ -260,34 +256,60 @@ $kpis = [
               </tbody>
             </table>
           </div>
+          <?= esdrive_paginacion('tablaDashRegistros', 4) ?>
         </div>
       </div>
 
-      <!-- Panel: Horarios -->
-      <div id="panelHorarios" class="dash-panel d-none">
+      <!-- Panel: Ultimos examinados -->
+      <div id="panelExaminados" class="dash-panel d-none">
         <div class="glass panel panel-flex">
-          <div class="panel-title"><i class="fas fa-calendar-days"></i>Proximos horarios</div>
+          <div class="panel-title"><i class="fas fa-file-signature"></i>Ultimos examinados</div>
           <div class="table-responsive">
-            <table class="table table-glass">
+            <table class="table table-glass" id="tablaDashExaminados">
               <thead>
-                <tr><th>Dia</th><th>Hora</th><th>Curso</th><th>Instructor</th><th>Cupo</th></tr>
+                <tr><th>Alumno</th><th>Estado</th><th class="text-center">Nota</th><th>Termino</th></tr>
               </thead>
               <tbody>
-                <?php if (!$horariosHoy): ?>
-                  <tr><td colspan="5" class="text-center" style="padding:24px;color:var(--text-mut)">No hay horarios programados.</td></tr>
+                <?php if (!$ultimosExamenes): ?>
+                  <tr><td colspan="4" class="text-center" style="padding:24px;color:var(--text-mut)">Todavia no hay examenes rendidos.</td></tr>
                 <?php endif; ?>
-                <?php foreach ($horariosHoy as $h): ?>
+                <?php foreach ($ultimosExamenes as $ex):
+                  $estadoEx  = (string) $ex['estado'];
+                  $rendidoEx = in_array($estadoEx, ['aprobado', 'reprobado'], true);
+                  $claseNota = $estadoEx === 'aprobado' ? 'nt-ok' : ($estadoEx === 'reprobado' ? 'nt-error' : 'nt-muted');
+                ?>
                 <tr>
-                  <td style="font-weight:600"><?= htmlspecialchars($h['dia']) ?></td>
-                  <td><?= htmlspecialchars($h['hora_inicio']) ?> - <?= htmlspecialchars($h['hora_fin']) ?></td>
-                  <td><?= htmlspecialchars($h['curso'] ?? 'Sin curso') ?></td>
-                  <td><?= htmlspecialchars($h['instructor'] ?? 'Sin asignar') ?></td>
-                  <td><?= (int) $h['cupo'] ?></td>
+                  <td>
+                    <div class="cell-user">
+                      <div class="cell-avatar" style="background:<?= esdrive_color_avatar($ex['nombre']) ?>"><?= esdrive_ini($ex['nombre']) ?></div>
+                      <div>
+                        <div class="cu-name"><?= htmlspecialchars($ex['nombre']) ?></div>
+                        <div class="cu-mail"><code><?= htmlspecialchars($ex['codigo']) ?></code></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><?= esdrive_badge(examen_etiqueta_estado($estadoEx)) ?></td>
+                  <td class="text-center">
+                    <?php if ($rendidoEx): ?>
+                      <span class="nota-caja <?= $claseNota ?>"><?= (int) $ex['nota'] ?><small>/100</small></span>
+                    <?php else: ?>
+                      <span style="color:var(--text-mut)">&mdash;</span>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <?php if ($ex['terminado_en']): ?>
+                      <?= date('d/m/Y', strtotime($ex['terminado_en'])) ?>
+                      <small style="color:var(--text-mut)"><?= date('h:i A', strtotime($ex['terminado_en'])) ?></small>
+                    <?php else: ?>
+                      <span style="color:var(--text-mut)">&mdash;</span>
+                    <?php endif; ?>
+                  </td>
                 </tr>
                 <?php endforeach; ?>
               </tbody>
             </table>
           </div>
+          <?= esdrive_paginacion('tablaDashExaminados', 4) ?>
         </div>
       </div>
     </div>
@@ -296,4 +318,9 @@ $kpis = [
 
 <script>
 window.__graficaAlumnos = <?= json_encode(['etiquetas' => $etiquetas, 'valores' => $valores]) ?>;
+
+document.addEventListener('DOMContentLoaded', function () {
+  esdriveTabla({ tabla: 'tablaDashRegistros', porPagina: 4 });
+  esdriveTabla({ tabla: 'tablaDashExaminados', porPagina: 4 });
+});
 </script>
