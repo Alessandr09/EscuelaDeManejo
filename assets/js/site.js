@@ -62,6 +62,104 @@
     });
   }
 
+  /* ---------- ANIMACIONES DE ENTRADA (animate.css) ----------
+     Los elementos marcados con [data-anim] reciben la animacion al entrar en
+     pantalla (o al cargar, si estan en el hero). Al terminar se retiran las
+     clases de animate.css para no interferir con los estados :hover. */
+  (function initAnimateOnScroll() {
+    var targets = Array.prototype.slice.call(document.querySelectorAll('[data-anim]'));
+    if (!targets.length) return;
+
+    function play(el) {
+      var name = el.getAttribute('data-anim');
+      if (!name) return;
+      var step = parseInt(el.getAttribute('data-anim-delay') || '0', 10) || 0;
+      var speed = el.getAttribute('data-anim-speed') || 'slow';
+      el.style.animationDelay = (step * 140) + 'ms';
+      el.classList.add('animate__animated', 'animate__' + speed, 'animate__' + name);
+      el.addEventListener('animationend', function handler() {
+        el.classList.remove('animate__animated', 'animate__' + speed, 'animate__' + name);
+        el.style.animationDelay = '';
+        el.removeEventListener('animationend', handler);
+      });
+    }
+
+    if (reduceMotion) return;
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(play);
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        play(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+    targets.forEach(function (el) {
+      if (el.closest('.hero-wrap')) {
+        play(el);
+      } else {
+        observer.observe(el);
+      }
+    });
+  })();
+
+  /* ---------- PRECIO DE LAS CARDS DE CURSOS ----------
+     El numero nace grande en la esquina inferior derecha; al preseleccionar la
+     card viaja de vuelta al hueco junto al tipo de vehiculo mientras se encoge. */
+  (function initCoursePriceMotion() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.course-card'));
+    if (!cards.length) return;
+
+    /* Posicion de un elemento respecto a la card, sin tener en cuenta transforms
+       (asi el destino no depende de la animacion de entrada del contenido). */
+    function offsetIn(el, root) {
+      var x = 0;
+      var y = 0;
+      var node = el;
+      while (node && node !== root) {
+        x += node.offsetLeft;
+        y += node.offsetTop;
+        node = node.offsetParent;
+      }
+      return { x: x, y: y };
+    }
+
+    cards.forEach(function (card) {
+      var price = card.querySelector(':scope > .course-price');
+      var slot = card.querySelector('.course-price-slot');
+      if (!price || !slot) return;
+
+      function recoger() {
+        if (reduceMotion) return;
+        var scale = parseFloat(getComputedStyle(price).getPropertyValue('--price-hover-scale')) || 0.34;
+        var w = price.offsetWidth;
+        var h = price.offsetHeight;
+        var target = offsetIn(slot, card);
+        // El escalado usa transform-origin: right bottom, asi que el borde
+        // derecho e inferior del precio no se mueven al encogerse.
+        var dx = target.x - ((price.offsetLeft + w) - w * scale);
+        var dy = (target.y + slot.offsetHeight) - (price.offsetTop + h);
+        card.style.setProperty('--price-tx', dx.toFixed(1) + 'px');
+        card.style.setProperty('--price-ty', dy.toFixed(1) + 'px');
+      }
+
+      function soltar() {
+        card.style.removeProperty('--price-tx');
+        card.style.removeProperty('--price-ty');
+      }
+
+      card.addEventListener('mouseenter', recoger);
+      card.addEventListener('focusin', recoger);
+      card.addEventListener('mouseleave', soltar);
+      card.addEventListener('focusout', soltar);
+    });
+  })();
+
   /* ---------- CARRUSEL DE EQUIPO (3D Card Carousel adaptado a BD) ---------- */
   (function initTeamCarousel() {
     var track = document.querySelector('.team-track');

@@ -24,10 +24,10 @@ if (empty($equipo)) {
 <section class="hero-wrap">
   <div class="container">
     <div class="hero-copy">
-      <span class="hero-kicker">Seguridad, experiencia y confianza al volante</span>
-      <h1 class="hero-title">Aprende a manejar con confianza</h1>
-      <p class="hero-lead">Instructores certificados, autos doble comando y cursos para todas las edades</p>
-      <div class="hero-cta">
+      <span class="hero-kicker" data-anim="fadeInUp">Seguridad, experiencia y confianza al volante</span>
+      <h1 class="hero-title" data-anim="fadeInUp" data-anim-delay="1">Aprende a manejar con confianza</h1>
+      <p class="hero-lead" data-anim="fadeInUp" data-anim-delay="2">Instructores certificados, autos doble comando y cursos para todas las edades</p>
+      <div class="hero-cta" data-anim="fadeInUp" data-anim-delay="3">
         <a href="#contacto" class="btn btn-gold">Agenda tu clase muestra gratis</a>
         <a href="tel:+50322223333" class="btn btn-hero-outline"><i class="fas fa-phone me-2"></i>+503 2222-3333</a>
       </div>
@@ -39,44 +39,43 @@ if (empty($equipo)) {
 <section class="section" id="cursos">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">Nuestros <span>Cursos</span></h2>
-      <p class="section-sub reveal">Elige la licencia que necesitas y comienza hoy mismo</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">Nuestros <span>Cursos</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Elige la licencia que necesitas y comienza hoy mismo</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
 
     <div class="row g-4">
       <?php
       $cursos = [
         ['fa-motorcycle','Clase A','Motocicleta','$120','2 semanas','motocicleta.jpg',['Incluye casco y guantes','Practica en circuito cerrado','Teoria + examen practico','Certificado inmediato']],
-        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas','sedan.jpg',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
+        ['fa-car-side','Clase B','Vehiculo particular','$180','4 semanas','ClaseB.jpg',['Vehiculo automatico o manual','Instructor certificado','Simulador de conduccion','Placa y permiso incluidos']],
         ['fa-truck','Clase C','Vehiculo de carga','$260','6 semanas','microbus.jpg',['Manejo de camiones y trailers','Certificacion oficial','Horarios nocturnos disponibles','Acompañamiento post-certificacion']],
       ];
-      foreach ($cursos as $c):
+      foreach ($cursos as $i => $c):
         [$icon,$titulo,$sub,$precio,$dura,$img,$feats] = $c;
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="course-card reveal">
-          <div class="course-media">
-            <img src="<?= BASE_URL ?>/assets/img/<?= $img ?>" alt="<?= $titulo ?> - <?= $sub ?>" loading="lazy">
-            <span class="course-tag"><i class="fas fa-clock"></i><?= $dura ?></span>
-          </div>
-          <div class="course-body">
-            <div class="course-head">
-              <div class="course-icon"><i class="fas <?= $icon ?>"></i></div>
-              <div>
-                <h4><?= $titulo ?></h4>
-                <p><?= $sub ?></p>
-              </div>
+        <article class="course-card" data-anim="fadeIn" data-anim-delay="<?= $i + 1 ?>">
+          <img src="<?= BASE_URL ?>/assets/img/<?= $img ?>" alt="<?= $titulo ?> - <?= $sub ?>" loading="lazy">
+          <span class="course-tag"><i class="fas fa-clock"></i><?= $dura ?></span>
+          <span class="course-price"><span class="course-price-num"><?= $precio ?></span><span class="visually-hidden"> por curso</span></span>
+          <div class="course-content">
+            <h3 class="course-title"><?= $titulo ?></h3>
+            <div class="course-infos">
+              <i class="fas <?= $icon ?>"></i>
+              <span><?= $sub ?></span>
+              <span class="course-price-slot" aria-hidden="true"></span>
             </div>
-            <div class="course-price"><?= $precio ?> <small>/ total</small></div>
-            <ul class="course-feats">
+            <ul class="course-synopsis">
               <?php foreach ($feats as $f): ?>
-              <li><i class="fas fa-check-circle"></i><?= $f ?></li>
+              <li><i class="fas fa-check-circle"></i><span><?= $f ?></span></li>
               <?php endforeach; ?>
             </ul>
-            <a href="#contacto" class="btn btn-gold w-100">Inscribirme</a>
+            <div class="course-actions">
+              <a href="#contacto" class="course-cta">Inscribirme <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
-        </div>
+        </article>
       </div>
       <?php endforeach; ?>
     </div>
@@ -87,12 +86,12 @@ if (empty($equipo)) {
 <section class="section section-band why-slider-section" id="porque">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">¿Por qué <span>ESDRIVE</span>?</h2>
-      <p class="section-sub reveal">Razones por las que somos tu mejor opción</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">¿Por qué <span>ESDRIVE</span>?</h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Razones por las que somos tu mejor opción</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
 
-    <div class="why-slider-wrap reveal">
+    <div class="why-slider-wrap" data-anim="fadeIn" data-anim-delay="2">
       <div class="blog-slider swiper" aria-label="Razones para elegir ESDRIVE">
         <div class="swiper-wrapper">
           <?php
@@ -134,12 +133,12 @@ if (empty($equipo)) {
 <section class="section team-section" id="equipo">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">Nuestro <span>Equipo</span></h2>
-      <p class="section-sub reveal">Los instructores y staff que te acompañan hasta tu licencia</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">Nuestro <span>Equipo</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Los instructores y staff que te acompañan hasta tu licencia</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
 
-    <div class="team-stage reveal">
+    <div class="team-stage" data-anim="fadeIn" data-anim-delay="2">
       <span class="team-ghost-title" aria-hidden="true">OUR TEAM</span>
 
       <div class="team-carousel">
@@ -213,9 +212,9 @@ if (empty($equipo)) {
 <section class="section" id="testimonios">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">Lo que dicen <span>nuestros alumnos</span></h2>
-      <p class="section-sub reveal">Historias reales de quienes ya obtuvieron su licencia</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">Lo que dicen <span>nuestros alumnos</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Historias reales de quienes ya obtuvieron su licencia</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
     <div class="row g-4">
       <?php
@@ -224,12 +223,12 @@ if (empty($equipo)) {
         ['Carlos Ramirez','Aprobada Clase A','La practica en circuito cerrado me dio mucha seguridad. Totalmente recomendado.'],
         ['Ana Martinez','Aprobada Clase C','Flexibilidad de horarios y vehiculos en excelente estado. Aprobar el examen fue facil.'],
       ];
-      foreach ($testis as $t):
+      foreach ($testis as $i => $t):
         [$nom,$rol,$txt] = $t;
         $ini = strtoupper(substr($nom,0,1));
       ?>
       <div class="col-lg-4 col-md-6">
-        <div class="testi-card reveal">
+        <div class="testi-card" data-anim="fadeIn" data-anim-delay="<?= $i + 1 ?>">
           <i class="fas fa-quote-right testi-quote"></i>
           <div class="testi-stars">
             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
@@ -253,12 +252,12 @@ if (empty($equipo)) {
 <section class="section section-band" id="preguntas">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">Preguntas <span>frecuentes</span></h2>
-      <p class="section-sub reveal">Todo lo que necesitas saber antes de inscribirte</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">Preguntas <span>frecuentes</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Todo lo que necesitas saber antes de inscribirte</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
 
-    <div class="faq-wrap reveal">
+    <div class="faq-wrap" data-anim="fadeIn" data-anim-delay="2">
       <div class="accordion" id="faqAccordion">
         <?php
         $faqs = [
@@ -290,7 +289,7 @@ if (empty($equipo)) {
 <section class="section cta-parallax" id="contacto">
   <div class="cta-parallax-bg" aria-hidden="true"></div>
   <div class="container">
-    <div class="cta-inner reveal">
+    <div class="cta-inner" data-anim="fadeIn">
       <div class="cta-grid">
         <div>
           <span class="cta-kicker"><i class="fas fa-route"></i> Tu camino a la licencia empieza aqui</span>
@@ -355,9 +354,9 @@ if (empty($equipo)) {
 <section class="section social-section" id="siguenos">
   <div class="container">
     <div class="title-center mb-5">
-      <h2 class="section-title reveal">Síguenos y <span>visítanos</span></h2>
-      <p class="section-sub reveal">Conecta con nosotros en redes o llega a nuestra escuela</p>
-      <div class="title-line reveal"></div>
+      <h2 class="section-title" data-anim="fadeInUp">Síguenos y <span>visítanos</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Conecta con nosotros en redes o llega a nuestra escuela</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
     </div>
 
     <?php
@@ -378,7 +377,7 @@ if (empty($equipo)) {
     ?>
 
     <div class="social-layout">
-      <div class="social-channels reveal">
+      <div class="social-channels" data-anim="fadeIn" data-anim-delay="2">
         <?php foreach ($redesSociales as [$icono, $nombre, $detalle, $url, $externo]): ?>
         <a class="social-channel" href="<?= htmlspecialchars($url) ?>"<?= $externo ? ' target="_blank" rel="noopener"' : '' ?>>
           <span class="social-icon"><i class="<?= $icono ?>"></i></span>
@@ -391,7 +390,7 @@ if (empty($equipo)) {
         <?php endforeach; ?>
       </div>
 
-      <div class="map-card reveal">
+      <div class="map-card" data-anim="fadeIn" data-anim-delay="2">
         <div class="map-frame">
           <iframe
             src="<?= $mapaEmbed ?>"
