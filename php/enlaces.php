@@ -37,4 +37,4 @@
 <script src="<?= BASE_URL ?>/assets/js/theme-landing.js?v=1" defer></script>
 
 <!-- Efectos del sitio: reveal + parallax + formulario -->
-<script src="<?= BASE_URL ?>/assets/js/site.js?v=16" defer></script>
+<script src="<?= BASE_URL ?>/assets/js/site.js?v=18" defer></script>

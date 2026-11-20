@@ -340,9 +340,20 @@
     new window.Swiper(slider, {
       effect: 'fade',
       fadeEffect: { crossFade: true },
-      loop: true,
+      // 'rewind' en lugar de 'loop': asi la rueda puede soltar el scroll
+      // al llegar a la ultima razon (releaseOnEdges) y la pagina no se traba.
+      rewind: true,
       speed: reduceMotion ? 0 : 600,
       grabCursor: true,
+      simulateTouch: true, // arrastrar con el mouse tambien cambia de razon
+      // La rueda del mouse / trackpad cambia de razon con el puntero sobre el slider
+      mousewheel: {
+        enabled: true,
+        // forceToAxis=false: al ser un slider horizontal, si se activara solo
+        // responderia a scroll lateral. Asi la rueda vertical cambia de razon.
+        forceToAxis: false,
+        releaseOnEdges: true
+      },
       pagination: {
         el: slider.querySelector('.blog-slider__pagination'),
         clickable: true
