@@ -6,6 +6,10 @@
  * y siembra datos de ejemplo la primera vez.
  *
  * Credenciales por defecto de WAMP: root / sin password en localhost.
+ *
+ * Si existe `config/db_local.php` (no versionado; solo en el servidor)
+ * se usan sus valores en lugar de los de WAMP. Asi la VM de Hestia
+ * conecta con su usuario de BD y el entorno local no cambia.
  */
 
 function db(): PDO
@@ -18,16 +22,38 @@ function db(): PDO
     $host = 'localhost';
     $user = 'root';
     $pass = '';
+    $name = 'esdrive';
 
-    $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+    $local = dirname(__DIR__) . '/config/db_local.php';
+    if (is_file($local)) {
+        $cfg = require $local;
+        if (is_array($cfg)) {
+            $host = $cfg['host'] ?? $host;
+            $user = $cfg['user'] ?? $user;
+            $pass = $cfg['pass'] ?? $pass;
+            $name = $cfg['name'] ?? $name;
+        }
+    }
+
+    // Con el nombre por defecto (WAMP) la BD se crea y selecciona aqui;
+    // con un nombre propio (VM de Hestia) se conecta directo a ella.
+    $dsn = "mysql:host=$host";
+    if ($name !== 'esdrive') {
+        $dsn .= ";dbname=$name";
+    }
+    $dsn .= ';charset=utf8mb4';
+
+    $pdo = new PDO($dsn, $user, $pass, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 
-    $pdo->exec('CREATE DATABASE IF NOT EXISTS `esdrive`
-                CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
-    $pdo->exec('USE `esdrive`');
+    if ($name === 'esdrive') {
+        $pdo->exec('CREATE DATABASE IF NOT EXISTS `esdrive`
+                    CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+        $pdo->exec('USE `esdrive`');
+    }
 
     /* ================= ESQUEMA ================= */
 

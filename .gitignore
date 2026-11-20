@@ -1,2 +1,3 @@
 .vscode/sftp.json
 assets/img/uploads/
+config/db_local.php
