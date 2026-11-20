@@ -78,7 +78,7 @@ $puede = esdrive_puede('empleados', 'gestionar');
             <td>
               <div class="cell-user">
                 <?php if ($e['imagen']): ?>
-                  <div class="cell-thumb"><img src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>"></div>
+                  <div class="cell-thumb"><img src="<?= htmlspecialchars(esdrive_img($e['imagen'])) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>"></div>
                 <?php else: ?>
                   <div class="cell-avatar" style="background:<?= esdrive_color_avatar($e['nombre']) ?>"><?= esdrive_ini($e['nombre']) ?></div>
                 <?php endif; ?>

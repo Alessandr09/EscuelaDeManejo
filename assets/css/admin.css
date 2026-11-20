@@ -260,9 +260,9 @@ body.admin-body {
 .dash-body .panel { min-height: 0; }
 .chart-single { flex: 1 1 auto; min-height: 0; }
 
-/* ===== CARRUSEL DE VEHICULOS (flota) - TEMA CLARO =====
-   Tarjeta blanca: foto arriba a sangre y ficha de datos debajo, sin
-   degradados oscuros ni zonas vacias. */
+/* ===== CARRUSEL DE VEHICULOS (flota) - ACABADO PREMIUM =====
+   Foto limpia a sangre arriba y ficha de datos en un panel solido abajo.
+   Sin degradados blancos que tapen la imagen. */
 .flota-carousel {
     position: relative;
     flex: 1 1 auto;
@@ -271,9 +271,9 @@ body.admin-body {
     flex-direction: column;
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid #e3e9f2;
-    background: #ffffff;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, .10);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .18);
 }
 .flota-carousel .carousel-inner {
     flex: 1 1 auto;
@@ -285,19 +285,23 @@ body.admin-body {
 
 .flota-slide {
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     min-height: 0;
-    background: #ffffff;
+    background: var(--surface);
     overflow: hidden;
 }
 .flota-media {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    max-width: none;
+    position: relative;
+    inset: auto;
+    /* height: 0 + flex-grow: el alto lo define la tarjeta, no la imagen */
+    flex: 1 1 0;
+    height: 0;
+    min-height: 0;
+    width: 100%;
     overflow: hidden;
-    background: linear-gradient(135deg, #f8fafc, #eef2f7);
+    background: var(--surface-2);
     border: 0;
 }
 .flota-media img {
@@ -310,40 +314,30 @@ body.admin-body {
 }
 .flota-slide:hover .flota-media img { transform: scale(1.06); }
 
-/* Nada de velos oscuros: la foto queda limpia */
-.flota-media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, 0) 45%);
-    pointer-events: none;
-}
 .flota-sin-img {
     width: 100%; height: 100%;
     display: grid; place-items: center;
-    color: #cbd5e1; font-size: 4rem;
+    color: var(--text-mut); font-size: 4rem; opacity: .45;
 }
 .flota-body {
-    position: absolute;
-    inset: auto 0 0 0;
+    position: relative;
+    inset: auto;
     z-index: 2;
+    flex: 0 0 auto;
     min-width: 0;
-    height: auto;
-    padding: 44px 18px 18px;
+    padding: 14px 18px 16px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     gap: 6px;
-    background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, .90) 16%,
-        #ffffff 44%);
+    background: var(--surface);
+    border-top: 1px solid rgba(233, 165, 55, .38);
 }
 .flota-nombre {
     font-family: 'Poppins', sans-serif;
     font-weight: 700; font-size: 1.05rem;
     line-height: 1.28;
-    color: #0f1729;
+    color: var(--text);
     white-space: normal;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -359,51 +353,61 @@ body.admin-body {
     border: 1px solid transparent;
 }
 .flota-meta .badge-soft.b-active {
-    background: rgba(21, 128, 61, .10);
-    border-color: rgba(21, 128, 61, .18);
-    color: #15803d;
+    background: rgba(34, 197, 94, .14);
+    border-color: rgba(34, 197, 94, .28);
+    color: #4ade80;
 }
 .flota-meta .badge-soft.b-pend {
-    background: rgba(180, 83, 9, .10);
-    border-color: rgba(180, 83, 9, .18);
-    color: #b45309;
+    background: rgba(245, 158, 11, .14);
+    border-color: rgba(245, 158, 11, .28);
+    color: #fbbf24;
 }
 .flota-meta .badge-soft i { color: inherit; }
+html.light-mode .flota-meta .badge-soft.b-active {
+    background: rgba(21, 128, 61, .10); border-color: rgba(21, 128, 61, .18); color: #15803d;
+}
+html.light-mode .flota-meta .badge-soft.b-pend {
+    background: rgba(180, 83, 9, .10); border-color: rgba(180, 83, 9, .18); color: #b45309;
+}
 .flota-placa {
     font-size: .74rem;
-    color: #64748b;
+    color: var(--text-mut);
     letter-spacing: .04em;
 }
 .flota-emp {
     font-size: .74rem; font-weight: 600;
-    color: #b45309;
+    color: #fbbf24;
 }
+html.light-mode .flota-emp { color: #b45309; }
 
 /* Info de horario + cuenta regresiva dentro de la card */
 .flota-horario { margin-top: 3px; }
 .flota-horario .fh-linea {
     display: flex; align-items: center; gap: 6px;
     font-size: .76rem; font-weight: 600;
-    color: #0f1729;
+    color: var(--text);
 }
-.flota-horario.sin-fecha .fh-linea { color: #64748b; font-weight: 500; }
-.flota-horario.aviso .fh-linea { color: #b45309; }
-.flota-horario.critico .fh-linea { color: #c2410c; }
-.flota-horario.cumplido .fh-linea { color: #15803d; }
+.flota-horario.sin-fecha .fh-linea { color: var(--text-mut); font-weight: 500; }
+.flota-horario.aviso .fh-linea { color: #fbbf24; }
+.flota-horario.critico .fh-linea { color: #fb923c; }
+.flota-horario.cumplido .fh-linea { color: #4ade80; }
+html.light-mode .flota-horario.aviso .fh-linea { color: #b45309; }
+html.light-mode .flota-horario.critico .fh-linea { color: #c2410c; }
+html.light-mode .flota-horario.cumplido .fh-linea { color: #15803d; }
 .flota-horario .fh-barra {
     height: 4px; margin-top: 7px;
-    background: #e6ebf2;
+    background: var(--surface-2);
     border-radius: 999px; overflow: hidden;
 }
 .flota-horario .fh-progreso {
     display: block; height: 100%; width: 0%;
-    background: #d97706;
+    background: var(--gold);
     transition: width 1s linear;
 }
-.flota-horario.critico .fh-progreso { background: #ea580c; }
-.flota-horario.cumplido .fh-progreso { background: #16a34a; }
+.flota-horario.critico .fh-progreso { background: #fb923c; }
+.flota-horario.cumplido .fh-progreso { background: #4ade80; }
 .flota-horario .fh-texto { font-variant-numeric: tabular-nums; }
-/* Indicadores: pildora blanca con barras finas, arriba a la derecha */
+/* Indicadores: pildora oscura translucida con barras finas */
 .flota-carousel .carousel-indicators {
     position: absolute;
     top: 12px;
@@ -411,16 +415,16 @@ body.admin-body {
     bottom: auto;
     left: auto;
     margin: 0;
-    padding: 5px 9px;
+    padding: 6px 9px;
     gap: 6px;
     z-index: 6;
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, .9);
-    border: 1px solid rgba(15, 23, 41, .07);
+    background: rgba(10, 16, 30, .58);
+    border: 1px solid rgba(255, 255, 255, .16);
     border-radius: 999px;
     backdrop-filter: blur(8px);
-    box-shadow: 0 6px 16px rgba(15, 23, 42, .12);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .22);
 }
 .flota-carousel .carousel-indicators [data-bs-target] {
     width: 14px;
@@ -429,17 +433,17 @@ body.admin-body {
     border: 0;
     margin: 0;
     padding: 0;
-    background-color: rgba(15, 23, 41, .22);
+    background-color: rgba(255, 255, 255, .30);
     opacity: 1;
     transition: width .25s ease, background-color .25s ease;
 }
-.flota-carousel .carousel-indicators [data-bs-target]:hover { background-color: rgba(15, 23, 41, .45); }
+.flota-carousel .carousel-indicators [data-bs-target]:hover { background-color: rgba(255, 255, 255, .60); }
 .flota-carousel .carousel-indicators .active {
     width: 24px;
-    background-color: #d97706;
+    background-color: var(--gold);
 }
 
-/* Flechas circulares blancas */
+/* Flechas circulares de cristal sobre la foto */
 .flota-carousel .carousel-control-prev,
 .flota-carousel .carousel-control-next {
     top: 38%;
@@ -449,10 +453,11 @@ body.admin-body {
     margin-top: 0;
     opacity: 0;
     z-index: 6;
-    background: #ffffff;
-    border: 1px solid #e3e9f2;
+    background: rgba(10, 16, 30, .58);
+    border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 999px;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, .16);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
     display: grid;
     place-items: center;
     transition: background .2s ease, opacity .25s ease, transform .2s ease;
@@ -468,17 +473,17 @@ body.admin-body {
 .flota-carousel .carousel-control-prev:hover,
 .flota-carousel .carousel-control-next:hover {
     opacity: 1;
-    background: #d97706;
-    border-color: #d97706;
+    background: var(--gold);
+    border-color: var(--gold);
     transform: scale(1.06);
 }
 .flota-carousel .carousel-control-prev-icon,
 .flota-carousel .carousel-control-next-icon {
     width: 14px; height: 14px;
-    filter: invert(1);
+    filter: none;
 }
 .flota-carousel .carousel-control-prev:hover .carousel-control-prev-icon,
-.flota-carousel .carousel-control-next:hover .carousel-control-next-icon { filter: none; }
+.flota-carousel .carousel-control-next:hover .carousel-control-next-icon { filter: invert(1); }
 
 /* Pie: contador de flota */
 .flota-count {

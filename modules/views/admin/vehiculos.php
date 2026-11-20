@@ -82,7 +82,7 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
             <td>
               <div class="cell-user">
                 <?php if ($v['imagen']): ?>
-                  <div class="cell-thumb"><img src="<?= htmlspecialchars($v['imagen']) ?>" alt="<?= htmlspecialchars($v['nombre']) ?>"></div>
+                  <div class="cell-thumb"><img src="<?= htmlspecialchars(esdrive_img($v['imagen'])) ?>" alt="<?= htmlspecialchars($v['nombre']) ?>"></div>
                 <?php else: ?>
                   <div class="cell-avatar"><i class="fas fa-car"></i></div>
                 <?php endif; ?>
@@ -246,7 +246,7 @@ foreach ($empleados as $e) { $empById[(int) $e['id']] = $e; }
               <input type="file" name="imagen" accept="image/*" id="inputImagenVehiculo" class="d-none">
               <small class="hint">JPG o PNG. Se muestra en la tabla y en el carrusel del dashboard.</small>
               <?php if (!empty($editar['imagen'])): ?>
-                <div class="preview-wrap"><img src="<?= htmlspecialchars($editar['imagen']) ?>" alt="Imagen actual"></div>
+                <div class="preview-wrap"><img src="<?= htmlspecialchars(esdrive_img($editar['imagen'])) ?>" alt="Imagen actual"></div>
               <?php endif; ?>
             </div>
           </div>

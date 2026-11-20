@@ -32,7 +32,7 @@
 
 <!-- Estilos propios -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css?v=7">
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=17">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin.css?v=18">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>

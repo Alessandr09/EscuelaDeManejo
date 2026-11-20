@@ -141,7 +141,7 @@ $kpis = [
                   <!-- Imagen en su propia columna: nunca se recorta mal -->
                   <div class="flota-media">
                     <?php if ($v['imagen']): ?>
-                      <img src="<?= htmlspecialchars($v['imagen']) ?>" alt="<?= htmlspecialchars($v['nombre']) ?>">
+                      <img src="<?= htmlspecialchars(esdrive_img($v['imagen'])) ?>" alt="<?= htmlspecialchars($v['nombre']) ?>">
                     <?php else: ?>
                       <div class="flota-sin-img"><i class="fas fa-car-side"></i></div>
                     <?php endif; ?>

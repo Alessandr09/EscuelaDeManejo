@@ -869,6 +869,153 @@ html.dark-mode .blog-slider__code { color: var(--gold); }
     box-shadow: 0 0 16px rgba(233, 165, 55, .45);
 }
 
+/* ============ GUIAS EN VIDEO ============ */
+.guia-card {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.guia-card:hover,
+.guia-card:focus-visible {
+    transform: translateY(-5px);
+    border-color: var(--gold);
+    box-shadow: 0 18px 38px rgba(15, 36, 64, .16);
+    outline: none;
+}
+
+.guia-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface-2);
+}
+.guia-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform .5s ease;
+}
+.guia-card:hover .guia-thumb img { transform: scale(1.05); }
+.guia-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 36, 64, 0) 45%, rgba(15, 36, 64, .55) 100%);
+    pointer-events: none;
+}
+.guia-play {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    width: 58px;
+    height: 58px;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #0f2440;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 22px rgba(233, 165, 55, .45);
+    transition: transform var(--transition), background var(--transition);
+}
+.guia-play i { margin-left: 3px; }
+.guia-card:hover .guia-play,
+.guia-card:focus-visible .guia-play {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: var(--gold-hover);
+}
+.guia-dur {
+    position: absolute;
+    z-index: 2;
+    right: 12px;
+    bottom: 12px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(15, 36, 64, .82);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+.guia-body { display: block; padding: 20px 22px 22px; }
+.guia-cat {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--gold-soft);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+html.dark-mode .guia-cat { color: var(--gold); }
+.guia-title {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+.guia-tip {
+    display: block;
+    min-height: 62px;
+    color: var(--text-mut);
+    font-size: .86rem;
+    line-height: 1.6;
+}
+.guia-ver {
+    display: inline-block;
+    margin-top: 14px;
+    color: var(--gold-soft);
+    font-size: .82rem;
+    font-weight: 700;
+}
+html.dark-mode .guia-ver { color: var(--gold); }
+.guia-ver i { display: inline-block; transition: transform var(--transition); }
+.guia-card:hover .guia-ver i { transform: translateX(3px); }
+
+.guia-credit { color: var(--text-mut); font-size: .8rem; }
+.guia-credit a { color: var(--gold-soft); text-decoration: none; font-weight: 600; }
+.guia-credit a:hover { text-decoration: underline; }
+html.dark-mode .guia-credit a { color: var(--gold); }
+
+/* Reproductor */
+.guia-modal .modal-content {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15, 36, 64, .28);
+}
+.guia-modal .modal-header { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.guia-modal .modal-title { margin: 0; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; }
+html.dark-mode .guia-modal .btn-close { filter: invert(1) grayscale(1) brightness(2); }
+.guia-video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.guia-modal-tip {
+    padding: 14px 20px 18px;
+    background: var(--surface-2);
+    color: var(--text-mut);
+    font-size: .88rem;
+    line-height: 1.6;
+}
+.guia-modal-tip i { color: var(--gold-soft); }
+html.dark-mode .guia-modal-tip i { color: var(--gold); }
+
 /* ============ EQUIPO (carrusel 3D) ============ */
 .team-section { overflow: hidden; }
 

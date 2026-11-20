@@ -365,6 +365,40 @@
     });
   })();
 
+  /* ---------- GUÍAS EN VIDEO (modal reproductor) ---------- */
+  (function initGuiasVideo() {
+    var modal = document.getElementById('modalGuia');
+    if (!modal) return;
+
+    var video = document.getElementById('videoGuia');
+    var titulo = document.getElementById('modalGuiaTitulo');
+    var tip = document.getElementById('videoGuiaTip');
+
+    modal.addEventListener('show.bs.modal', function (ev) {
+      var btn = ev.relatedTarget;
+      if (!btn) return;
+
+      titulo.textContent = btn.getAttribute('data-titulo') || 'Guía';
+      tip.textContent = btn.getAttribute('data-tip') || '';
+      video.poster = btn.getAttribute('data-poster') || '';
+      video.src = btn.getAttribute('data-video') || '';
+      video.load();
+
+      // El play lo inicia el clic del usuario, asi se respeta la politica de autoplay.
+      var promesa = video.play();
+      if (promesa && typeof promesa.catch === 'function') {
+        promesa.catch(function () { /* el usuario puede dar play manualmente */ });
+      }
+    });
+
+    modal.addEventListener('hide.bs.modal', function () {
+      video.pause();
+      video.removeAttribute('src');
+      video.removeAttribute('poster');
+      video.load();
+    });
+  })();
+
   if (reduceMotion) return;
 
   /* ---------- PARALLAX ---------- */

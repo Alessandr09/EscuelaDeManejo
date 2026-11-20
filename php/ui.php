@@ -78,6 +78,39 @@ function esdrive_badge(string $estado): string
     return '<span class="badge-soft b-info"><i class="fas fa-circle-info me-1"></i>' . htmlspecialchars($estado) . '</span>';
 }
 
+/**
+ * Normaliza una ruta de imagen guardada en la BD antes de imprimirla.
+ *
+ * Algunos registros antiguos guardaron el prefijo de BASE_URL dos veces
+ * (p. ej. /EscuelaDeManejo/EscuelaDeManejo/assets/img/motocicleta.jpg), por lo
+ * que el navegador no encuentra el archivo. Esta funcion lo corrige al vuelo
+ * y tambien acepta rutas relativas (assets/img/...) sin tocar URLs externas.
+ */
+function esdrive_img(string $ruta): string
+{
+    $ruta = trim($ruta);
+    if ($ruta === '') { return ''; }
+
+    // URLs externas y data URI se dejan intactas.
+    if (preg_match('#^(?:https?:)?//#i', $ruta) || stripos($ruta, 'data:') === 0) {
+        return $ruta;
+    }
+
+    $partes = array_values(array_filter(explode('/', str_replace('\\', '/', $ruta)), 'strlen'));
+    $base   = array_values(array_filter(explode('/', trim(BASE_URL, '/')), 'strlen'));
+
+    // Quitar el prefijo base repetido las veces que aparezca.
+    if ($base) {
+        $n = count($base);
+        while (count($partes) > $n && array_slice($partes, 0, $n) === $base) {
+            array_splice($partes, 0, $n);
+        }
+    }
+
+    if (!$partes) { return ''; }
+    return rtrim(BASE_URL, '/') . '/' . implode('/', $partes);
+}
+
 /** Iniciales de un nombre */
 function esdrive_ini(string $nombre): string
 {

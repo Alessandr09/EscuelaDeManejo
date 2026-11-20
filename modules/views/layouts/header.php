@@ -18,11 +18,12 @@
 
     <div class="collapse navbar-collapse" id="navPrincipal">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-        <li class="nav-item"><a class="nav-link active" href="<?= BASE_URL ?>/index.php">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/index.php">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
         <li class="nav-item"><a class="nav-link" href="#porque">Nosotros</a></li>
         <li class="nav-item"><a class="nav-link" href="#testimonios">Testimonios</a></li>
         <li class="nav-item"><a class="nav-link" href="#preguntas">Preguntas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#guias">Guías</a></li>
         <li class="nav-item"><a class="nav-link" href="#siguenos">Contacto</a></li>
       </ul>
 
@@ -37,14 +38,46 @@
 </nav>
 
 <script>
-/* Navbar: agrega sombra al hacer scroll */
+/* Navbar: sombra al hacer scroll + enlace activo segun la seccion visible */
 (function () {
   var nav = document.querySelector('.nav-esdrive');
   if (!nav) return;
+
+  var links = Array.prototype.slice.call(nav.querySelectorAll('.nav-link[href]'));
+
   function onScroll() {
     nav.classList.toggle('nav-scrolled', window.scrollY > 30);
+
+    // Margen por debajo del navbar fijo para considerar "alcanzada" una seccion.
+    var linea = (nav.offsetHeight || 74) + 24;
+    var actual = links[0] || null; // "Inicio" mientras no se alcance ninguna seccion
+
+    links.forEach(function (link) {
+      var href = link.getAttribute('href') || '';
+      if (href.charAt(0) !== '#') return; // Inicio no apunta a una seccion
+      var seccion = document.querySelector(href);
+      if (seccion && seccion.getBoundingClientRect().top <= linea) actual = link;
+    });
+
+    // Al llegar al fondo, marcar el ultimo enlace (Contacto).
+    // scrollY > 0 evita marcarlo al cargar, antes de que exista todo el contenido.
+    if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+      actual = links[links.length - 1] || actual;
+    }
+
+    links.forEach(function (link) {
+      var esActual = link === actual;
+      link.classList.toggle('active', esActual);
+      if (esActual) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
   }
+
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  // El header se incluye antes del contenido: volver a calcular cuando el DOM este listo.
+  document.addEventListener('DOMContentLoaded', onScroll);
+  window.addEventListener('load', onScroll);
   onScroll();
 })();
 </script>

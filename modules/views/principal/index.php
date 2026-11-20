@@ -350,6 +350,111 @@ if (empty($equipo)) {
   </div>
 </section>
 
+<!-- ============ GUIAS EN VIDEO ============ -->
+<section class="section section-band guias-section" id="guias">
+  <div class="container">
+    <div class="title-center mb-5">
+      <h2 class="section-title" data-anim="fadeInUp">Guías <span>para el volante</span></h2>
+      <p class="section-sub" data-anim="fadeInUp" data-anim-delay="1">Videos cortos con consejos prácticos para manejar mejor cada día</p>
+      <div class="title-line" data-anim="fadeInUp" data-anim-delay="2"></div>
+    </div>
+
+    <?php
+    // Miniaturas de Pexels optimizadas para la tarjeta (16:9).
+    $guiaThumb = function ($url) {
+        return $url . '?auto=compress&cs=tinysrgb&fit=crop&w=800&h=450';
+    };
+
+    $videosGuias = [
+      [
+        'fa-steering-wheel', 'Primeros pasos', 'Tu puesto de mando', '0:10',
+        'https://videos.pexels.com/video-files/10579034/10579034-uhd_2560_1440_25fps.mp4',
+        'https://images.pexels.com/videos/10579034/pexels-photo-10579034.jpeg',
+        'Ajusta el asiento y los espejos, abróchate el cinturón y revisa el tablero antes de arrancar.'
+      ],
+      [
+        'fa-square-parking', 'Estacionamiento', 'Cómo estacionarse con seguridad', '0:15',
+        'https://videos.pexels.com/video-files/9100884/9100884-uhd_2560_1440_30fps.mp4',
+        'https://images.pexels.com/videos/9100884/car-car-park-parking-parking-area-9100884.jpeg',
+        'Enciende la direccional, busca un espacio completo y calcula el ángulo con ayuda de los espejos.'
+      ],
+      [
+        'fa-route', 'Circulación', 'Cambios de carril sin sorpresas', '0:22',
+        'https://videos.pexels.com/video-files/20589891/20589891-hd_1920_1080_60fps.mp4',
+        'https://images.pexels.com/videos/20589891/pexels-photo-20589891.jpeg',
+        'Espejo, direccional y ángulo muerto: cambia de carril solo cuando tengas espacio suficiente.'
+      ],
+      [
+        'fa-moon', 'Conducción nocturna', 'Manejar de noche', '0:09',
+        'https://videos.pexels.com/video-files/28928755/12519833_2560_1440_30fps.mp4',
+        'https://images.pexels.com/videos/28928755/drive-car-highway-night-timelapse-28928755.jpeg',
+        'Usa las luces altas solo sin tráfico de frente y mantén una distancia mayor con el vehículo que va adelante.'
+      ],
+      [
+        'fa-cloud-rain', 'Mal tiempo', 'Conducción bajo lluvia', '0:17',
+        'https://videos.pexels.com/video-files/13395797/13395797-hd_1280_720_25fps.mp4',
+        'https://images.pexels.com/videos/13395797/ambiance-inside-the-car-moving-rain-13395797.jpeg',
+        'Reduce la velocidad, enciende las luces y aumenta la distancia de frenado: el pavimento resbala más.'
+      ],
+      [
+        'fa-graduation-cap', 'Examen práctico', 'El día de tu evaluación', '0:08',
+        'https://videos.pexels.com/video-files/8630309/8630309-uhd_2560_1440_25fps.mp4',
+        'https://images.pexels.com/videos/8630309/pexels-photo-8630309.jpeg',
+        'Respira, escucha bien las indicaciones y prioriza siempre la seguridad por encima de la rapidez.'
+      ],
+    ];
+    ?>
+
+    <div class="row g-4">
+      <?php foreach ($videosGuias as $i => $g): ?>
+        <?php [$icono, $categoria, $titulo, $duracion, $video, $poster, $tip] = $g; ?>
+      <div class="col-lg-4 col-md-6">
+        <button type="button" class="guia-card" data-anim="fadeIn" data-anim-delay="<?= $i + 1 ?>"
+                data-video="<?= htmlspecialchars($video, ENT_QUOTES) ?>"
+                data-poster="<?= htmlspecialchars($poster, ENT_QUOTES) ?>"
+                data-titulo="<?= htmlspecialchars($titulo, ENT_QUOTES) ?>"
+                data-tip="<?= htmlspecialchars($tip, ENT_QUOTES) ?>"
+                data-bs-toggle="modal" data-bs-target="#modalGuia"
+                aria-label="Ver guía: <?= htmlspecialchars($titulo, ENT_QUOTES) ?>">
+          <span class="guia-thumb">
+            <img src="<?= htmlspecialchars($guiaThumb($poster), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($titulo, ENT_QUOTES) ?>" loading="lazy">
+            <span class="guia-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+            <span class="guia-dur"><i class="fas fa-clock me-1"></i><?= htmlspecialchars($duracion) ?></span>
+          </span>
+          <span class="guia-body">
+            <span class="guia-cat"><i class="fas <?= htmlspecialchars($icono, ENT_QUOTES) ?> me-2"></i><?= htmlspecialchars($categoria) ?></span>
+            <span class="guia-title" role="heading" aria-level="3"><?= htmlspecialchars($titulo) ?></span>
+            <span class="guia-tip"><?= htmlspecialchars($tip) ?></span>
+            <span class="guia-ver">Ver guía <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i></span>
+          </span>
+        </button>
+      </div>
+      <?php endforeach; ?>
+    </div>
+
+    <p class="guia-credit text-center mt-4">
+      <i class="fas fa-circle-info me-2"></i>Videos de stock: <a href="https://www.pexels.com/videos/" target="_blank" rel="noopener">Pexels</a>
+      · Consejos de ESDRIVE. ¿Quieres practicar de verdad? <a href="#contacto">agenda tu clase</a>.
+    </p>
+  </div>
+</section>
+
+<!-- Reproductor de las guías en video -->
+<div class="modal fade guia-modal" id="modalGuia" tabindex="-1" aria-labelledby="modalGuiaTitulo" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalGuiaTitulo">Guía</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-0">
+        <video id="videoGuia" class="guia-video" controls playsinline preload="none"></video>
+        <div class="guia-modal-tip"><i class="fas fa-lightbulb me-2" aria-hidden="true"></i><span id="videoGuiaTip"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ============ REDES SOCIALES Y UBICACION ============ -->
 <section class="section social-section" id="siguenos">
   <div class="container">

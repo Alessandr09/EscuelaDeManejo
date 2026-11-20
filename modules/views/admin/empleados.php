@@ -70,7 +70,7 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
             <td>
               <div class="cell-user">
                 <?php if ($e['imagen']): ?>
-                  <div class="cell-thumb cell-thumb-round"><img src="<?= htmlspecialchars($e['imagen']) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>"></div>
+                  <div class="cell-thumb cell-thumb-round"><img src="<?= htmlspecialchars(esdrive_img($e['imagen'])) ?>" alt="<?= htmlspecialchars($e['nombre']) ?>"></div>
                 <?php else: ?>
                   <div class="cell-avatar"><?= strtoupper(substr($e['nombre'], 0, 1)) ?></div>
                 <?php endif; ?>
@@ -163,7 +163,7 @@ foreach (db()->query('SELECT empleado_id, COUNT(*) c FROM vehiculos WHERE emplea
               <input type="file" name="imagen" accept="image/*" id="inputImagenEmp" class="d-none">
               <small class="hint">JPG o PNG. Se muestra en el carousel "Nuestro equipo" de la pagina principal automaticamente.</small>
               <?php if (!empty($editar['imagen'])): ?>
-                <div class="preview-wrap"><img src="<?= htmlspecialchars($editar['imagen']) ?>" alt="Foto actual"></div>
+                <div class="preview-wrap"><img src="<?= htmlspecialchars(esdrive_img($editar['imagen'])) ?>" alt="Foto actual"></div>
               <?php endif; ?>
             </div>
           </div>
