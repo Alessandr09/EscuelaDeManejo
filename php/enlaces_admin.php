@@ -1,7 +1,8 @@
-<?php require_once __DIR__ . '/base.php'; ?>
+<?php require_once __DIR__ . '/base.php'; require_once __DIR__ . '/cfg.php'; ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Panel - <?= APP_NOMBRE ?></title>
+<link rel="icon" href="<?= htmlspecialchars(esdrive_favicon()) ?>">
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
