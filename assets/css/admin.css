@@ -1022,3 +1022,63 @@ html.light-mode .login-card .form-control:focus {
     .topbar-date { display: none; }
     .topbar-user .tu-meta { display: none; }
 }
+
+/* ============ CONFIGURACION: secciones internas de un solo panel ============ */
+.cfg-block-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-mut);
+    margin-bottom: 14px;
+}
+.cfg-block-title i { color: var(--gold); font-size: .78rem; }
+.cfg-block-title::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+}
+.cfg-div {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 18px 0;
+    opacity: .9;
+}
+.cfg-preview {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    flex: 0 0 auto;
+}
+.cfg-card {
+    height: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+}
+.cfg-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-weight: 700;
+    font-size: .78rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+.cfg-lbl {
+    font-size: .72rem !important;
+    margin-bottom: 3px !important;
+    color: var(--text-mut);
+}
+.cfg-card .form-control { font-size: .8rem; }
