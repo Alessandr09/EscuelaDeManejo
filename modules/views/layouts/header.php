@@ -1,10 +1,10 @@
-<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+<?php require_once __DIR__ . '/../../../php/base.php'; require_once __DIR__ . '/../../../php/cfg.php'; ?>
 <div class="app-bg"></div>
 
 <nav class="navbar navbar-expand-lg nav-esdrive">
   <div class="container">
     <a class="navbar-brand" href="<?= BASE_URL ?>/index.php">
-      <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo <?= APP_NOMBRE ?>">
+      <img src="<?= htmlspecialchars(esdrive_logo()) ?>" alt="Logo <?= APP_NOMBRE ?>">
       <span class="navbar-brand-text">
         <span class="nav-brand-name">ES<span>DRIVE</span></span><br>
         <span class="nav-brand-sub">Escuela de Manejo</span>

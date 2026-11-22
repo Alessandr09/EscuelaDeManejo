@@ -123,16 +123,25 @@ $kpis = [
               $fase    = '';
               $fechaTs = 0;
               $texto   = '';
-              if ($esDispo && !empty($v['proximo_uso'])) {
-                  $fase = 'uso';  $fechaTs = strtotime($v['proximo_uso']);
-                  $texto = 'Se usara a las ' . date('H:i', $fechaTs);
-              } elseif (!$esDispo && !empty($v['disponible_desde'])) {
-                  $fase = 'libre'; $fechaTs = strtotime($v['disponible_desde']);
-                  $texto = 'Vuelve a estar libre a las ' . date('H:i', $fechaTs);
-              } elseif ($esDispo) {
-                  $texto = 'Libre ahora &middot; sin horario asignado';
+              $proximoTs = !empty($v['proximo_uso'])     ? strtotime($v['proximo_uso'])     : 0;
+              $libreTs   = !empty($v['disponible_desde']) ? strtotime($v['disponible_desde']) : 0;
+              $ahoraTs   = time();
+              // El texto SIEMPRE debe coincidir con el badge (estado del vehiculo):
+              // las fechas solo sirven para contar hacia una transicion futura.
+              if ($esDispo) {
+                  if ($proximoTs > $ahoraTs) {
+                      $fase = 'uso'; $fechaTs = $proximoTs;
+                      $texto = 'Se usara a las ' . date('H:i', $fechaTs);
+                  } else {
+                      $texto = empty($v['proximo_uso']) ? 'Libre ahora &middot; sin horario asignado' : 'Disponible ahora';
+                  }
               } else {
-                  $texto = 'En uso ahora';
+                  if ($libreTs > $ahoraTs) {
+                      $fase = 'libre'; $fechaTs = $libreTs;
+                      $texto = 'Vuelve a estar libre a las ' . date('H:i', $fechaTs);
+                  } else {
+                      $texto = 'En uso ahora';
+                  }
               }
               $empAsig = (!empty($v['empleado_id']) && isset($empNombre[(int) $v['empleado_id']])) ? $empNombre[(int) $v['empleado_id']] : null;
             ?>
@@ -161,7 +170,8 @@ $kpis = [
                       <div class="flota-emp"><i class="fas fa-user-tie me-1"></i><?= htmlspecialchars($empAsig) ?></div>
                     <?php endif; ?>
                     <div class="flota-horario <?= $fase ? 'tiene-fecha' : 'sin-fecha' ?>"
-                         <?= $fase ? 'data-fecha="' . date('Y-m-d\TH:i:s', $fechaTs) . '" data-fase="' . $fase . '"' : '' ?>>
+                         <?= $fase ? 'data-fecha="' . date('Y-m-d\TH:i:s', $fechaTs) . '" data-fase="' . $fase . '"' : '' ?>
+                         data-estado="<?= $esDispo ? 'disponible' : 'en_uso' ?>">
                       <div class="fh-linea"><i class="far fa-clock me-1"></i><span class="fh-texto"><?= htmlspecialchars($texto) ?></span></div>
                       <?php if ($fase): ?><div class="fh-barra"><span class="fh-progreso"></span></div><?php endif; ?>
                     </div>

@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/auth.php';
+require_once __DIR__ . '/../../../php/cfg.php';
 $vista = $vista ?? 'dashboard';
 $link  = function ($v) { return BASE_URL . '/admin.php?v=' . $v; };
 $activo = function ($v) use ($vista) { return $vista === $v ? 'active' : ''; };
@@ -32,7 +33,7 @@ $nav = function ($id, $icono, $texto, $badgeVal = '') use ($link, $activo) {
 ?>
 <aside class="admin-sidebar">
   <div class="sidebar-brand">
-    <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo">
+    <img src="<?= htmlspecialchars(esdrive_logo()) ?>" alt="Logo">
     <div class="sb-text">
       <div class="sb-name">ES<span>DRIVE</span></div>
       <div class="sb-sub">Panel admin</div>

@@ -133,13 +133,13 @@ window.esdriveCountdowns = function () {
 
       var objetivo = new Date(n.getAttribute('data-fecha')).getTime();
       var fase = n.getAttribute('data-fase'); // 'uso' | 'libre'
+      var estado = n.getAttribute('data-estado'); // 'disponible' | 'en_uso'
       var falta = objetivo - ahora;
 
       n.classList.remove('aviso', 'critico', 'cumplido');
 
       if (fase === 'uso') {
         var base = 'Se usara';
-        var fin  = 'En uso ahora';
         if (falta > ALARMA) {
           texto.textContent = base + ' a las ' + new Date(objetivo).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
           if (barra) barra.style.width = '0%';
@@ -148,7 +148,8 @@ window.esdriveCountdowns = function () {
           n.classList.add(falta <= 10 * 60 * 1000 ? 'critico' : 'aviso');
           if (barra) barra.style.width = Math.max(0, (falta / ALARMA) * 100) + '%';
         } else {
-          texto.textContent = fin;
+          // La hora programada paso: pintar segun el estado REAL del vehiculo
+          texto.textContent = estado === 'disponible' ? 'Disponible ahora' : 'En uso ahora';
           n.classList.add('cumplido');
           if (barra) barra.style.width = '100%';
         }
@@ -162,7 +163,7 @@ window.esdriveCountdowns = function () {
           n.classList.add(falta <= 10 * 60 * 1000 ? 'critico' : 'aviso');
           if (barra) barra.style.width = Math.max(0, (falta / ALARMA) * 100) + '%';
         } else {
-          texto.textContent = 'Libre ahora';
+          texto.textContent = estado === 'disponible' ? 'Disponible ahora' : 'Libre ahora';
           n.classList.add('cumplido');
           if (barra) barra.style.width = '100%';
         }
@@ -205,6 +206,11 @@ document.addEventListener('DOMContentLoaded', function () {
         layout.classList.toggle('mobile-open');   // en movil: drawer
       } else {
         layout.classList.toggle('sidebar-collapsed'); // en escritorio: recoger
+        // Persistir el estado para que al cambiar de pestaña no se despliegue
+        try {
+          localStorage.setItem('esdrive_side',
+            layout.classList.contains('sidebar-collapsed') ? '1' : '0');
+        } catch (e) {}
       }
     });
   }

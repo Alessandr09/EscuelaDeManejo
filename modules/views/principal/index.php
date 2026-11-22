@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../php/base.php';
 require_once __DIR__ . '/../../../php/db.php';
+require_once __DIR__ . '/../../../php/cfg.php';
 
 // El equipo se alimenta de la tabla `empleados` (se administra desde el panel)
 try {
@@ -360,54 +361,21 @@ if (empty($equipo)) {
     </div>
 
     <?php
+    require_once __DIR__ . '/../../../php/cfg.php';
+
     // Miniaturas de Pexels optimizadas para la tarjeta (16:9).
     $guiaThumb = function ($url) {
         return $url . '?auto=compress&cs=tinysrgb&fit=crop&w=800&h=450';
     };
 
-    $videosGuias = [
-      [
-        'fa-steering-wheel', 'Primeros pasos', 'Tu puesto de mando', '0:10',
-        'https://videos.pexels.com/video-files/10579034/10579034-uhd_2560_1440_25fps.mp4',
-        'https://images.pexels.com/videos/10579034/pexels-photo-10579034.jpeg',
-        'Ajusta el asiento y los espejos, abróchate el cinturón y revisa el tablero antes de arrancar.'
-      ],
-      [
-        'fa-square-parking', 'Estacionamiento', 'Cómo estacionarse con seguridad', '0:15',
-        'https://videos.pexels.com/video-files/9100884/9100884-uhd_2560_1440_30fps.mp4',
-        'https://images.pexels.com/videos/9100884/car-car-park-parking-parking-area-9100884.jpeg',
-        'Enciende la direccional, busca un espacio completo y calcula el ángulo con ayuda de los espejos.'
-      ],
-      [
-        'fa-route', 'Circulación', 'Cambios de carril sin sorpresas', '0:22',
-        'https://videos.pexels.com/video-files/20589891/20589891-hd_1920_1080_60fps.mp4',
-        'https://images.pexels.com/videos/20589891/pexels-photo-20589891.jpeg',
-        'Espejo, direccional y ángulo muerto: cambia de carril solo cuando tengas espacio suficiente.'
-      ],
-      [
-        'fa-moon', 'Conducción nocturna', 'Manejar de noche', '0:09',
-        'https://videos.pexels.com/video-files/28928755/12519833_2560_1440_30fps.mp4',
-        'https://images.pexels.com/videos/28928755/drive-car-highway-night-timelapse-28928755.jpeg',
-        'Usa las luces altas solo sin tráfico de frente y mantén una distancia mayor con el vehículo que va adelante.'
-      ],
-      [
-        'fa-cloud-rain', 'Mal tiempo', 'Conducción bajo lluvia', '0:17',
-        'https://videos.pexels.com/video-files/13395797/13395797-hd_1280_720_25fps.mp4',
-        'https://images.pexels.com/videos/13395797/ambiance-inside-the-car-moving-rain-13395797.jpeg',
-        'Reduce la velocidad, enciende las luces y aumenta la distancia de frenado: el pavimento resbala más.'
-      ],
-      [
-        'fa-graduation-cap', 'Examen práctico', 'El día de tu evaluación', '0:08',
-        'https://videos.pexels.com/video-files/8630309/8630309-uhd_2560_1440_25fps.mp4',
-        'https://images.pexels.com/videos/8630309/pexels-photo-8630309.jpeg',
-        'Respira, escucha bien las indicaciones y prioriza siempre la seguridad por encima de la rapidez.'
-      ],
-    ];
+    // Guias configurables desde el panel (Configuracion > Videos de guias).
+    $videosGuias = esdrive_guias();
     ?>
 
     <div class="row g-4">
       <?php foreach ($videosGuias as $i => $g): ?>
-        <?php [$icono, $categoria, $titulo, $duracion, $video, $poster, $tip] = $g; ?>
+        <?php ['icono' => $icono, 'categoria' => $categoria, 'titulo' => $titulo, 'duracion' => $duracion,
+               'video' => $video, 'poster' => $poster, 'tip' => $tip] = $g; ?>
       <div class="col-lg-4 col-md-6">
         <button type="button" class="guia-card" data-anim="fadeIn" data-anim-delay="<?= $i + 1 ?>"
                 data-video="<?= htmlspecialchars($video, ENT_QUOTES) ?>"
@@ -465,17 +433,11 @@ if (empty($equipo)) {
     </div>
 
     <?php
-    // TODO: reemplazar los enlaces "#siguenos" por los perfiles oficiales cuando esten disponibles.
-    $redesSociales = [
-      ['fab fa-tiktok', 'TikTok', '@esdrive', '#siguenos', false],
-      ['fab fa-instagram', 'Instagram', '@esdrive', '#siguenos', false],
-      ['fab fa-facebook-f', 'Facebook', 'ESDRIVE Escuela de Manejo', '#siguenos', false],
-      ['fas fa-envelope', 'Correo electrónico', 'contacto@esdrive.com', 'mailto:contacto@esdrive.com', false],
-      ['fab fa-whatsapp', 'WhatsApp', '+503 7000-0000', 'https://wa.me/50370000000', true],
-    ];
+    // Redes configurables desde el panel (Configuracion > Redes sociales).
+    $redesSociales = esdrive_redes();
 
-    // TODO: reemplazar por la direccion exacta de la escuela.
-    $direccionCorta = 'Av. Principal #123, San Salvador';
+    // Direccion configurable desde el panel (Configuracion > Datos generales).
+    $direccionCorta = esdrive_cfg('direccion', 'Av. Principal #123, San Salvador');
     $direccionMapa = $direccionCorta . ', El Salvador';
     $mapaEmbed = 'https://www.google.com/maps?q=' . rawurlencode($direccionMapa) . '&output=embed';
     $mapaRuta = 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($direccionMapa);

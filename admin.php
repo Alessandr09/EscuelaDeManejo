@@ -329,12 +329,42 @@ if ($auth && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
 
     /* ---------- CONFIGURACION ---------- */
     if ($accion === 'guardar_config') {
-        $campos = ['nombre', 'telefono', 'email', 'direccion', 'horario', 'whatsapp'];
         $pdo = db();
-        $st = $pdo->prepare('INSERT INTO `config` (clave, valor) VALUES (?,?) ON DUPLICATE KEY UPDATE valor = VALUES(valor)');
+        $st  = $pdo->prepare('INSERT INTO `config` (clave, valor) VALUES (?,?) ON DUPLICATE KEY UPDATE valor = VALUES(valor)');
+
+        // Campos simples de texto (solo los que vienen en este formulario:
+        // la vista usa varios formularios separados con la misma accion)
+        $campos = [
+            'nombre', 'telefono', 'email', 'direccion', 'horario', 'whatsapp',
+            'redes_facebook', 'redes_instagram', 'redes_tiktok',
+        ];
         foreach ($campos as $c) {
-            $st->execute([$c, trim($_POST[$c] ?? '')]);
+            if (array_key_exists($c, $_POST)) {
+                $st->execute([$c, trim($_POST[$c])]);
+            }
         }
+
+        // Icono y logo (subida de archivo)
+        $iconoUrl = $subirImagen('icono', 'icono');
+        if ($iconoUrl !== '') { $st->execute(['icono', $iconoUrl]); }
+        $logoUrl = $subirImagen('logo', 'logo');
+        if ($logoUrl !== '') { $st->execute(['logo', $logoUrl]); }
+
+        // Videos de guias (JSON con claves: icono, categoria, titulo, duracion, video, poster, tip)
+        if (isset($_POST['guia']) && is_array($_POST['guia'])) {
+            $camposGuia = ['icono', 'categoria', 'titulo', 'duracion', 'video', 'poster', 'tip'];
+            $guias = [];
+            $filas = array_slice($_POST['guia'], 0, 12, true); // tope de seguridad
+            foreach ($filas as $i => $fila) {
+                if (!is_array($fila)) { continue; }
+                $g = [];
+                foreach ($camposGuia as $k) { $g[$k] = trim((string) ($fila[$k] ?? '')); }
+                $guias[(int) $i] = $g;
+            }
+            ksort($guias);
+            $st->execute(['guias', json_encode(array_values($guias), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+        }
+
         $go('ok', 'configuracion');
     }
 }
@@ -353,6 +383,7 @@ if ($vista !== 'login' && !in_array($vista, $mapaVistas, true)) { $vista = 'dash
     <?php else: ?>
       <div class="app-bg"></div>
       <div class="admin-layout" id="adminLayout">
+        <script>try{if(localStorage.getItem('esdrive_side')==='1'&&window.innerWidth>992){document.getElementById('adminLayout').classList.add('sidebar-collapsed');}}catch(e){}</script>
         <?php include __DIR__ . '/modules/views/layouts/admin_sidebar.php'; ?>
         <main class="admin-main">
           <?php include __DIR__ . '/modules/views/layouts/admin_topbar.php'; ?>

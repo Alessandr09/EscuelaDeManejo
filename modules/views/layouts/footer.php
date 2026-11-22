@@ -1,18 +1,21 @@
-<?php require_once __DIR__ . '/../../../php/base.php'; ?>
+<?php require_once __DIR__ . '/../../../php/base.php'; require_once __DIR__ . '/../../../php/cfg.php';
+$redesFoot = esdrive_redes_links();
+$esExterno = function (string $u): bool { return $u !== '#siguenos' && $u !== ''; };
+?>
 <footer class="footer-glass">
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-4 col-md-6">
         <div class="d-flex align-items-center gap-2 mb-3">
-          <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo" width="38" height="38">
+          <img src="<?= htmlspecialchars(esdrive_logo()) ?>" alt="Logo" width="38" height="38">
           <span class="nav-brand-name">ES<span>DRIVE</span></span>
         </div>
         <p>Formamos conductores responsables y seguros. Licencias de las clases A, B y C con instructores certificados y vehiculos modernos.</p>
         <div class="footer-social mt-3">
-          <a href="#siguenos" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#siguenos" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#siguenos" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-          <a href="https://wa.me/50370000000" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="<?= htmlspecialchars($redesFoot['facebook']) ?>" <?= $esExterno($redesFoot['facebook']) ? 'target="_blank" rel="noopener"' : '' ?> aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="<?= htmlspecialchars($redesFoot['instagram']) ?>" <?= $esExterno($redesFoot['instagram']) ? 'target="_blank" rel="noopener"' : '' ?> aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="<?= htmlspecialchars($redesFoot['tiktok']) ?>" <?= $esExterno($redesFoot['tiktok']) ? 'target="_blank" rel="noopener"' : '' ?> aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="<?= htmlspecialchars($redesFoot['whatsapp']) ?>" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
 
@@ -51,7 +54,7 @@
 
     <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
       <span>&copy; <?= date('Y') ?> <?= APP_NOMBRE ?> — <?= APP_TAGLINE ?>. Todos los derechos reservados.</span>
-      <span>Desarrollado con <i class="fas fa-heart" style="color:var(--gold)"></i> por ESDRIVE</span>
+      <span>Fue hecho por <strong style="color:var(--gold)">Diego Romero</strong> y <strong style="color:var(--gold)">Juan Henriquez</strong></span>
     </div>
   </div>
 </footer>

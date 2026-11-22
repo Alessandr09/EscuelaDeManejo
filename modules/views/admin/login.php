@@ -13,7 +13,6 @@
 <div class="login-wrap">
   <div class="glass login-card animate__animated animate__zoomIn">
     <div class="login-logo">
-      <img src="<?= BASE_URL ?>/assets/img/logo.svg" alt="Logo">
       <h4>ES<span>DRIVE</span></h4>
       <p>Panel de administracion</p>
     </div>
